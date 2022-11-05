@@ -9,7 +9,7 @@ div(class="flex justify-between h-screen font-mono font-semibold")
           p Copyleft (ɔ) 1987-2023, Hailasoft Oy Ab
 
       div(class="mt-5")
-        animated-text(:run="currentState === 2" text="OSFX VER:1.0 23/3/14" @done="nextState(800)")
+        animated-text(:run="currentState === 2" text="OSFX VER:1.0 23/3/14" @done="nextState(300)")
       div(v-show="currentState === 3" class="mt-10")
         animated-text(:run="currentState === 3" :speed="200" text="WAIT..." @done="nextState(1300)")
       div(class="mt-36")
@@ -28,7 +28,7 @@ div(class="flex justify-between h-screen font-mono font-semibold")
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import AnimatedText from '../components/AnimatedText.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue';
 
@@ -83,6 +83,7 @@ function nextState(delay?: number) {
 }
 
 document.onkeydown = (e) => emits('done')
+onBeforeUnmount(() => document.onkeydown = null)
 </script>
 
 <style>

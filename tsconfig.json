@@ -7,7 +7,11 @@
       "@/*": ["./src/*"]
     }
   },
-
+  "vueCompilerOptions": {
+    "plugins": [
+      "@volar/vue-language-plugin-pug"
+    ]
+  },
   "references": [
     {
       "path": "./tsconfig.config.json"
