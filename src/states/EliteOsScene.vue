@@ -8,6 +8,8 @@ import { ref } from 'vue';
 import OsWindow from '../components/OsWindow.vue'
 import SourceCode from '../source_code/code'
 
+// TODO: create CodeEditorWindow and use that instead of the root scene.
+
 /*
   SPEC:
   - Most buttons generate code.
@@ -15,6 +17,7 @@ import SourceCode from '../source_code/code'
   - Current challenge has a memory limit (number of characters).
   - Code generation should start from a random line break that's followed by a character.
   - After a code section(?) completes, it may randomly become more powerful.
+  - Blinking box cursor when active.
 */
 
 const codePoints = ref(0)
