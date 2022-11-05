@@ -74,10 +74,9 @@ function nextState(delay?: number) {
       break
     case AnimationState.MemTest:
       currentState.value = AnimationState.OK
-      break
-    case AnimationState.OK:
-      currentState.value = AnimationState.Header
-      setTimeout(() => emits('done'), 1000)
+      setTimeout(() => {
+        emits('done')
+      }, 1000)
       break
   }
 }
