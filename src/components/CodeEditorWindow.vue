@@ -33,8 +33,7 @@ const characterLimit = ref(10)
 //   console.log(h4xBody.value?.)
 // })
 
-const displayedCode = ref("")
-const displayedCodeRows = computed(() => displayedCode.value.split('\n'))
+const displayedCodeRows = ref<string[]>([''])
 let sourceCodeCursorPosition = 0
 let amountCoded = 0
 
@@ -42,14 +41,21 @@ const codingSkill = 30
 
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 async function input () {
+  // Game logic
   amountCoded += codingSkill
-  displayedCode.value += SourceCode.substring(sourceCodeCursorPosition, amountCoded)
+
+  // Add code to screen
+  const newCodeRows = SourceCode.substring(sourceCodeCursorPosition, amountCoded).split('\n')
   sourceCodeCursorPosition += codingSkill
+  displayedCodeRows.value[displayedCodeRows.value.length - 1] += newCodeRows[0]
+  for (let i = 1; i < newCodeRows.length; i++) {
+    displayedCodeRows.value.push(newCodeRows[i])
+  }
+
+  // Keep new code visible
   await nextTick()
   h4xWindow.value?.scrollToBottom()
 }
-
-const numberOfLines = computed(() => (displayedCode.value.match(/\n/g) || '').length + 1)
 
 document.onkeydown = (e) => input()
 </script>

@@ -1,4 +1,5 @@
-export default `#include "quaternion.h"
+
+const godot = `#include "quaternion.h"
 
 #include "core/math/basis.h"
 #include "core/string/ustring.h"
@@ -309,3 +310,6 @@ Quaternion Quaternion::from_euler(const Vector3 &p_euler) {
 			sin_a1 * sin_a2 * sin_a3 + cos_a1 * cos_a2 * cos_a3);
 }
 `
+
+// Export without comments. Could also strip double blank lines, but whatever.
+export default godot.split('\n').filter(string => !string.includes('// ')).join('\n')
