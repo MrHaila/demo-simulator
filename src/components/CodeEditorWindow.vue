@@ -35,6 +35,11 @@ const characterLimit = ref(10)
 
 const displayedCodeRows = ref<string[]>([''])
 let sourceCodeCursorPosition = 0
+const lines = SourceCode.split('\n')
+while (!sourceCodeCursorPosition) {
+  const line = Math.floor(Math.random() * (lines.length - 1))
+  if (lines[line].length !== 0 && !lines[line].match(/^\s+|}/)) sourceCodeCursorPosition = SourceCode.indexOf(lines[line])
+}
 let amountCoded = 0
 
 const codingSkill = 30
@@ -45,7 +50,7 @@ async function input () {
   amountCoded += codingSkill
 
   // Add code to screen
-  const newCodeRows = SourceCode.substring(sourceCodeCursorPosition, amountCoded).split('\n')
+  const newCodeRows = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + codingSkill).split('\n')
   sourceCodeCursorPosition += codingSkill
   displayedCodeRows.value[displayedCodeRows.value.length - 1] += newCodeRows[0]
   for (let i = 1; i < newCodeRows.length; i++) {
