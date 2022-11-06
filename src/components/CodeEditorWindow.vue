@@ -2,18 +2,17 @@
 os-window(
   title="H4X_EDIT"
   no-padding
-  class="overflow-y-scroll"
+  ref="h4xWindow"
 )
-  div(class="flex" ref="h4xBody")
-    div(class="h-full text-right px-2 bg-gray-800 text-gray-400 font-mono border-r-gray-700 border-r-2" style="min-width: 3rem;")
-      div(v-for="i in numberOfLines" class="") {{ i }}
-
-    pre(class="font-mono px-2") {{ displayedCode }}
-      span(class="blink") █
+  table(class="table-fixed font-mono")
+    tbody
+      tr(v-for="(string, index) in displayedCodeRows" :key="index")
+        td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ index }}
+        td(class="whitespace-pre-wrap h-6 px-2") {{ string }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import OsWindow from '../components/OsWindow.vue'
 import SourceCode from '../source_code/code'
 
@@ -28,25 +27,26 @@ import SourceCode from '../source_code/code'
 */
 
 const codePoints = ref(0)
-const characterLimit = ref(100)
+const characterLimit = ref(10)
 
-const h4xBody = ref<Element | null>(null)
 // onMounted(() => {
 //   console.log(h4xBody.value?.)
 // })
 
 const displayedCode = ref("")
+const displayedCodeRows = computed(() => displayedCode.value.split('\n'))
 let sourceCodeCursorPosition = 0
 let amountCoded = 0
 
 const codingSkill = 30
 
-function input () {
+const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
+async function input () {
   amountCoded += codingSkill
   displayedCode.value += SourceCode.substring(sourceCodeCursorPosition, amountCoded)
   sourceCodeCursorPosition += codingSkill
-  if (h4xBody.value) h4xBody.value.scrollTop = h4xBody.value.scrollHeight // Keep scrolled to the bottom. Needs testing.
-  console.log(h4xBody.value?.scrollHeight)
+  await nextTick()
+  h4xWindow.value?.scrollToBottom()
 }
 
 const numberOfLines = computed(() => (displayedCode.value.match(/\n/g) || '').length + 1)
@@ -56,7 +56,7 @@ document.onkeydown = (e) => input()
 
 <style>
 .blink {
-  animation: blink-animation 2s steps(2, start) infinite;
+  animation: blink-animation 1s steps(2, start) infinite;
 }
 @keyframes blink-animation {
   to {

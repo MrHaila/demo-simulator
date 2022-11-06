@@ -1,12 +1,26 @@
 <template lang="pug">
 div(class="flex gap-2 h-full")
+  //- Left column
   code-editor-window(
     class="grow"
   )
-  os-window(
-    title="Profile"
-    class="h-52 basis-80"
-  ) Level 83 Cosmic Monkey
+
+  //- Right column
+  div(
+    class="basis-80 flex flex-col gap-2 shrink-0"
+  )
+    os-window(
+      title="Profile"
+      class="basis-52"
+    ) Level 83 Cosmic Monkey
+
+    os-window(
+      title="Mission"
+      class="grow"
+    )
+      ul
+        li 1. Hello World
+
 </template>
 
 <script lang="ts" setup>
