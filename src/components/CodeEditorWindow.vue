@@ -17,21 +17,16 @@ import OsWindow from '../components/OsWindow.vue'
 import SourceCode from '../source_code/code'
 
 /*
-  SPEC:
-  - Most buttons generate code.
-  - Amount generated starts from 1 character and improves with skill.
+  TODO:
+  - Move code skill to pinia player profile.
   - Current challenge has a memory limit (number of characters).
-  - Code generation should start from a random line break that's followed by a character.
+  - Add lifecycle: limit reached? Code analysis animation scene after that?
   - After a code section(?) completes, it may randomly become more powerful.
   - Blinking box cursor when active.
 */
 
 const codePoints = ref(0)
 const characterLimit = ref(10)
-
-// onMounted(() => {
-//   console.log(h4xBody.value?.)
-// })
 
 const displayedCodeRows = ref<string[]>([''])
 let sourceCodeCursorPosition = 0
@@ -50,6 +45,7 @@ async function input () {
   amountCoded += codingSkill
 
   // Add code to screen
+  // TODO: check if file has less code than what we need -> add what we can, move cursor to 0 and add the rest
   const newCodeRows = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + codingSkill).split('\n')
   sourceCodeCursorPosition += codingSkill
   displayedCodeRows.value[displayedCodeRows.value.length - 1] += newCodeRows[0]
