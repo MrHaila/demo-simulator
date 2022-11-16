@@ -12,7 +12,7 @@ div(class="p-2 h-screen")
 <script setup lang="ts">
 import BootScene from "./states/BootScene.vue"
 import EliteOsScene from "./states/EliteOsScene.vue"
-import { useGameStateStore, scenes } from "./stores/counter"
+import { useGameStateStore, scenes } from "./stores/gameStateStore"
 
 const gameStateStore = useGameStateStore()
 </script>
