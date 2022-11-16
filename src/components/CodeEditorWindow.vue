@@ -12,7 +12,7 @@ os-window(
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref } from 'vue';
+import { nextTick, ref } from 'vue'
 import OsWindow from '../components/OsWindow.vue'
 import SourceCode from '../source_code/code'
 
@@ -27,28 +27,34 @@ import SourceCode from '../source_code/code'
 
 const codePoints = ref(0)
 const characterLimit = ref(10)
+let amountCoded = 0
+const codingSpeed = 30
 
-let sourceCodeCursorPosition = 9000
-const lines = SourceCode.split('\n')
+// Pick a random start position
+let sourceCodeCursorPosition = 0
+let lines = SourceCode.split('\n')
 while (!sourceCodeCursorPosition) {
   const line = Math.floor(Math.random() * (lines.length - 1))
   if (lines[line].length !== 0 && !lines[line].match(/^\s+|}/)) sourceCodeCursorPosition = SourceCode.indexOf(lines[line])
 }
-let amountCoded = 0
+lines = []
 
-const codingSpeed = 30
+// INPUT HANDLING ----------------------------
 
 interface CodeLine {
   lineNumber: number
   text: string
 }
+
 const displayedCodeRows = ref<CodeLine[]>([
   {
     lineNumber: 0,
     text: ''
   }
 ])
+
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
+
 async function input () {
   // Game logic
   amountCoded += codingSpeed
@@ -88,7 +94,7 @@ async function input () {
   h4xWindow.value?.scrollToBottom()
 }
 
-document.onkeydown = (e) => input()
+document.onkeydown = input
 </script>
 
 <style>
