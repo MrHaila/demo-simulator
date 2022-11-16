@@ -6,9 +6,9 @@ os-window(
 )
   table(class="table-fixed font-mono")
     tbody
-      tr(v-for="(string, index) in displayedCodeRows" :key="index")
-        td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ index }}
-        td(class="whitespace-pre-wrap h-6 px-2") {{ string }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
+      tr(v-for="(line, index) in displayedCodeRows" :key="index")
+        td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ line.lineNumber }}
+        td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
 </template>
 
 <script lang="ts" setup>
@@ -28,8 +28,7 @@ import SourceCode from '../source_code/code'
 const codePoints = ref(0)
 const characterLimit = ref(10)
 
-const displayedCodeRows = ref<string[]>([''])
-let sourceCodeCursorPosition = 0
+let sourceCodeCursorPosition = 9000
 const lines = SourceCode.split('\n')
 while (!sourceCodeCursorPosition) {
   const line = Math.floor(Math.random() * (lines.length - 1))
@@ -37,24 +36,55 @@ while (!sourceCodeCursorPosition) {
 }
 let amountCoded = 0
 
-const codingSkill = 30
+const codingSpeed = 30
 
+interface CodeLine {
+  lineNumber: number
+  text: string
+}
+const displayedCodeRows = ref<CodeLine[]>([
+  {
+    lineNumber: 0,
+    text: ''
+  }
+])
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 async function input () {
   // Game logic
-  amountCoded += codingSkill
+  amountCoded += codingSpeed
 
-  // Add code to screen
-  // TODO: check if file has less code than what we need -> add what we can, move cursor to 0 and add the rest
-  const newCodeRows = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + codingSkill).split('\n')
-  sourceCodeCursorPosition += codingSkill
-  displayedCodeRows.value[displayedCodeRows.value.length - 1] += newCodeRows[0]
-  for (let i = 1; i < newCodeRows.length; i++) {
-    displayedCodeRows.value.push(newCodeRows[i])
+  // Grab new characters from the source file and split by line breaks.
+  let newCode = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + codingSpeed)
+
+  // If the source file ran out...
+  if (newCode.length !== codingSpeed) {
+    // Loop back and add the rest.
+    sourceCodeCursorPosition = 0
+    newCode += `\n${SourceCode.substring(sourceCodeCursorPosition, codingSpeed - newCode.length)}`
   }
 
-  // Keep new code visible
-  await nextTick()
+  const newCodeRows = newCode.split('\n')
+  sourceCodeCursorPosition += codingSpeed
+
+  // Append first new row to the latest displayed row.
+  displayedCodeRows.value[displayedCodeRows.value.length - 1].text += newCodeRows[0]
+
+  // For each subsequent row...
+  for (let i = 1; i < newCodeRows.length; i++) {
+    // Directly add new rows to the display buffer.
+    displayedCodeRows.value.push({
+      lineNumber: displayedCodeRows.value[displayedCodeRows.value.length - 1].lineNumber + 1,
+      text: newCodeRows[i]
+    })
+
+    // Trim excess lines.
+    if (displayedCodeRows.value.length > 300) {
+      displayedCodeRows.value.shift()
+    }
+  }
+
+  // Keep new code visible.
+  await nextTick() // Wait for a DOM update.
   h4xWindow.value?.scrollToBottom()
 }
 
