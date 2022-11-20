@@ -8,10 +8,12 @@ os-window(
     tbody
       tr(v-for="(line, index) in displayedCodeRows" :key="index")
         td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ line.lineNumber }}
-        td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
+        td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
 </template>
 
 <script lang="ts" setup>
+import { Scenes, useGameStateStore } from '@/stores/gameStateStore';
+import { onKeyStroke, useWindowFocus } from '@vueuse/core';
 import { nextTick, ref } from 'vue'
 import OsWindow from '../components/OsWindow.vue'
 import SourceCode from '../source_code/code'
@@ -22,13 +24,13 @@ import SourceCode from '../source_code/code'
   - Current challenge has a memory limit (number of characters).
   - Add lifecycle: limit reached? Code analysis animation scene after that?
   - After a code section(?) completes, it may randomly become more powerful.
-  - Blinking box cursor when active.
 */
+
+const gameStateStore = useGameStateStore()
 
 const codePoints = ref(0)
 const characterLimit = ref(10)
 let amountCoded = 0
-const codingSpeed = 30
 
 // Pick a random start position
 let sourceCodeCursorPosition = 0
@@ -57,20 +59,20 @@ const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
 async function input () {
   // Game logic
-  amountCoded += codingSpeed
+  amountCoded += gameStateStore.profile.codingSpeed
 
   // Grab new characters from the source file and split by line breaks.
-  let newCode = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + codingSpeed)
+  let newCode = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + gameStateStore.profile.codingSpeed)
 
   // If the source file ran out...
-  if (newCode.length !== codingSpeed) {
+  if (newCode.length !== gameStateStore.profile.codingSpeed) {
     // Loop back and add the rest.
     sourceCodeCursorPosition = 0
-    newCode += `\n${SourceCode.substring(sourceCodeCursorPosition, codingSpeed - newCode.length)}`
+    newCode += `\n${SourceCode.substring(sourceCodeCursorPosition, gameStateStore.profile.codingSpeed - newCode.length)}`
   }
 
   const newCodeRows = newCode.split('\n')
-  sourceCodeCursorPosition += codingSpeed
+  sourceCodeCursorPosition += gameStateStore.profile.codingSpeed
 
   // Append first new row to the latest displayed row.
   displayedCodeRows.value[displayedCodeRows.value.length - 1].text += newCodeRows[0]
@@ -94,7 +96,15 @@ async function input () {
   h4xWindow.value?.scrollToBottom()
 }
 
-document.onkeydown = input
+const windowIsInfocus = useWindowFocus()
+onKeyStroke((e) => {
+  if (e.key === "Escape") {
+    gameStateStore.currentScene = Scenes.Home
+  } else if (windowIsInfocus.value && e.key.length === 1) {
+    // e.preventDefault()
+    input()
+  }
+})
 </script>
 
 <style>
