@@ -12,8 +12,8 @@ os-window(
         th(class="border border-liver py-1 px-2") Quantity
         th(class="border border-liver py-1 px-2") Name
         th(class="border border-liver py-1 px-2") Country
-    tbody
-      tr(v-for="(row, index) in displayedRows" :key="index")
+    tbody(v-for="(row, index) in displayedRows" :key="index")
+      tr
         //- td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ row.rowNumber }}
         //- td(class="whitespace-pre-wrap h-6 px-2") {{ row.text }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id'" class="blink") █]
@@ -21,6 +21,8 @@ os-window(
         td(class="border border-liver py-1 px-2") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity'" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name'" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country'" class="blink") █]
+      tr(v-if="Number(row.id) % 10 === 0 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id")
+        td(colspan="5" class="text-center font-sans py-3 bg-gray-700") You have earned one back scratch from Koko the Sage.
 </template>
 
 <script lang="ts" setup>
@@ -29,7 +31,8 @@ import OsWindow from './OsWindow.vue'
 import { countries, names } from '../source_code/work'
 
 let latestWorkId = 0
-const codingSpeed = 1
+const codingSpeed = 10
+const backScratches = ref(0)
 
 const mwxWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
@@ -116,11 +119,14 @@ async function input (remainingAmountLeftToType?: number) {
       currentOrder.quantity.length === nextOrder.quantity.length &&
       currentOrder.name.length === nextOrder.name.length &&
       currentOrder.country.length === nextOrder.country.length) {
+    // If the current id was divisible by 10, add points
+    if (latestWorkId % 10 === 0) {
+      backScratches.value++
+    }
+
     latestWorkId++
     addEmptyOrder()
     nextOrder = getRandomOrder()
-
-    // TODO: Count points
   }
 
   // If there are still characters left to type, then continue typing
