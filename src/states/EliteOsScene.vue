@@ -1,7 +1,10 @@
 <template lang="pug">
 div(class="flex gap-2 h-full")
   //- Left column
-  code-editor-window(
+  //- code-editor-window(
+  //-   class="grow"
+  //- )
+  monkey-work-window(
     class="grow"
   )
 
@@ -25,5 +28,6 @@ div(class="flex gap-2 h-full")
 
 <script lang="ts" setup>
 import CodeEditorWindow from '@/components/CodeEditorWindow.vue'
+import MonkeyWorkWindow from '@/components/MonkeyWorkWindow.vue'
 import OsWindow from '@/components/OsWindow.vue'
 </script>
