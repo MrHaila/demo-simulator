@@ -14,8 +14,6 @@ os-window(
         th(class="border border-liver py-1 px-2") Country
     tbody(v-for="(row, index) in displayedRows" :key="index")
       tr
-        //- td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ row.rowNumber }}
-        //- td(class="whitespace-pre-wrap h-6 px-2") {{ row.text }}#[span(v-show="index === displayedCodeRows.length - 1" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id'" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type'" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity'" class="blink") █]
