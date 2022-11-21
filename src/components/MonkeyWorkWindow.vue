@@ -6,7 +6,7 @@ os-window(
 )
   //- TODO: move scrolling to the table body instead of all window contents
   table(class="table-fixed font-mono border-collapse w-full")
-    thead(class="text-left")
+    thead(class="text-left bg-gray-700")
       tr
         th(class="border border-liver py-1 px-2") Order Id
         th(class="border border-liver py-1 px-2") Type

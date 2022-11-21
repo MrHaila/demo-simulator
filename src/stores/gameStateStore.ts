@@ -6,6 +6,7 @@ export enum Scenes {
   Home,
   Work,
   Challenge,
+  ChallengesList,
 }
 
 export const currentSaveVersion = 1

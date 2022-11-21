@@ -20,7 +20,6 @@ import SourceCode from '../source_code/code'
 
 /*
   TODO:
-  - Move code skill to pinia player profile.
   - Current challenge has a memory limit (number of characters).
   - Add lifecycle: limit reached? Code analysis animation scene after that?
   - After a code section(?) completes, it may randomly become more powerful.

@@ -1,8 +1,12 @@
 <template lang="pug">
 div(class="flex gap-2 h-full")
   //- Left column
+  challenges-window(
+    v-if="gameStateStore.currentScene === Scenes.ChallengesList"
+    class="grow"
+  )
   code-editor-window(
-    v-if="gameStateStore.currentScene === Scenes.Challenge"
+    v-else-if="gameStateStore.currentScene === Scenes.Challenge"
     class="grow"
   )
   monkey-work-window(
@@ -13,10 +17,33 @@ div(class="flex gap-2 h-full")
     v-else
     class="grow"
   )
-    div home screen TBD
-    div(class="space-x-2")
-      os-button(@click="gameStateStore.currentScene = Scenes.Work") Work for Koto
-      os-button(@click="gameStateStore.currentScene = Scenes.Challenge") Do a Challenge
+    div ELITE OS
+    div All Software ------------------------------------------------
+    div(class="flex justify-evenly space-x-2")
+      os-app-shortcut(
+        title="Scene Explorer 1337"
+        description="The definitive source of all Scene challenges and compos."
+        buttonLabel="Open  Challenges"
+        @button="gameStateStore.currentScene = Scenes.ChallengesList"
+        )
+      os-app-shortcut(
+        title="Monkey Works X Pro"
+        description="You have been assigned a floating license for Monkey Works X Pro by Koto Group Global Ltd."
+        buttonLabel="Open Work"
+        @button="gameStateStore.currentScene = Scenes.Work"
+        )
+      os-app-shortcut(
+        title="Kotoshop"
+        description="Want skills? Old Koto has what you need... for a price."
+        buttonLabel="Open Shop"
+        @button="gameStateStore.currentScene = Scenes.Home"
+        )
+      os-app-shortcut(
+        title="silk_road.app"
+        description="This is application is from an unidentified developer. It is not recommended to run this application."
+        buttonLabel="Open App"
+        @button="gameStateStore.currentScene = Scenes.Home"
+        )
 
   //- Right column
   div(
@@ -43,10 +70,11 @@ div(class="flex gap-2 h-full")
 <script lang="ts" setup>
 import CodeEditorWindow from '@/components/CodeEditorWindow.vue'
 import MonkeyWorkWindow from '@/components/MonkeyWorkWindow.vue'
+import ChallengesWindow from '@/components/ChallengesWindow.vue'
 import OsWindow from '@/components/OsWindow.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { Scenes } from '@/stores/gameStateStore'
-import OsButton from '@/components/OsButton.vue'
+import OsAppShortcut from '@/components/OsAppShortcut.vue'
 
 const gameStateStore = useGameStateStore()
 </script>
