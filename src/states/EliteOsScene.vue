@@ -17,8 +17,12 @@ div(class="flex gap-2 h-full")
     v-else
     class="grow"
   )
-    div ELITE OS
-    div All Software ------------------------------------------------
+    div(class="flex justify-center my-6")
+      EliteOsLogo(class="fill-gray-600 w-96")
+    
+    div(class="flex my-6 items-center gap-4")
+      p(class="uppercase") All Software
+      hr(class="flex-grow")
     div(class="flex justify-evenly space-x-2")
       os-app-shortcut(
         title="Scene Explorer 1337"
@@ -75,6 +79,7 @@ import OsWindow from '@/components/OsWindow.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { Scenes } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
+import EliteOsLogo from '@/assets/EliteOsLogo.vue'
 
 const gameStateStore = useGameStateStore()
 </script>
