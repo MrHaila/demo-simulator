@@ -9,15 +9,20 @@ export enum Scenes {
   ChallengesList,
 }
 
-export const currentSaveVersion = 1
+export const currentSaveVersion = 3
 
 const defaultProfile = {
   saveVersion: currentSaveVersion,
   name: '',
   codingSpeed: 1,
-  codingSkill: 0,
+  codingSkill: 1,
   backScratches: 0,
+  juiceBoxes: 0,
   latestWorkId: 0,
+}
+
+const defaultProgression = {
+  completedChallenges: {} as { [key: number]: { score: number } },
 }
 
 export const useGameStateStore = defineStore({
@@ -25,6 +30,7 @@ export const useGameStateStore = defineStore({
   state: () => ({
     currentScene: Scenes.Boot,
     profile: useStorage('profile', defaultProfile),
+    progression: useStorage('progression', defaultProgression),
   }),
   actions: {
     resetGame() {

@@ -15,8 +15,8 @@ os-window(
 import { Scenes, useGameStateStore } from '@/stores/gameStateStore';
 import { onKeyStroke, useWindowFocus } from '@vueuse/core';
 import { nextTick, ref } from 'vue'
-import OsWindow from '../components/OsWindow.vue'
-import SourceCode from '../source_code/code'
+import OsWindow from '../windows/OsWindow.vue'
+import SourceCode from '../../source_code/code'
 
 /*
   TODO:

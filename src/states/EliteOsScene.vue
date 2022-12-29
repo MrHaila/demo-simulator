@@ -20,9 +20,9 @@ div(class="flex gap-2 h-full")
     div(class="flex justify-center my-6")
       EliteOsLogo(class="fill-gray-600 w-96")
     
-    div(class="flex my-6 items-center gap-4")
+    div(class="flex my-6 items-center gap-4 text-gray-600")
       p(class="uppercase") All Software
-      hr(class="flex-grow")
+      hr(class="flex-grow border-gray-600")
     div(class="flex justify-evenly space-x-2")
       os-app-shortcut(
         title="Scene Explorer 1337"
@@ -55,12 +55,20 @@ div(class="flex gap-2 h-full")
   )
     os-window(
       title="Profile"
-      class="basis-52"
+      class=""
     )
       ul
         li Level 83 Cosmic Monkey
-        li Dexterity: {{ gameStateStore.profile.codingSpeed }}
-        li Scratches: {{ gameStateStore.profile.backScratches }}
+        li {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}: {{ gameStateStore.profile.codingSpeed }}
+        li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
+
+    os-window(
+      title="Assets"
+      class=""
+    )
+      ul
+        li {{ RedactText('Scratches', !!gameStateStore.profile.backScratches) }}: {{ gameStateStore.profile.backScratches }}
+        li {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}: {{ gameStateStore.profile.juiceBoxes }}
 
     os-window(
       title="Mission"
@@ -72,14 +80,19 @@ div(class="flex gap-2 h-full")
 </template>
 
 <script lang="ts" setup>
-import CodeEditorWindow from '@/components/CodeEditorWindow.vue'
-import MonkeyWorkWindow from '@/components/MonkeyWorkWindow.vue'
-import ChallengesWindow from '@/components/ChallengesWindow.vue'
-import OsWindow from '@/components/OsWindow.vue'
+import CodeEditorWindow from '@/components/windows/CodeEditorWindow.vue'
+import MonkeyWorkWindow from '@/components/windows/MonkeyWorkWindow.vue'
+import ChallengesWindow from '@/components/windows/ChallengesWindow.vue'
+import OsWindow from '@/components/windows/OsWindow.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { Scenes } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
 
 const gameStateStore = useGameStateStore()
+
+function RedactText(text: string, skip: boolean = false) {
+  if (!skip) text = text.replace(/./g, '?')
+  return text
+}
 </script>
