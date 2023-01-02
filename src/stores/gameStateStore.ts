@@ -1,12 +1,20 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
+import type { ChallengeBase } from '@/content/challenges'
 
 export enum Scenes {
-  Boot = 1,
-  Home,
-  Work,
-  Challenge,
-  ChallengesList,
+  Boot = 'Boot',
+  Home = 'Home',
+}
+
+export enum EliteOsApps {
+  Desktop = 'Desktop',
+  ChallengesList = 'ChallengesList',
+  Challenge = 'Challenge',
+  Work = 'Work',
+  PowerShop = 'PowerShop',
+  AchievementShop = 'AchievementShop',
+  Settings = 'Settings',
 }
 
 export const currentSaveVersion = 3
@@ -29,6 +37,8 @@ export const useGameStateStore = defineStore({
   id: 'game state',
   state: () => ({
     currentScene: Scenes.Boot,
+    currentEliteOsApp: EliteOsApps.Desktop,
+    currentChallenge: null as ChallengeBase | null,
     profile: useStorage('profile', defaultProfile),
     progression: useStorage('progression', defaultProgression),
   }),

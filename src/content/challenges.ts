@@ -20,10 +20,15 @@ export interface ChallengeBase {
   id: number
   name: string
   description: string
-  descriptionAuthor: PlotCharacter
+  descriptionAuthor?: PlotCharacter
   characterLimit?: number
   dependsOn: number | number[] | false
+  sourceCode?: 'helloWorld' | 'quaternion'
   // TODO: reward?
+}
+
+export interface ChallengeTutorial extends ChallengeBase {
+  challengeType: 'tutorial'
 }
 
 export interface ChallengeTimeAttack extends ChallengeBase {
@@ -46,15 +51,14 @@ export interface ChallengeCompo extends ChallengeBase {
   }[]
 }
 
-export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo)[] = [
+export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial)[] = [
   {
     id: 0,
-    challengeType: 'timeAttack',
-    name: '371t3 R04d - Tier I',
-    description: 'To progress in True Skill™, all must ascent the road. Yes. This is the way.',
-    descriptionAuthor: PlotCharacter.Koko,
-    maximumMilliseconds: 1337,
+    challengeType: 'tutorial',
+    name: 'Hello World',
+    description: 'Buttons make clicky noises. Press buttons. Make clicky noises.',
     dependsOn: false,
+    sourceCode: 'helloWorld',
   },
   {
     id: 1,

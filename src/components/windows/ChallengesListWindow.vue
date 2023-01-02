@@ -17,7 +17,7 @@ os-window(
         h2(class="") {{ challenge.name }}
         div(class="text-sm") {{ challenge.description }}
         div(class="flex justify-end mt-2")
-          os-button Open
+          os-button(@click="openChallenge(challenge)") Open
 
       div(v-else class="border-gray-600")
         h2(class="text-gray-600") {{ challenge.name }}
@@ -37,7 +37,7 @@ os-window(
 <script setup lang="ts">
 import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
-import { Scenes, useGameStateStore } from '@/stores/gameStateStore'
+import { EliteOsApps, Scenes, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke } from '@vueuse/core'
 import { allChallenges, challengesAsRows, type ChallengeBase } from '@/content/challenges'
 
@@ -51,5 +51,10 @@ function getChallengeStatus(challenge: ChallengeBase) {
   if (gameStateStore.progression.completedChallenges[challenge.id]) return 'completed'
   else if (challenge.dependsOn === false) return 'unlocked'
   return 'locked'
+}
+
+function openChallenge(challenge: ChallengeBase) {
+  gameStateStore.currentChallenge = challenge
+  gameStateStore.currentEliteOsApp = EliteOsApps.Challenge
 }
 </script>

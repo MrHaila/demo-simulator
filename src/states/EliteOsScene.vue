@@ -2,15 +2,15 @@
 div(class="flex gap-2 h-full")
   //- Left column
   challenges-window(
-    v-if="gameStateStore.currentScene === Scenes.ChallengesList"
+    v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList"
     class="grow"
   )
   code-editor-window(
-    v-else-if="gameStateStore.currentScene === Scenes.Challenge"
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
     class="grow"
   )
   monkey-work-window(
-    v-else-if="gameStateStore.currentScene === Scenes.Work"
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work"
     class="grow"
   )
   div(
@@ -28,25 +28,25 @@ div(class="flex gap-2 h-full")
         title="Scene Explorer 1337"
         description="The definitive source of all Scene challenges and compos."
         buttonLabel="Open  Challenges"
-        @button="gameStateStore.currentScene = Scenes.ChallengesList"
+        @button="gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList"
         )
       os-app-shortcut(
         title="Monkey Works X Pro"
         description="You have been assigned a floating license for Monkey Works X Pro by Koto Group Global Ltd."
         buttonLabel="Open Work"
-        @button="gameStateStore.currentScene = Scenes.Work"
+        @button="gameStateStore.currentEliteOsApp = EliteOsApps.Work"
         )
       os-app-shortcut(
         title="Kotoshop"
         description="Want skills? Old Koto has what you need... for a price."
         buttonLabel="Open Shop"
-        @button="gameStateStore.currentScene = Scenes.Home"
+        @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
         )
       os-app-shortcut(
         title="silk_road.app"
         description="This is application is from an unidentified developer. It is not recommended to run this application."
         buttonLabel="Open App"
-        @button="gameStateStore.currentScene = Scenes.Home"
+        @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
         )
 
   //- Right column
@@ -63,12 +63,21 @@ div(class="flex gap-2 h-full")
         li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
 
     os-window(
+      v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge"
       title="Assets"
       class=""
     )
       ul
         li {{ RedactText('Scratches', !!gameStateStore.profile.backScratches) }}: {{ gameStateStore.profile.backScratches }}
         li {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}: {{ gameStateStore.profile.juiceBoxes }}
+
+    OsWindow(
+      v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
+      title="Challenge TBD"
+      class=""
+    )
+      ul
+        li Goal or score board or something?
 
     os-window(
       title="Mission"
@@ -80,12 +89,12 @@ div(class="flex gap-2 h-full")
 </template>
 
 <script lang="ts" setup>
-import CodeEditorWindow from '@/components/windows/CodeEditorWindow.vue'
+import CodeEditorWindow from '@/components/windows/ChallengeWindow.vue'
 import MonkeyWorkWindow from '@/components/windows/MonkeyWorkWindow.vue'
-import ChallengesWindow from '@/components/windows/ChallengesWindow.vue'
+import ChallengesWindow from '@/components/windows/ChallengesListWindow.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
-import { Scenes } from '@/stores/gameStateStore'
+import { EliteOsApps } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
 

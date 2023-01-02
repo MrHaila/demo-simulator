@@ -1,6 +1,6 @@
 <template lang="pug">
 os-window(
-  title="H4X_EDIT"
+  :title="`H4X_EDIT - ${gameStateStore.currentChallenge?.name}`"
   no-padding
   ref="h4xWindow"
 )
@@ -12,10 +12,10 @@ os-window(
 </template>
 
 <script lang="ts" setup>
-import { Scenes, useGameStateStore } from '@/stores/gameStateStore';
-import { onKeyStroke, useWindowFocus } from '@vueuse/core';
+import { Scenes, useGameStateStore } from '@/stores/gameStateStore'
+import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
-import OsWindow from '../windows/OsWindow.vue'
+import OsWindow from './OsWindow.vue'
 import SourceCode from '../../source_code/code'
 
 /*
@@ -26,6 +26,8 @@ import SourceCode from '../../source_code/code'
 */
 
 const gameStateStore = useGameStateStore()
+
+const challenge = gameStateStore.currentChallenge
 
 const codePoints = ref(0)
 const characterLimit = ref(10)
