@@ -6,8 +6,8 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-enum PlotCharacter {
-  Koko = 'Koko the Sage',
+export enum PlotCharacter {
+  Koko = 'Don Koko',
   Mother = 'The Mother',
   Father = 'The Father',
   Bear = 'Russian Bear',

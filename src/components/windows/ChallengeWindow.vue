@@ -18,9 +18,10 @@ os-window(
 import { EliteOsApps, Scenes, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
-import OsWindow from './OsWindow.vue'
-import OsButton from '../OsButton.vue'
-import SourceCode from '../../source_code/code'
+import OsWindow from '@/components/windows/OsWindow.vue'
+import OsButton from '@/components/OsButton.vue'
+import SourceCode from '@/source_code/code'
+import SourceCodeHelloWorld from '@/source_code/helloWorld'
 
 /*
   TODO:
@@ -33,16 +34,23 @@ const gameStateStore = useGameStateStore()
 
 const challenge = gameStateStore.currentChallenge
 
+const characterLimit = ref(challenge?.characterLimit)
 const codePoints = ref(0)
-const characterLimit = ref(10)
 let amountCoded = 0
 
-// Pick a random start position
+let sourceCode: string
+if (challenge?.sourceCode === 'helloWorld') sourceCode = SourceCodeHelloWorld
+else sourceCode = SourceCode
+
+// Pick a random start position for non-tutorial challenges.
 let sourceCodeCursorPosition = 0
-let lines = SourceCode.split('\n')
-while (!sourceCodeCursorPosition) {
-  const line = Math.floor(Math.random() * (lines.length - 1))
-  if (lines[line].length !== 0 && !lines[line].match(/^\s+|}/)) sourceCodeCursorPosition = SourceCode.indexOf(lines[line])
+let lines: string[]
+if (challenge?.challengeType !== 'tutorial') {
+  lines = sourceCode.split('\n')
+  while (!sourceCodeCursorPosition) {
+    const line = Math.floor(Math.random() * (lines.length - 1))
+    if (lines[line].length !== 0 && !lines[line].match(/^\s+|}/)) sourceCodeCursorPosition = SourceCode.indexOf(lines[line])
+  }
 }
 lines = []
 
@@ -67,13 +75,13 @@ async function input () {
   amountCoded += gameStateStore.profile.codingSpeed
 
   // Grab new characters from the source file and split by line breaks.
-  let newCode = SourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + gameStateStore.profile.codingSpeed)
+  let newCode = sourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + gameStateStore.profile.codingSpeed)
 
-  // If the source file ran out...
-  if (newCode.length !== gameStateStore.profile.codingSpeed) {
+  // If the source file ran out in a non-tutorial challenge...
+  if (newCode.length !== gameStateStore.profile.codingSpeed && challenge?.challengeType !== 'tutorial') {
     // Loop back and add the rest.
     sourceCodeCursorPosition = 0
-    newCode += `\n${SourceCode.substring(sourceCodeCursorPosition, gameStateStore.profile.codingSpeed - newCode.length)}`
+    newCode += `\n${sourceCode.substring(sourceCodeCursorPosition, gameStateStore.profile.codingSpeed - newCode.length)}`
   }
 
   const newCodeRows = newCode.split('\n')
@@ -104,7 +112,7 @@ async function input () {
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
   if (e.key === "Escape") {
-    gameStateStore.currentScene = Scenes.Home
+    exitChallenge()
   } else if (windowIsInfocus.value && e.key.length === 1) {
     // e.preventDefault()
     input()

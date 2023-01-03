@@ -32,13 +32,13 @@ div(class="flex gap-2 h-full")
         )
       os-app-shortcut(
         title="Monkey Works X Pro"
-        description="You have been assigned a floating license for Monkey Works X Pro by Koto Group Global Ltd."
+        description="You have been assigned a floating license for Monkey Works X Pro by Koko Group Global Ltd."
         buttonLabel="Open Work"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.Work"
         )
       os-app-shortcut(
-        title="Kotoshop"
-        description="Want skills? Old Koto has what you need... for a price."
+        title="Kokoshop"
+        description="Want skills? Old Koko has what you need... for a price."
         buttonLabel="Open Shop"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
         )
@@ -73,11 +73,11 @@ div(class="flex gap-2 h-full")
 
     OsWindow(
       v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
-      title="Challenge TBD"
+      title="Challenge Info"
       class=""
     )
       ul
-        li Goal or score board or something?
+        li {{ gameStateStore.currentChallenge?.description }}
 
     os-window(
       title="Mission"

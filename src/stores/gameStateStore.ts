@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import type { ChallengeBase } from '@/content/challenges'
+import type { ChallengeBase, ChallengeCompo, ChallengeScoreAttack, ChallengeTimeAttack, ChallengeTutorial } from '@/content/challenges'
 
 export enum Scenes {
   Boot = 'Boot',
@@ -38,7 +38,7 @@ export const useGameStateStore = defineStore({
   state: () => ({
     currentScene: Scenes.Boot,
     currentEliteOsApp: EliteOsApps.Desktop,
-    currentChallenge: null as ChallengeBase | null,
+    currentChallenge: null as ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial | null,
     profile: useStorage('profile', defaultProfile),
     progression: useStorage('progression', defaultProgression),
   }),
