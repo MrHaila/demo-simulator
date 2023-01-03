@@ -17,9 +17,16 @@ div(class="flex gap-2 h-full")
     v-else
     class="grow px-2"
   )
+    ParticlesComponent(
+      id="tsparticles"
+      class="absolute top-0 left-0 w-full h-full -z-50"
+      :particlesInit="particlesInit"
+      :options="particleOptions"
+    )
+
     div(class="flex justify-center my-6")
       EliteOsLogo(class="fill-gray-600 w-96")
-    
+
     div(class="flex my-6 items-center gap-4 text-gray-600")
       p(class="uppercase") All Software
       hr(class="flex-grow border-gray-600")
@@ -97,6 +104,76 @@ import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
+
+import { ParticlesComponent } from 'vue3-particles'
+import { loadFull } from 'tsparticles'
+
+const particlesInit = async (engine: any) => {
+  await loadFull(engine)
+}
+
+const particleOptions = {
+  fpsLimit: 120,
+  interactivity: {
+    events: {
+      onHover: {
+        enable: true,
+        mode: 'repulse'
+      },
+      resize: true
+    },
+    modes: {
+      bubble: {
+        distance: 400,
+        duration: 2,
+        opacity: 0.8,
+        size: 40
+      },
+      repulse: {
+        distance: 140,
+        duration: 0.4
+      }
+    }
+  },
+  particles: {
+    color: {
+      value: '#ffffff'
+    },
+    links: {
+      color: '#ffffff',
+      distance: 140,
+      enable: true,
+      opacity: 0.3,
+      width: 1
+    },
+    move: {
+      enable: true,
+      outModes: {
+        default: 'out'
+      },
+      random: false,
+      speed: 2.5,
+      straight: false
+    },
+    number: {
+      density: {
+        enable: true,
+        area: 800
+      },
+      value: 60
+    },
+    opacity: {
+      value: 0.2
+    },
+    shape: {
+      type: 'circle'
+    },
+    size: {
+      random: true,
+      value: 5
+    }
+  }
+}
 
 const gameStateStore = useGameStateStore()
 
