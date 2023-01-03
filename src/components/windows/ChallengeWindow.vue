@@ -9,13 +9,17 @@ os-window(
       tr(v-for="(line, index) in displayedCodeRows" :key="index")
         td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ line.lineNumber }}
         td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
+
+  template(#footer-right)
+    os-button(@click="exitChallenge") Abort Challenge
 </template>
 
 <script lang="ts" setup>
-import { Scenes, useGameStateStore } from '@/stores/gameStateStore'
+import { EliteOsApps, Scenes, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
 import OsWindow from './OsWindow.vue'
+import OsButton from '../OsButton.vue'
 import SourceCode from '../../source_code/code'
 
 /*
@@ -106,6 +110,11 @@ onKeyStroke((e) => {
     input()
   }
 })
+
+function exitChallenge () {
+  gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList
+  gameStateStore.currentChallenge = null
+}
 </script>
 
 <style>

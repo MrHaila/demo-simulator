@@ -15,7 +15,7 @@ div(class="flex gap-2 h-full")
   )
   div(
     v-else
-    class="grow"
+    class="grow px-2"
   )
     div(class="flex justify-center my-6")
       EliteOsLogo(class="fill-gray-600 w-96")

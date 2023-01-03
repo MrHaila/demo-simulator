@@ -28,6 +28,9 @@ os-window(
 
   //pre(class="text-xs") {{ challengesAsRows }}
 
+  template(#footer-right)
+    os-button(@click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop") Back to Desktop
+
 // TODO
   - Challenge entries
   - Tree view
@@ -37,14 +40,14 @@ os-window(
 <script setup lang="ts">
 import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
-import { EliteOsApps, Scenes, useGameStateStore } from '@/stores/gameStateStore'
+import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke } from '@vueuse/core'
-import { allChallenges, challengesAsRows, type ChallengeBase } from '@/content/challenges'
+import { challengesAsRows, type ChallengeBase } from '@/content/challenges'
 
 const gameStateStore = useGameStateStore()
 
 onKeyStroke(['Escape'], () => {
-  gameStateStore.currentScene = Scenes.Home
+  gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
 })
 
 function getChallengeStatus(challenge: ChallengeBase) {

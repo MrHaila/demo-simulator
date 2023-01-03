@@ -27,14 +27,14 @@ os-window(
         td(colspan="5" class="w-full text-center p font-sans italic text-sm pt-2 text-gray-500") Press any key to do work.
 
   template(#footer-right)
-    os-button(@click="gameStateStore.currentScene = Scenes.Home") Whatever, I'm done
+    os-button(@click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop") Whatever, I'm done
 </template>
 
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue'
 import OsWindow from './OsWindow.vue'
 import { countries, names } from '@/source_code/work'
-import { useGameStateStore, Scenes } from '@/stores/gameStateStore'
+import { useGameStateStore, EliteOsApps } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import OsButton from '@/components/OsButton.vue'
 
@@ -149,7 +149,7 @@ async function input (remainingAmountLeftToType?: number) {
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
   if (e.key === "Escape") {
-    gameStateStore.currentScene = Scenes.Home
+    gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
   } else if (windowIsInfocus.value && e.key.length === 1) {
     // e.preventDefault()
     input()
