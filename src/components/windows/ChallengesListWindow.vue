@@ -1,6 +1,6 @@
 <template lang="pug">
 os-window(
-  title="Scene Explorer 1337 - Elite Road"
+  title="Scene Explorer v1337"
   no-padding
   ref="challengesWindow"
 )

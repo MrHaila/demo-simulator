@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="flex justify-between h-screen")
+div(class="p-2 flex justify-between h-screen")
   div(class="flex flex-col justify-between")
     div
       div(class="flex")

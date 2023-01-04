@@ -35,7 +35,7 @@ div(class="p-2 flex gap-2 h-full")
       hr(class="flex-grow border-gray-600")
     div(class="flex justify-evenly space-x-2")
       OsAppShortcut(
-        title="Scene Explorer 1337"
+        title="Scene Explorer"
         description="The definitive source of all Scene challenges and compos."
         buttonLabel="Open  Challenges"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList"
