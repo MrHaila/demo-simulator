@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="p-2 h-screen")
+div(class="h-screen")
   boot-scene(v-if="gameStateStore.currentScene === Scenes.Boot" @done="gameStateStore.currentScene = Scenes.Home")
   elite-os-scene(v-else)
 </template>

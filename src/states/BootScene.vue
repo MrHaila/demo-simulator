@@ -24,13 +24,13 @@ div(class="flex justify-between h-screen")
       p 23/6/1-ö092DX-2ASÅ190Z-00
 
   div ASSEMBLY LOGO
-
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
 import AnimatedText from '../components/AnimatedText.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue';
+import { onKeyStroke, useWindowFocus } from '@vueuse/core';
 
 const emits = defineEmits(['done'])
 
@@ -81,8 +81,12 @@ function nextState(delay?: number) {
   }
 }
 
-document.onkeydown = (e) => emits('done')
-onBeforeUnmount(() => document.onkeydown = null)
+const windowIsInfocus = useWindowFocus()
+onKeyStroke((e) => {
+  if (windowIsInfocus.value && e.key.length === 1) {
+    emits('done')
+  }
+})
 </script>
 
 <style>

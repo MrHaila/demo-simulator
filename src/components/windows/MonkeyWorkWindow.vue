@@ -14,7 +14,7 @@ os-window(
         th(class="border border-liver py-1 px-2") Name
         th(class="border border-liver py-1 px-2") Country
     tbody(v-for="(row, index) in displayedRows" :key="index")
-      tr
+      tr(style="height: 33px")
         td(class="border border-liver py-1 px-2") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus" class="blink") █]
         td(class="border border-liver py-1 px-2") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus" class="blink") █]
@@ -26,7 +26,7 @@ os-window(
           aside(class="text-xl text-liver") +1 Back Scratch
       tr(v-if="displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1].id")
         //- TODO: animate?
-        td(colspan="5" class="w-full text-center p font-sans italic text-sm pt-2 text-gray-500") Press any key to do work.
+        td(colspan="5" class="w-full text-center p font-sans italic text-sm pt-2 text-gray-500 animate-pulse") Press any key to do work.
 
   template(#footer-right)
     os-button(@click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop") Whatever, I'm done
@@ -129,7 +129,7 @@ async function input (remainingAmountLeftToType?: number) {
       currentOrder.name.length === nextOrder.name.length &&
       currentOrder.country.length === nextOrder.country.length) {
     // If the current id was divisible by 10, add points
-    if (gameStateStore.profile.latestWorkId % 10 === 0) {
+    if (gameStateStore.profile.latestWorkId !== 0 && gameStateStore.profile.latestWorkId % 10 === 0) {
       gameStateStore.profile.backScratches++
     }
 

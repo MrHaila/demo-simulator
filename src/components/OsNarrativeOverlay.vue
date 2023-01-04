@@ -18,9 +18,9 @@ div(
     h1(class="text-xl") "{{ currentDialogue.text }}"
     aside(class="italic") - {{ currentDialogue.author }}
   div(v-else)
-    h1 "{{ currentDialogue?.text }}"
+    h1 {{ currentDialogue?.text }}
 
-  p(class="text-xs mt-3 text-center") Press any key to continue.
+  p(class="text-xs mt-3 text-center animate-pulse") Press any key to continue.
 
   div(class="text-xs p-2 text-gray-400")
     p Current scene: {{ currentNarrativeScene?.id }}

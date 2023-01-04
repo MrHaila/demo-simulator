@@ -2,7 +2,7 @@
 //- TODO
   - Confetti? https://confetti.js.org/#
 
-div(class="flex gap-2 h-full")
+div(class="p-2 flex gap-2 h-full")
   //- Left column
   ChallengesWindow(
     v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList"
@@ -48,7 +48,7 @@ div(class="flex gap-2 h-full")
         )
       OsAppShortcut(
         title="Kokoshop"
-        description="Want skills? Old Koko has what you need... for a price."
+        description="Itching for skills? Old Koko has what you need... if you've got the scratch for it."
         buttonLabel="Open Shop"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
         )
