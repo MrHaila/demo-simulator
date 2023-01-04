@@ -107,6 +107,7 @@ import EliteOsLogo from '@/assets/EliteOsLogo.vue'
 
 import { ParticlesComponent } from 'vue3-particles'
 import { loadFull } from 'tsparticles'
+import type { RecursivePartial, IOptions } from 'tsparticles-engine'
 
 const particlesInit = async (engine: any) => {
   await loadFull(engine)
@@ -173,7 +174,7 @@ const particleOptions = {
       value: 5
     }
   }
-}
+} satisfies RecursivePartial<IOptions>
 
 const gameStateStore = useGameStateStore()
 

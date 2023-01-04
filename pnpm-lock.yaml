@@ -14,6 +14,7 @@ specifiers:
   pug: ^3.0.2
   tailwindcss: ^3.2.4
   tsparticles: ^2.7.1
+  tsparticles-engine: ^2.7.1
   typescript: ^4.9.4
   vite: ^4.0.4
   vue: ^3.2.45
@@ -24,6 +25,7 @@ dependencies:
   '@vueuse/core': 9.10.0_vue@3.2.45
   pinia: 2.0.28_prq2uz4lho2pwp6irk4cfkrxwu
   tsparticles: 2.7.1
+  tsparticles-engine: 2.7.1
   vue: 3.2.45
   vue3-particles: 2.7.1
 
