@@ -22,7 +22,7 @@ os-window(
         td(class="border border-liver py-1 px-2") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus" class="blink") █]
       tr(v-if="Number(row.id) % 10 === 0 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id")
         td(colspan="5" class="text-center font-sans py-3 bg-gray-700 border border-liver px-2")
-          p You have earned a back scratch from {{ PlotCharacter.Koko }}.
+          p You have earned a back scratch from {{ PlotCharacters.Koko }}.
           aside(class="text-xl text-liver") +1 Back Scratch
       tr(v-if="displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1].id")
         //- TODO: animate?
@@ -39,7 +39,7 @@ import { countries, names } from '@/source_code/work'
 import { useGameStateStore, EliteOsApps } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import OsButton from '@/components/OsButton.vue'
-import { PlotCharacter } from '@/content/challenges'
+import { PlotCharacters } from '@/content/narrative'
 
 const gameStateStore = useGameStateStore()
 

@@ -6,21 +6,13 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-export enum PlotCharacter {
-  Koko = 'Don Koko',
-  Mother = 'The Mother',
-  Father = 'The Father',
-  Bear = 'Russian Bear',
-  Cod = 'English Cod',
-  Universe = 'The Universe',
-  AutoMonkey = 'AutoMonkey'
-}
+import { PlotCharacters } from "./narrative"
 
 export interface ChallengeBase {
   id: number
   name: string
   description: string
-  descriptionAuthor?: PlotCharacter
+  descriptionAuthor?: PlotCharacters
   characterLimit?: number
   dependsOn: number | number[] | false
   sourceCode?: 'helloWorld' | 'quaternion'
@@ -51,7 +43,9 @@ export interface ChallengeCompo extends ChallengeBase {
   }[]
 }
 
-export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial)[] = [
+export type UnknownChallenge = ChallengeCompo | ChallengeScoreAttack | ChallengeTimeAttack | ChallengeTutorial
+
+export const allChallenges: UnknownChallenge[] = [
   {
     id: 0,
     challengeType: 'tutorial',
@@ -65,7 +59,7 @@ export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | Challe
     challengeType: 'scoreAttack',
     name: 'Score Attack Test',
     description: 'This is a test of the score attack challenge type.',
-    descriptionAuthor: PlotCharacter.Universe,
+    descriptionAuthor: PlotCharacters.Universe,
     minimumScore: 100,
     characterLimit: 100,
     dependsOn: 0,
@@ -75,7 +69,7 @@ export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | Challe
     challengeType: 'compo',
     name: 'Score Attack Compo Test',
     description: 'This is a test of the score attack compo challenge type.',
-    descriptionAuthor: PlotCharacter.Universe,
+    descriptionAuthor: PlotCharacters.Universe,
     compoType: 'scoreAttack',
     challengers: [
       {
@@ -94,7 +88,7 @@ export const allChallenges: (ChallengeTimeAttack | ChallengeScoreAttack | Challe
     challengeType: 'compo',
     name: 'Time Attack Compo Test',
     description: 'This is a test of the time attack compo challenge type.',
-    descriptionAuthor: PlotCharacter.Universe,
+    descriptionAuthor: PlotCharacters.Universe,
     compoType: 'timeAttack',
     challengers: [
       {

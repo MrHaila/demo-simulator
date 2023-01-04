@@ -42,7 +42,7 @@ import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke } from '@vueuse/core'
-import { challengesAsRows, type ChallengeBase, type ChallengeCompo, type ChallengeScoreAttack, type ChallengeTimeAttack, type ChallengeTutorial } from '@/content/challenges'
+import { challengesAsRows, type UnknownChallenge } from '@/content/challenges'
 
 const gameStateStore = useGameStateStore()
 
@@ -50,13 +50,13 @@ onKeyStroke(['Escape'], () => {
   gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
 })
 
-function getChallengeStatus(challenge: ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial) {
+function getChallengeStatus(challenge: UnknownChallenge) {
   if (gameStateStore.progression.completedChallenges[challenge.id]) return 'completed'
   else if (challenge.dependsOn === false) return 'unlocked'
   return 'locked'
 }
 
-function openChallenge(challenge: ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial) {
+function openChallenge(challenge: UnknownChallenge) {
   gameStateStore.currentChallenge = challenge
   gameStateStore.currentEliteOsApp = EliteOsApps.Challenge
 }

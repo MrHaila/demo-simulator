@@ -1,15 +1,18 @@
 <template lang="pug">
+//- TODO
+  - Confetti? https://confetti.js.org/#
+
 div(class="flex gap-2 h-full")
   //- Left column
-  challenges-window(
+  ChallengesWindow(
     v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList"
     class="grow"
   )
-  code-editor-window(
+  CodeEditorWindow(
     v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
     class="grow"
   )
-  monkey-work-window(
+  MonkeyWorkWindow(
     v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work"
     class="grow"
   )
@@ -31,25 +34,25 @@ div(class="flex gap-2 h-full")
       p(class="uppercase") All Software
       hr(class="flex-grow border-gray-600")
     div(class="flex justify-evenly space-x-2")
-      os-app-shortcut(
+      OsAppShortcut(
         title="Scene Explorer 1337"
         description="The definitive source of all Scene challenges and compos."
         buttonLabel="Open  Challenges"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList"
         )
-      os-app-shortcut(
+      OsAppShortcut(
         title="Monkey Works X Pro"
         description="You have been assigned a floating license for Monkey Works X Pro by Koko Group Global Ltd."
         buttonLabel="Open Work"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.Work"
         )
-      os-app-shortcut(
+      OsAppShortcut(
         title="Kokoshop"
         description="Want skills? Old Koko has what you need... for a price."
         buttonLabel="Open Shop"
         @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
         )
-      os-app-shortcut(
+      OsAppShortcut(
         title="silk_road.app"
         description="This is application is from an unidentified developer. It is not recommended to run this application."
         buttonLabel="Open App"
@@ -60,7 +63,7 @@ div(class="flex gap-2 h-full")
   div(
     class="basis-80 flex flex-col gap-2 shrink-0"
   )
-    os-window(
+    OsWindow(
       title="Profile"
       class=""
     )
@@ -69,7 +72,7 @@ div(class="flex gap-2 h-full")
         li {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}: {{ gameStateStore.profile.codingSpeed }}
         li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
 
-    os-window(
+    OsWindow(
       v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge"
       title="Assets"
       class=""
@@ -86,12 +89,18 @@ div(class="flex gap-2 h-full")
       ul
         li {{ gameStateStore.currentChallenge?.description }}
 
-    os-window(
+    OsWindow(
       title="Mission"
       class="grow"
     )
       ul
         li 1. Hello World
+
+OsTalkingHead(:placement="NarrativePlacements.Desktop")
+
+//- TODO: fade
+div(:class="['absolute bottom-0 left-0 right-0 top-0 bg-neutral-900 opacity-70 z-10 flex flex-col justify-end', { 'hidden': !isOverlayVisible }]")
+  div(class="w-full text-right text-xs p-2 text-gray-400") DEBUG: {{ totalSubscribers }} subscriber{{ totalSubscribers === 1 ? '' : 's'}}
 
 </template>
 
@@ -104,10 +113,16 @@ import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
+import OsTalkingHead from '@/components/OsNarrativeOverlay.vue'
+
+import { useOverlay } from '@/components/composables/OsOverlay'
 
 import { ParticlesComponent } from 'vue3-particles'
 import { loadFull } from 'tsparticles'
 import type { RecursivePartial, IOptions } from 'tsparticles-engine'
+import { NarrativePlacements } from '@/content/narrative'
+
+const { isOverlayVisible, totalSubscribers } = useOverlay()
 
 const particlesInit = async (engine: any) => {
   await loadFull(engine)

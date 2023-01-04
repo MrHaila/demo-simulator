@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import type { ChallengeBase, ChallengeCompo, ChallengeScoreAttack, ChallengeTimeAttack, ChallengeTutorial } from '@/content/challenges'
+import type { UnknownChallenge } from '@/content/challenges'
+import { NarrativePlacements, testScene, type NarrativeScene } from '@/content/narrative'
 
 export enum Scenes {
   Boot = 'Boot',
@@ -17,7 +18,7 @@ export enum EliteOsApps {
   Settings = 'Settings',
 }
 
-export const currentSaveVersion = 3
+export const currentSaveVersion = 4
 
 const defaultProfile = {
   saveVersion: currentSaveVersion,
@@ -33,14 +34,23 @@ const defaultProgression = {
   completedChallenges: {} as { [key: number]: { score: number } },
 }
 
+const defaultTalkingHeadQueues = {
+  [NarrativePlacements.Desktop]: [testScene] as NarrativeScene[],
+  [NarrativePlacements.ChallengesList]: [] as NarrativeScene[],
+  [NarrativePlacements.Work]: [] as NarrativeScene[],
+  [NarrativePlacements.PowerShop]: [] as NarrativeScene[],
+  [NarrativePlacements.AchievementShop]: [] as NarrativeScene[],
+}
+
 export const useGameStateStore = defineStore({
   id: 'game state',
   state: () => ({
     currentScene: Scenes.Boot,
     currentEliteOsApp: EliteOsApps.Desktop,
-    currentChallenge: null as ChallengeTimeAttack | ChallengeScoreAttack | ChallengeCompo | ChallengeTutorial | null,
+    currentChallenge: null as UnknownChallenge | null,
     profile: useStorage('profile', defaultProfile),
     progression: useStorage('progression', defaultProgression),
+    talkingHeadQueues: defaultTalkingHeadQueues,
   }),
   actions: {
     resetGame() {
