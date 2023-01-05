@@ -18,12 +18,14 @@ export enum PlotCharacters {
   Computer = 'Computer',
 }
 
+export interface NarrativeDialogue {
+  text: string
+  author?: PlotCharacters
+}
+
 export interface NarrativeScene {
   id: string
-  dialogue: {
-    text: string
-    author: PlotCharacters | null
-  }[]
+  dialogue: NarrativeDialogue[]
 }
 
 export const testScene = {
@@ -35,7 +37,6 @@ export const testScene = {
     },
     {
       text: 'You come away impressed.',
-      author: null
     }
   ],
 } satisfies NarrativeScene

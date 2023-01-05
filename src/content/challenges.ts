@@ -6,7 +6,7 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-import { PlotCharacters } from "./narrative"
+import { PlotCharacters, type NarrativeDialogue } from "./narrative"
 
 export interface ChallengeBase {
   id: number
@@ -16,6 +16,12 @@ export interface ChallengeBase {
   characterLimit?: number
   dependsOn: number | number[] | false
   sourceCode?: 'helloWorld' | 'quaternion'
+  dialogue: {
+    introFirstTime: NarrativeDialogue[]
+    introRetry?: NarrativeDialogue[]
+    win: NarrativeDialogue[]
+    lose?: NarrativeDialogue[]
+  }
   // TODO: reward?
 }
 
@@ -53,6 +59,19 @@ export const allChallenges: UnknownChallenge[] = [
     description: 'Buttons make clicky noises. Press buttons. Make clicky noises.',
     dependsOn: false,
     sourceCode: 'helloWorld',
+    dialogue: {
+      introFirstTime: [
+        { text: 'The empty text editor is strangely inviting.' },
+        { text: 'You feel compelled to type something.' },
+        { text: 'With a trembling hand, you reach out to...' },
+      ],
+      win: [
+        {
+          text: 'Hello, world!',
+          author: PlotCharacters.Computer,
+        }
+      ],
+    }
   },
   {
     id: 1,
@@ -63,6 +82,14 @@ export const allChallenges: UnknownChallenge[] = [
     minimumScore: 100,
     characterLimit: 100,
     dependsOn: 0,
+    dialogue: {
+      introFirstTime: [
+        { text: 'TBD' },
+      ],
+      win: [
+        { text: 'TBD' },
+      ],
+    }
   },
   {
     id: 2,
@@ -82,6 +109,14 @@ export const allChallenges: UnknownChallenge[] = [
       },
     ],
     dependsOn: 1,
+    dialogue: {
+      introFirstTime: [
+        { text: 'TBD' },
+      ],
+      win: [
+        { text: 'TBD' },
+      ],
+    }
   },
   {
     id: 3,
@@ -101,6 +136,14 @@ export const allChallenges: UnknownChallenge[] = [
       },
     ],
     dependsOn: 1,
+    dialogue: {
+      introFirstTime: [
+        { text: 'TBD' },
+      ],
+      win: [
+        { text: 'TBD' },
+      ],
+    }
   }
 ]
 

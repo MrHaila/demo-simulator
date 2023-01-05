@@ -1,9 +1,14 @@
 <template lang="pug">
-os-window(
-  :title="`H4X_EDIT - ${gameStateStore.currentChallenge?.name}`"
+OsWindow(
+  :title="`H4X_EDIT - ${challenge?.name}`"
   no-padding
   ref="h4xWindow"
 )
+  template(#title-right)
+    span(v-if="challenge?.challengeType === 'scoreAttack'") {{ codePoints }} points
+    //span(v-else-if="challenge?.challengeType === 'timeAttack'") {{ timeLeft }} seconds left
+    span(v-else-if="challenge?.challengeType === 'tutorial'") {{ sourceCode.length - amountCoded }} characters left
+
   table(class="table-fixed font-mono")
     tbody
       tr(v-for="(line, index) in displayedCodeRows" :key="index")
@@ -22,6 +27,7 @@ import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
+import type { NarrativeDialogue, NarrativeScene } from '@/content/narrative'
 
 /*
   TODO:
@@ -33,6 +39,16 @@ import SourceCodeHelloWorld from '@/source_code/helloWorld'
 const gameStateStore = useGameStateStore()
 
 const challenge = gameStateStore.currentChallenge
+
+enum ChallengeStates {
+  Intro = 'intro',
+  Coding = 'coding',
+  Results = 'results'
+}
+
+const currentState = ref(ChallengeStates.Intro)
+const currentNarrativeDialogues = ref<NarrativeDialogue[]>()
+if (challenge?.dialogue.introFirstTime) currentNarrativeDialogues.value = challenge.dialogue.introFirstTime
 
 const characterLimit = ref(challenge?.characterLimit)
 const codePoints = ref(0)
@@ -71,7 +87,6 @@ const displayedCodeRows = ref<CodeLine[]>([
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
 async function input () {
-  // Game logic
   amountCoded += gameStateStore.profile.codingSpeed
 
   // Grab new characters from the source file and split by line breaks.
@@ -104,9 +119,27 @@ async function input () {
     }
   }
 
+  codePoints.value += codeToPoints(newCode)
+
   // Keep new code visible.
   await nextTick() // Wait for a DOM update.
   h4xWindow.value?.scrollToBottom()
+
+  // If the challenge is a tutorial, check if the player has coded enough.
+  if (challenge?.challengeType === 'tutorial' && amountCoded >= sourceCode.length) {
+    
+  }
+}
+
+function codeToPoints (code: string) {
+  let points = 0
+
+  // Add points for each non-whitespace, non-line-break character.
+  for (let i = 0; i < code.length; i++) {
+    if (code[i] !== ' ' && code[i] !== '\n') points++
+  }
+
+  return points
 }
 
 const windowIsInfocus = useWindowFocus()
