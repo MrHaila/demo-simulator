@@ -1,4 +1,5 @@
-import { EliteOsApps } from "@/stores/gameStateStore";
+import { EliteOsApps } from "@/stores/gameStateStore"
+import AvatarUrlComputer from '@/assets/avatars/computer@1x.jpg'
 
 export enum NarrativePlacements {
   Desktop = "desktop",
@@ -21,11 +22,29 @@ export enum PlotCharacters {
 export interface NarrativeDialogue {
   text: string
   author?: PlotCharacters
+  alignment?: 'left' | 'right'
 }
 
 export interface NarrativeScene {
   id: string
   dialogue: NarrativeDialogue[]
+}
+
+export function getCharacterAvatarImageUrl(character?: PlotCharacters) {
+  switch (character) {
+    case PlotCharacters.Koko:
+      return AvatarUrlComputer
+    case PlotCharacters.Bear:
+      return AvatarUrlComputer
+    case PlotCharacters.Cod:
+      return AvatarUrlComputer
+    case PlotCharacters.Universe:
+      return AvatarUrlComputer
+    case PlotCharacters.AutoMonkey:
+      return AvatarUrlComputer
+    case PlotCharacters.Computer:
+      return AvatarUrlComputer
+  }
 }
 
 export const testScene = {
@@ -34,6 +53,11 @@ export const testScene = {
     {
       text: 'Hello, world!',
       author: PlotCharacters.Computer,
+    },
+    {
+      text: 'Whoa, this is cool!',
+      author: PlotCharacters.Cod,
+      alignment: 'right',
     },
     {
       text: 'You come away impressed.',
