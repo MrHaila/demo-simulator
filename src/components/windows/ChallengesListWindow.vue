@@ -29,7 +29,10 @@ os-window(
   //pre(class="text-xs") {{ challengesAsRows }}
 
   template(#footer-right)
-    os-button(@click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop") Back to Desktop
+    OsButton(
+      hotkey="Esc"
+      @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
+      ) Back to Desktop
 
 // TODO
   - Challenge entries

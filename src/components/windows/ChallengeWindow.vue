@@ -30,10 +30,16 @@ OsWindow(
     h2(class="text-lg mt-4") Compilation status: #[span(class="text-olive") SUCCESS!]
 
     template(#footer-right)
-      os-button(@click="showOutro") Run
+      os-button(
+        @click="showOutro"
+        hotkey="Enter"
+        ) Run
 
   template(#footer-right)
-    os-button(@click="exitChallenge") Abort Challenge
+    os-button(
+      @click="exitChallenge"
+      hotkey="Esc"
+      ) Abort Challenge
 </template>
 
 <script lang="ts" setup>

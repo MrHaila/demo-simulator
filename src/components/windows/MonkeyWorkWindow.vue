@@ -29,7 +29,10 @@ os-window(
         td(colspan="5" class="w-full text-center p font-sans italic text-sm pt-2 text-gray-500 animate-pulse") Press any key to do work.
 
   template(#footer-right)
-    os-button(@click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop") Whatever, I'm done
+    os-button(
+      hotkey="Esc"
+      @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
+      ) Whatever, I'm done
 </template>
 
 <script lang="ts" setup>
