@@ -45,15 +45,15 @@ enum ChallengeStates {
   Coding = 'coding',
   Results = 'results'
 }
-
 const currentState = ref(ChallengeStates.Intro)
+
 const currentNarrativeDialogues = ref<NarrativeDialogue[]>()
 if (challenge?.dialogue.introFirstTime) currentNarrativeDialogues.value = challenge.dialogue.introFirstTime
 
-const characterLimit = ref(challenge?.characterLimit)
 const codePoints = ref(0)
 let amountCoded = 0
 
+// Load some code.
 let sourceCode: string
 if (challenge?.sourceCode === 'helloWorld') sourceCode = SourceCodeHelloWorld
 else sourceCode = SourceCode
@@ -144,11 +144,13 @@ function codeToPoints (code: string) {
 
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
-  if (e.key === "Escape") {
-    exitChallenge()
-  } else if (windowIsInfocus.value && e.key.length === 1) {
-    // e.preventDefault()
-    input()
+  if (currentState.value === ChallengeStates.Coding) {
+    if (e.key === "Escape") {
+      exitChallenge()
+    } else if (windowIsInfocus.value && e.key.length === 1) {
+      // e.preventDefault()
+      input()
+    }
   }
 })
 

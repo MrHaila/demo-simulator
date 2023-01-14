@@ -96,7 +96,11 @@ div(class="p-2 flex gap-2 h-full")
       ul
         li 1. Hello World
 
-OsTalkingHead(:placement="NarrativePlacements.Desktop")
+OsNarrativeScene(
+  v-if="gameStateStore.talkingHeadQueues.desktop.length > 0"
+  :narrativeScene="gameStateStore.talkingHeadQueues.desktop[0]"
+  @done="gameStateStore.talkingHeadQueues.desktop.shift()"
+  )
 
 //- TODO: fade
 div(:class="['absolute bottom-0 left-0 right-0 top-0 bg-neutral-900 opacity-70 z-10 flex flex-col justify-end', { 'hidden': !isOverlayVisible }]")
@@ -113,14 +117,13 @@ import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
-import OsTalkingHead from '@/components/OsNarrativeOverlay.vue'
+import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 
 import { useOverlay } from '@/components/composables/OsOverlay'
 
 import { ParticlesComponent } from 'vue3-particles'
 import { loadFull } from 'tsparticles'
 import type { RecursivePartial, IOptions } from 'tsparticles-engine'
-import { NarrativePlacements } from '@/content/narrative'
 
 const { isOverlayVisible, totalSubscribers } = useOverlay()
 
