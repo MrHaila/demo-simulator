@@ -6,7 +6,7 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-import { PlotCharacters, type NarrativeDialogue } from "./narrative"
+import { PlotCharacters, type NarrativeDialogue, type NarrativeScene } from "./narrative"
 
 export interface ChallengeBase {
   id: number
@@ -16,11 +16,11 @@ export interface ChallengeBase {
   characterLimit?: number
   dependsOn: number | number[] | false
   sourceCode?: 'helloWorld' | 'quaternion'
-  dialogue: {
-    introFirstTime: NarrativeDialogue[]
-    introRetry?: NarrativeDialogue[]
-    win: NarrativeDialogue[]
-    lose?: NarrativeDialogue[]
+  narrativeScenes: {
+    introFirstTime: NarrativeScene
+    introRetry?: NarrativeScene
+    win: NarrativeScene
+    lose?: NarrativeScene
   }
   // TODO: reward?
 }
@@ -59,19 +59,25 @@ export const allChallenges: UnknownChallenge[] = [
     description: 'Buttons make clicky noises. Press buttons. Make clicky noises.',
     dependsOn: false,
     sourceCode: 'helloWorld',
-    dialogue: {
-      introFirstTime: [
-        { text: 'The empty text editor is strangely inviting.' },
-        { text: 'You feel compelled to type something.' },
-        { text: 'With a trembling hand, you reach out to...' },
-      ],
-      win: [
-        {
-          text: 'Hello, world!',
-          author: PlotCharacters.Computer,
-        }
-      ],
-    }
+    narrativeScenes: {
+      introFirstTime: {
+        id: 'hello world first time intro',
+        dialogue: [
+          { text: 'The empty text editor is strangely inviting.' },
+          { text: 'You feel compelled to type something.' },
+          { text: 'With a trembling hand, you reach out to...' },
+        ]
+      },
+      win: {
+        id: 'hello world win',
+        dialogue: [
+          {
+            text: 'Hello, world!',
+            author: PlotCharacters.Computer,
+          }
+        ],
+      }
+    },
   },
   {
     id: 1,
@@ -82,13 +88,19 @@ export const allChallenges: UnknownChallenge[] = [
     minimumScore: 100,
     characterLimit: 100,
     dependsOn: 0,
-    dialogue: {
-      introFirstTime: [
-        { text: 'TBD' },
-      ],
-      win: [
-        { text: 'TBD' },
-      ],
+    narrativeScenes: {
+      introFirstTime: {
+        id: 'score attack first time intro',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
+      win: {
+        id: 'score attack win',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
     }
   },
   {
@@ -109,13 +121,19 @@ export const allChallenges: UnknownChallenge[] = [
       },
     ],
     dependsOn: 1,
-    dialogue: {
-      introFirstTime: [
-        { text: 'TBD' },
-      ],
-      win: [
-        { text: 'TBD' },
-      ],
+    narrativeScenes: {
+      introFirstTime: {
+        id: 'score attack compo first time intro',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
+      win: {
+        id: 'score attack compo win',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
     }
   },
   {
@@ -136,13 +154,19 @@ export const allChallenges: UnknownChallenge[] = [
       },
     ],
     dependsOn: 1,
-    dialogue: {
-      introFirstTime: [
-        { text: 'TBD' },
-      ],
-      win: [
-        { text: 'TBD' },
-      ],
+    narrativeScenes: {
+      introFirstTime: {
+        id: 'time attack compo first time intro',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
+      win: {
+        id: 'time attack compo win',
+        dialogue: [
+          { text: 'TBD' },
+        ]
+      },
     }
   }
 ]

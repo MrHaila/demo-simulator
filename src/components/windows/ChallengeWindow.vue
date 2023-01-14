@@ -15,19 +15,36 @@ OsWindow(
         td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ line.lineNumber }}
         td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
 
+  OsWindow(
+    v-if="currentState === ChallengeStates.Results"
+    title="Compiler Results"
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+    style="width: 30rem;"
+  )
+    h1(class="text-lg") Input
+    ul
+      li {{ displayedCodeRows.length }} lines of code.
+      li {{ amountCoded }} characters.
+      li TBD seconds of programming time.
+
+    h2(class="text-lg mt-4") Compilation status: #[span(class="text-olive") SUCCESS!]
+
+    template(#footer-right)
+      os-button(@click="showOutro") Run
+
   template(#footer-right)
     os-button(@click="exitChallenge") Abort Challenge
 </template>
 
 <script lang="ts" setup>
-import { EliteOsApps, Scenes, useGameStateStore } from '@/stores/gameStateStore'
+import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
-import type { NarrativeDialogue, NarrativeScene } from '@/content/narrative'
+import { useNarrativeScene } from '../composables/OsNarrativeScene'
 
 /*
   TODO:
@@ -43,12 +60,18 @@ const challenge = gameStateStore.currentChallenge
 enum ChallengeStates {
   Intro = 'intro',
   Coding = 'coding',
-  Results = 'results'
+  Results = 'results',
+  Outro = 'outro',
 }
 const currentState = ref(ChallengeStates.Intro)
 
-const currentNarrativeDialogues = ref<NarrativeDialogue[]>()
-if (challenge?.dialogue.introFirstTime) currentNarrativeDialogues.value = challenge.dialogue.introFirstTime
+// NARRATIVE ----------------------------
+
+const { showNarrativeScene } = useNarrativeScene()
+if (challenge?.narrativeScenes.introFirstTime) showNarrativeScene(challenge.narrativeScenes.introFirstTime, () => currentState.value = ChallengeStates.Coding)
+else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, () => currentState.value = ChallengeStates.Coding)
+
+// CODE ----------------------------
 
 const codePoints = ref(0)
 let amountCoded = 0
@@ -79,7 +102,7 @@ interface CodeLine {
 
 const displayedCodeRows = ref<CodeLine[]>([
   {
-    lineNumber: 0,
+    lineNumber: 1,
     text: ''
   }
 ])
@@ -127,7 +150,7 @@ async function input () {
 
   // If the challenge is a tutorial, check if the player has coded enough.
   if (challenge?.challengeType === 'tutorial' && amountCoded >= sourceCode.length) {
-    
+    currentState.value = ChallengeStates.Results
   }
 }
 
@@ -142,6 +165,14 @@ function codeToPoints (code: string) {
   return points
 }
 
+function showOutro() {
+  if (challenge) {
+    currentState.value = ChallengeStates.Outro
+    const sceneToShow = challenge.narrativeScenes.win
+    showNarrativeScene(sceneToShow, () => exitChallenge())
+  }
+}
+
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
   if (currentState.value === ChallengeStates.Coding) {
@@ -150,6 +181,11 @@ onKeyStroke((e) => {
     } else if (windowIsInfocus.value && e.key.length === 1) {
       // e.preventDefault()
       input()
+    }
+  }
+  else if (currentState.value === ChallengeStates.Results) {
+    if (e.key === "Enter") {
+      showOutro()
     }
   }
 })

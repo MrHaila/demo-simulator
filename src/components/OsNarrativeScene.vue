@@ -1,7 +1,7 @@
 <template lang="pug">
 //- Centered container
 div(
-  class="absolute top-0 bottom-0 left-1/4 right-1/4 z-20 space-y-6 flex flex-col justify-end pb-8"
+  class="absolute top-0 bottom-0 left-1/4 right-1/4 z-20 space-y-6 flex flex-col justify-end pb-20"
   )
 
   //- Dialogue rows
@@ -43,9 +43,12 @@ import { computed, ref } from 'vue'
 import { useOverlay } from '@/components/composables/OsOverlay'
 import { getCharacterAvatarImageUrl, type NarrativeScene } from '@/content/narrative'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
+import { useNarrativeScene } from './composables/OsNarrativeScene';
 
 const { showOverlay } = useOverlay()
 showOverlay()
+
+const { clearCurrentNarrativeScene, currentNarrativeSceneCallback } = useNarrativeScene()
 
 const props = defineProps<{
   narrativeScene: NarrativeScene
@@ -54,14 +57,12 @@ const props = defineProps<{
 const dialogueIndex = ref(0)
 const visibleDialogues = computed(() => props.narrativeScene.dialogue.slice(0, dialogueIndex.value + 1))
 
-const emits = defineEmits(['done'])
-
 // INPUT HANDLING
 
 // Keyboard input
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
-  if (windowIsInfocus.value && e.key.length === 1) {
+  if (windowIsInfocus.value && (e.key.length === 1 || e.key === 'Enter')) {
     nextDialogue()
   }
 })
@@ -72,7 +73,10 @@ function nextDialogue() {
     dialogueIndex.value++
   }
   else {
-    emits('done')
+    if (currentNarrativeSceneCallback.value) {
+      currentNarrativeSceneCallback.value()
+    }
+    clearCurrentNarrativeScene()
   }
 }
 </script>

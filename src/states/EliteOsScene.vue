@@ -9,6 +9,11 @@ ParticlesComponent(
   :options="particleOptions"
   )
 
+OsNarrativeScene(
+  v-if="currentNarrativeScene"
+  :narrativeScene="currentNarrativeScene"
+  )
+
 div(class="p-2 flex gap-2 h-full")
   //- Left column
   ChallengesWindow(
@@ -80,6 +85,9 @@ import OsWindow from '@/components/windows/OsWindow.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'
 
+import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
+import { useNarrativeScene } from '@/components/composables/OsNarrativeScene'
+
 import { useOverlay } from '@/components/composables/OsOverlay'
 
 import { ParticlesComponent } from 'vue3-particles'
@@ -87,6 +95,7 @@ import { loadFull } from 'tsparticles'
 import type { RecursivePartial, IOptions } from 'tsparticles-engine'
 
 const { isOverlayVisible, totalSubscribers } = useOverlay()
+const { currentNarrativeScene } = useNarrativeScene()
 
 const particlesInit = async (engine: any) => {
   await loadFull(engine)

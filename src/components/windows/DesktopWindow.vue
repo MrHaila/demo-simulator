@@ -36,7 +36,7 @@ div(class="px-2")
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
       )
 
-  OsNarrativeScene(
+  //OsNarrativeScene(
     v-if="gameStateStore.talkingHeadQueues.desktop.length > 0"
     :narrativeScene="gameStateStore.talkingHeadQueues.desktop[0]"
     @done="gameStateStore.talkingHeadQueues.desktop.shift()"
@@ -50,6 +50,14 @@ import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'
+import { useNarrativeScene } from '../composables/OsNarrativeScene'
 
 const gameStateStore = useGameStateStore()
+const { showNarrativeScene } = useNarrativeScene()
+
+if (gameStateStore.talkingHeadQueues.desktop.length > 0) {
+  showNarrativeScene(gameStateStore.talkingHeadQueues.desktop[0], () => {
+    gameStateStore.talkingHeadQueues.desktop.shift()
+  })
+}
 </script>
