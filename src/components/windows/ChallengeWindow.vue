@@ -51,6 +51,7 @@ import OsButton from '@/components/OsButton.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
+import { DateTime } from 'luxon'
 
 /*
   TODO:
@@ -70,12 +71,27 @@ enum ChallengeStates {
   Outro = 'outro',
 }
 const currentState = ref(ChallengeStates.Intro)
+const codingStarted = ref<DateTime>(DateTime.now())
+const codingEnded = ref<DateTime>(DateTime.now())
 
 // NARRATIVE ----------------------------
 
 const { showNarrativeScene } = useNarrativeScene()
-if (challenge?.narrativeScenes.introFirstTime) showNarrativeScene(challenge.narrativeScenes.introFirstTime, () => currentState.value = ChallengeStates.Coding)
-else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, () => currentState.value = ChallengeStates.Coding)
+if (challenge?.narrativeScenes.introFirstTime) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
+else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
+
+function startCoding () {
+  currentState.value = ChallengeStates.Coding
+  codingStarted.value = DateTime.now()
+}
+
+function showOutro() {
+  if (challenge) {
+    currentState.value = ChallengeStates.Outro
+    const sceneToShow = challenge.narrativeScenes.win
+    showNarrativeScene(sceneToShow, () => exitChallenge())
+  }
+}
 
 // CODE ----------------------------
 
@@ -157,6 +173,7 @@ async function input () {
   // If the challenge is a tutorial, check if the player has coded enough.
   if (challenge?.challengeType === 'tutorial' && amountCoded >= sourceCode.length) {
     currentState.value = ChallengeStates.Results
+    codingEnded.value = DateTime.now()
   }
 }
 
@@ -169,14 +186,6 @@ function codeToPoints (code: string) {
   }
 
   return points
-}
-
-function showOutro() {
-  if (challenge) {
-    currentState.value = ChallengeStates.Outro
-    const sceneToShow = challenge.narrativeScenes.win
-    showNarrativeScene(sceneToShow, () => exitChallenge())
-  }
 }
 
 const windowIsInfocus = useWindowFocus()
