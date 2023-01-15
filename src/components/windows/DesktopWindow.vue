@@ -12,9 +12,9 @@ div(class="px-2")
   //- Apps
   div(class="flex justify-evenly space-x-2")
     OsAppShortcut(
-      title="Scene Explorer"
-      description="The definitive source of all Scene challenges and compos."
-      buttonLabel="Open  Challenges"
+      title="Elite Road"
+      description="So, you think you can code? Prove it."
+      buttonLabel="Open Challenges"
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList"
       )
     OsAppShortcut(
@@ -40,7 +40,6 @@ div(class="px-2")
 <script lang="ts" setup>
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
-import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { EliteOsApps } from '@/stores/gameStateStore'

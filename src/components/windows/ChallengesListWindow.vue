@@ -1,25 +1,49 @@
 <template lang="pug">
 os-window(
-  title="Scene Explorer v1337"
+  title="Elite Road Browser (build 1337)"
   no-padding
   ref="challengesWindow"
 )
-  div(v-for="row in challengesAsRows" class="flex gap-2 my-2 justify-center")
-    div(v-for="challenge in row" :key="challenge.id" class="p-3 border-4 bg-gray-800 w-80")
-      div(v-if="getChallengeStatus(challenge) === 'completed'" class="border-liver")
-        h2(class="") {{ challenge.name }}
+  //- Rows of challenges
+  div(
+    v-for="(row, index) in challengesAsRows"
+    :key="index"
+    class="flex gap-2 my-2 justify-center"
+    )
+    //- A challenge
+    div(
+      v-for="challenge in row"
+      :key="challenge.id"
+      class=" w-80 "
+      )
+      //- Completed
+      div(
+        v-if="getChallengeStatus(challenge) === 'completed'"
+        class="border-kombu border-4 rounded-lg p-3 bg-gray-800"
+        )
+        div(class="flex justify-between")
+          h2(class="") {{ challenge.name }}
+          span(class="text-xs text-kombu") Completed
         div(class="text-sm") {{ challenge.description }}
         //div(class="text-xs") Depends on: {{ challenge.dependsOn }}
         div(class="flex justify-end mt-2")
-          p Completed
+          os-button(@click="openChallenge(challenge)") Replay
 
-      div(v-else-if="getChallengeStatus(challenge) === 'unlocked'" class="border-liver")
+      //- Available
+      div(
+        v-else-if="getChallengeStatus(challenge) === 'unlocked'"
+        class="border-liver border-4 rounded-lg p-3 bg-gray-800"
+        )
         h2(class="") {{ challenge.name }}
         div(class="text-sm") {{ challenge.description }}
         div(class="flex justify-end mt-2")
           os-button(@click="openChallenge(challenge)") Open
 
-      div(v-else class="border-gray-600")
+      //- Locked
+      div(
+        v-else
+        class="border-gray-600 border-4 rounded-lg p-3 bg-gray-800"
+        )
         h2(class="text-gray-600") {{ challenge.name }}
         div(class="text-sm text-gray-600") {{ challenge.description }}
         div(class="flex justify-end mt-2")
@@ -54,8 +78,16 @@ onKeyStroke(['Escape'], () => {
 })
 
 function getChallengeStatus(challenge: UnknownChallenge) {
+  // Return completed if challenge id is in completedChallenges.
   if (gameStateStore.progression.completedChallenges[challenge.id]) return 'completed'
-  else if (challenge.dependsOn === false) return 'unlocked'
+  
+  // Return unlocked if challenge has no dependencies, or if all dependencies are completed.
+  let dependencies = challenge.dependsOn
+  if (typeof(dependencies) === 'number') dependencies = [dependencies]
+  if (!dependencies) return 'unlocked'
+  if (dependencies.every(dependency => gameStateStore.progression.completedChallenges[dependency])) return 'unlocked'
+
+  // Otherwise, return locked.
   return 'locked'
 }
 

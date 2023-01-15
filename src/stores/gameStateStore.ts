@@ -31,7 +31,10 @@ const defaultProfile = {
 }
 
 const defaultProgression = {
-  completedChallenges: {} as { [key: number]: { score: number } },
+  completedChallenges: {} as { [key: number]: { 
+    score: number
+    durationISO: string
+  } },
   completedNarrativeScenes: [] as string[],
 }
 

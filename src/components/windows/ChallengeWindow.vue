@@ -51,7 +51,7 @@ import OsButton from '@/components/OsButton.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
-import { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
 
 /*
   TODO:
@@ -175,7 +175,21 @@ async function input () {
   if (challenge?.challengeType === 'tutorial' && amountCoded >= sourceCode.length) {
     currentState.value = ChallengeStates.Results
     codingEnded.value = DateTime.now()
+    gameStateStore.progression.completedChallenges[challenge.id] = {
+      score: codePoints.value,
+      durationISO: getChallengeDuration().toISO()
+    }
+    // const previousResult = gameStateStore.progression.completedChallenges[challenge.id]
+
+    // gameStateStore.progression.completedChallenges[challenge.id] = {
+    //   score: codePoints.value > previousResult?.score ? codePoints.value : previousResult?.score,
+    //   durationISO: getChallengeDuration().milliseconds > Duration.fromISO(previousResult?.durationISO).milliseconds ? getChallengeDuration().toISO() : previousResult?.durationISO,
+    // }
   }
+}
+
+function getChallengeDuration () {
+  return codingEnded.value.diff(codingStarted.value)
 }
 
 function codeToPoints (code: string) {
