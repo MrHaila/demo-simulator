@@ -18,7 +18,7 @@ export enum EliteOsApps {
   Settings = 'Settings',
 }
 
-export const currentSaveVersion = 4
+export const currentSaveVersion = 6
 
 const defaultProfile = {
   saveVersion: currentSaveVersion,
@@ -32,9 +32,10 @@ const defaultProfile = {
 
 const defaultProgression = {
   completedChallenges: {} as { [key: number]: { score: number } },
+  completedNarrativeScenes: [] as string[],
 }
 
-const defaultTalkingHeadQueues = {
+const defaultNarrativeSceneQueues = {
   [NarrativePlacements.Desktop]: [testScene] as NarrativeScene[],
   [NarrativePlacements.ChallengesList]: [] as NarrativeScene[],
   [NarrativePlacements.Work]: [] as NarrativeScene[],
@@ -50,11 +51,13 @@ export const useGameStateStore = defineStore({
     currentChallenge: null as UnknownChallenge | null,
     profile: useStorage('profile', defaultProfile),
     progression: useStorage('progression', defaultProgression),
-    talkingHeadQueues: defaultTalkingHeadQueues,
+    narrativeSceneQueues: useStorage('narrativeSceneQueues', defaultNarrativeSceneQueues),
   }),
   actions: {
     resetGame() {
       this.profile = defaultProfile
+      this.progression = defaultProgression
+      this.narrativeSceneQueues = defaultNarrativeSceneQueues
     }
   }
 })

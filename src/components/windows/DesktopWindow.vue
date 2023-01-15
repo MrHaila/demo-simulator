@@ -35,12 +35,6 @@ div(class="px-2")
       buttonLabel="Open App"
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
       )
-
-  //OsNarrativeScene(
-    v-if="gameStateStore.talkingHeadQueues.desktop.length > 0"
-    :narrativeScene="gameStateStore.talkingHeadQueues.desktop[0]"
-    @done="gameStateStore.talkingHeadQueues.desktop.shift()"
-    )
 </template>
 
 <script lang="ts" setup>
@@ -55,9 +49,9 @@ import { useNarrativeScene } from '../composables/OsNarrativeScene'
 const gameStateStore = useGameStateStore()
 const { showNarrativeScene } = useNarrativeScene()
 
-if (gameStateStore.talkingHeadQueues.desktop.length > 0) {
-  showNarrativeScene(gameStateStore.talkingHeadQueues.desktop[0], () => {
-    gameStateStore.talkingHeadQueues.desktop.shift()
+if (gameStateStore.narrativeSceneQueues.desktop.length > 0) {
+  showNarrativeScene(gameStateStore.narrativeSceneQueues.desktop[0], () => {
+    gameStateStore.narrativeSceneQueues.desktop.shift()
   })
 }
 </script>

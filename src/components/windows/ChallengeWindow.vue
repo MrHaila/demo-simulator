@@ -77,8 +77,9 @@ const codingEnded = ref<DateTime>(DateTime.now())
 // NARRATIVE ----------------------------
 
 const { showNarrativeScene } = useNarrativeScene()
-if (challenge?.narrativeScenes.introFirstTime) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
+if (challenge?.narrativeScenes.introFirstTime && !gameStateStore.progression.completedNarrativeScenes.includes(challenge?.narrativeScenes.introFirstTime.id)) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
 else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
+else startCoding()
 
 function startCoding () {
   currentState.value = ChallengeStates.Coding
