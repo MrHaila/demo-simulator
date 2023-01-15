@@ -28,6 +28,7 @@ div(class="p-2 flex gap-2 h-full")
     v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work"
     class="grow"
     )
+  //- TODO: ask for a name
   DesktopWindow(
     v-else
     class="grow"
@@ -42,7 +43,8 @@ div(class="p-2 flex gap-2 h-full")
       class=""
     )
       ul
-        li Level 83 Cosmic Monkey
+        li {{ gameStateStore.profile.name }}
+        li {{ gameStateStore.profile.title }}
         li {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}: {{ gameStateStore.profile.codingSpeed }}
         li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
 
@@ -165,6 +167,11 @@ const particleOptions = {
 } satisfies RecursivePartial<IOptions>
 
 const gameStateStore = useGameStateStore()
+
+// Ask for name if not set.
+if (gameStateStore.profile.name === '') {
+  gameStateStore.currentEliteOsApp = EliteOsApps.EnterName
+}
 
 function RedactText(text: string, skip: boolean = false) {
   if (!skip) text = text.replace(/./g, '?')

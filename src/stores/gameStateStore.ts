@@ -9,6 +9,7 @@ export enum Scenes {
 }
 
 export enum EliteOsApps {
+  EnterName = 'EnterName',
   Desktop = 'Desktop',
   ChallengesList = 'ChallengesList',
   Challenge = 'Challenge',
@@ -16,6 +17,13 @@ export enum EliteOsApps {
   PowerShop = 'PowerShop',
   AchievementShop = 'AchievementShop',
   Settings = 'Settings',
+}
+
+export enum Titles {
+  Chimp = 'Script Chimp',
+  Smart = 'Wrinkle Brained Monkey',
+  Hero = 'Hero Programmer',
+  God = 'The One True God of Code',
 }
 
 export const currentSaveVersion = 6
@@ -28,6 +36,7 @@ const defaultProfile = {
   backScratches: 0,
   juiceBoxes: 0,
   latestWorkId: 0,
+  title: Titles.Chimp,
 }
 
 const defaultProgression = {
