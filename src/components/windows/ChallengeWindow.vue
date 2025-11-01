@@ -134,6 +134,7 @@ const displayedCodeRows = ref<CodeLine[]>([
 
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
+// eslint-disable-next-line complexity -- I accept
 async function input (): Promise<void> {
   amountCoded += gameStateStore.profile.codingSpeed
 

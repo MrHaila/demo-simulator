@@ -87,6 +87,7 @@ function getRandomOrder(): MwxEntry {
 }
 let nextOrder = getRandomOrder()
 
+// eslint-disable-next-line complexity -- I accept
 async function input (remainingAmountLeftToType?: number): Promise<void> {
   let amountLeftToType = remainingAmountLeftToType ?? gameStateStore.profile.codingSpeed
 

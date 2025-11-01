@@ -26,7 +26,7 @@ defineProps<{
 }>()
 
 // Keep scrolled to the bottom. Needs to be called on nextTick().
-const bodyElement = ref<any>(null)
+const bodyElement = ref<HTMLElement | null>(null)
 function scrollToBottom (): void {
   if (bodyElement.value) bodyElement.value.scrollTop = bodyElement.value.scrollHeight
 }

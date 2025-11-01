@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
 import type { UnknownChallenge } from '@/content/challenges'
-import { NarrativePlacements, testScene, type NarrativeScene } from '@/content/narrative'
+import { NarrativePlacements, testScene, type NarrativeScene, type NarrativePlacement } from '@/content/narrative'
 
 export const Scenes = {
   Boot: 'Boot',
@@ -33,7 +33,16 @@ export type Title = (typeof Titles)[keyof typeof Titles]
 
 export const currentSaveVersion = 6
 
-const defaultProfile = {
+const defaultProfile: {
+  saveVersion: number
+  name: string
+  codingSpeed: number
+  codingSkill: number
+  backScratches: number
+  juiceBoxes: number
+  latestWorkId: number
+  title: Title
+} = {
   saveVersion: currentSaveVersion,
   name: '',
   codingSpeed: 1,
@@ -44,17 +53,21 @@ const defaultProfile = {
   title: Titles.Chimp as Title,
 }
 
-const defaultProgression = {
-  completedChallenges: {} as Record<number, { 
+const defaultProgression: {
+  completedChallenges: Record<number, { 
     score: number
     durationISO: string
-  }>,
+  }>
+  completedNarrativeScenes: string[]
+} = {
+  completedChallenges: {},
   completedNarrativeScenes: [] as string[],
 }
 
-const defaultNarrativeSceneQueues = {
+const defaultNarrativeSceneQueues: Record<NarrativePlacement, NarrativeScene[]> = {
   [NarrativePlacements.Desktop]: [testScene] as NarrativeScene[],
   [NarrativePlacements.ChallengesList]: [] as NarrativeScene[],
+  [NarrativePlacements.Challenge]: [] as NarrativeScene[],
   [NarrativePlacements.Work]: [] as NarrativeScene[],
   [NarrativePlacements.PowerShop]: [] as NarrativeScene[],
   [NarrativePlacements.AchievementShop]: [] as NarrativeScene[],

@@ -163,8 +163,8 @@ if (gameStateStore.profile.name === '') {
   gameStateStore.currentEliteOsApp = EliteOsApps.EnterName
 }
 
-function RedactText(text: string, skip: boolean = false): string {
-  if (!skip) text = text.replace(/./g, '?')
-  return text
+function RedactText(text: string, skip = false): string {
+  const result = skip ? text : text.replace(/./g, '?')
+  return result
 }
 </script>
