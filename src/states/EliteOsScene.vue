@@ -2,10 +2,9 @@
 //- TODO
   - Confetti? https://confetti.js.org/#
 
-ParticlesComponent(
+vue-particles(
   id="tsparticles"
   class="absolute top-0 left-0 w-full h-full -z-50"
-  :particlesInit="particlesInit"
   :options="particleOptions"
   )
 
@@ -92,16 +91,8 @@ import { useNarrativeScene } from '@/components/composables/OsNarrativeScene'
 
 import { useOverlay } from '@/components/composables/OsOverlay'
 
-import { ParticlesComponent } from 'vue3-particles'
-import { loadFull } from 'tsparticles'
-import type { RecursivePartial, IOptions } from 'tsparticles-engine'
-
 const { isOverlayVisible, totalSubscribers } = useOverlay()
 const { currentNarrativeScene } = useNarrativeScene()
-
-const particlesInit = async (engine: any) => {
-  await loadFull(engine)
-}
 
 const particleOptions = {
   fpsLimit: 120,
@@ -164,7 +155,7 @@ const particleOptions = {
       value: 5
     }
   }
-} satisfies RecursivePartial<IOptions>
+}
 
 const gameStateStore = useGameStateStore()
 

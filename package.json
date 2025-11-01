@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tsparticles/slim": "^3.0.1",
+    "@tsparticles/vue3": "^3.0.0",
     "@vueuse/core": "^14.0.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.22"
@@ -21,6 +22,7 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/language-plugin-pug": "^3.1.2",
     "@vue/tsconfig": "^0.8.1",
+    "@tsconfig/node22": "^22.0.2",
     "luxon": "^3.7.2",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.6",

@@ -55,8 +55,7 @@ const defaultNarrativeSceneQueues = {
   [NarrativePlacements.AchievementShop]: [] as NarrativeScene[],
 }
 
-export const useGameStateStore = defineStore({
-  id: 'game state',
+export const useGameStateStore = defineStore('game state', {
   state: () => ({
     currentScene: Scenes.Boot,
     currentEliteOsApp: EliteOsApps.Desktop,
