@@ -1,27 +1,30 @@
 import { EliteOsApps } from "@/stores/gameStateStore"
 import AvatarUrlComputer from '@/assets/avatars/computer@1x.jpg'
 
-export enum NarrativePlacements {
-  Desktop = "desktop",
-  ChallengesList = "challengesList",
-  Challenge = "challenge",
-  Work = "work",
-  PowerShop = "powerShop",
-  AchievementShop = "achievementShop",
-}
+export const NarrativePlacements = {
+  Desktop: "desktop",
+  ChallengesList: "challengesList",
+  Challenge: "challenge",
+  Work: "work",
+  PowerShop: "powerShop",
+  AchievementShop: "achievementShop",
+} as const
 
-export enum PlotCharacters {
-  Koko = 'Don Koko',
-  Bear = 'Russian Bear',
-  Cod = 'English Cod',
-  Universe = 'The Universe',
-  AutoMonkey = 'AutoMonkey',
-  Computer = 'Computer',
-}
+export const PlotCharacters = {
+  Koko: 'Don Koko',
+  Bear: 'Russian Bear',
+  Cod: 'English Cod',
+  Universe: 'The Universe',
+  AutoMonkey: 'AutoMonkey',
+  Computer: 'Computer',
+} as const
+
+export type PlotCharacter = (typeof PlotCharacters)[keyof typeof PlotCharacters]
+export type NarrativePlacement = (typeof NarrativePlacements)[keyof typeof NarrativePlacements]
 
 export interface NarrativeDialogue {
   text: string
-  author?: PlotCharacters
+  author?: PlotCharacter
   alignment?: 'left' | 'right'
 }
 
@@ -30,7 +33,7 @@ export interface NarrativeScene {
   dialogue: NarrativeDialogue[]
 }
 
-export function getCharacterAvatarImageUrl(character: PlotCharacters): string {
+export function getCharacterAvatarImageUrl(character: PlotCharacter): string {
   switch (character) {
     case PlotCharacters.Koko:
       return AvatarUrlComputer

@@ -1,30 +1,35 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
 import type { UnknownChallenge } from '@/content/challenges'
 import { NarrativePlacements, testScene, type NarrativeScene } from '@/content/narrative'
 
-export enum Scenes {
-  Boot = 'Boot',
-  Home = 'Home',
-}
+export const Scenes = {
+  Boot: 'Boot',
+  Home: 'Home',
+} as const
 
-export enum EliteOsApps {
-  EnterName = 'EnterName',
-  Desktop = 'Desktop',
-  ChallengesList = 'ChallengesList',
-  Challenge = 'Challenge',
-  Work = 'Work',
-  PowerShop = 'PowerShop',
-  AchievementShop = 'AchievementShop',
-  Settings = 'Settings',
-}
+export const EliteOsApps = {
+  EnterName: 'EnterName',
+  Desktop: 'Desktop',
+  ChallengesList: 'ChallengesList',
+  Challenge: 'Challenge',
+  Work: 'Work',
+  PowerShop: 'PowerShop',
+  AchievementShop: 'AchievementShop',
+  Settings: 'Settings',
+} as const
 
-export enum Titles {
-  Chimp = 'Script Chimp',
-  Smart = 'Wrinkle Brained Monkey',
-  Hero = 'Hero Programmer',
-  God = 'The One True God of Code',
-}
+export const Titles = {
+  Chimp: 'Script Chimp',
+  Smart: 'Wrinkle Brained Monkey',
+  Hero: 'Hero Programmer',
+  God: 'The One True God of Code',
+} as const
+
+export type Scene = (typeof Scenes)[keyof typeof Scenes]
+export type EliteOsApp = (typeof EliteOsApps)[keyof typeof EliteOsApps]
+export type Title = (typeof Titles)[keyof typeof Titles]
 
 export const currentSaveVersion = 6
 
@@ -36,14 +41,14 @@ const defaultProfile = {
   backScratches: 0,
   juiceBoxes: 0,
   latestWorkId: 0,
-  title: Titles.Chimp,
+  title: Titles.Chimp as Title,
 }
 
 const defaultProgression = {
-  completedChallenges: {} as { [key: number]: { 
+  completedChallenges: {} as Record<number, { 
     score: number
     durationISO: string
-  } },
+  }>,
   completedNarrativeScenes: [] as string[],
 }
 
@@ -57,8 +62,8 @@ const defaultNarrativeSceneQueues = {
 
 export const useGameStateStore = defineStore('game state', {
   state: () => ({
-    currentScene: Scenes.Boot,
-    currentEliteOsApp: EliteOsApps.Desktop,
+    currentScene: ref<Scene>(Scenes.Boot),
+    currentEliteOsApp: ref<EliteOsApp>(EliteOsApps.Desktop),
     currentChallenge: null as UnknownChallenge | null,
     profile: useStorage('profile', defaultProfile),
     progression: useStorage('progression', defaultProgression),

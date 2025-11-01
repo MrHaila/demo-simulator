@@ -15,7 +15,7 @@ const emits = defineEmits(['done'])
 
 const displayedText = ref('')
 const interval = setInterval(() => {
-  if (props.run === undefined || props.run) {
+  if (props.run) {
     displayedText.value = props.text.substring(0, displayedText.value.length + 1)
   }
   
@@ -23,7 +23,7 @@ const interval = setInterval(() => {
       clearInterval(interval)
       emits('done')
   }
-}, props.speed || 25)
+}, props.speed ?? 25)
 
 
 

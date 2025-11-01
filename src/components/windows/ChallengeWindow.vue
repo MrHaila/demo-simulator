@@ -64,20 +64,20 @@ const gameStateStore = useGameStateStore()
 
 const challenge = gameStateStore.currentChallenge
 
-enum ChallengeStates {
-  Intro = 'intro',
-  Coding = 'coding',
-  Results = 'results',
-  Outro = 'outro',
-}
-const currentState = ref(ChallengeStates.Intro)
+const ChallengeStates = {
+  Intro: 'intro',
+  Coding: 'coding',
+  Results: 'results',
+  Outro: 'outro',
+} as const
+const currentState = ref<(typeof ChallengeStates)[keyof typeof ChallengeStates]>(ChallengeStates.Intro)
 const codingStarted = ref<DateTime>(DateTime.now())
 const codingEnded = ref<DateTime>(DateTime.now())
 
 // NARRATIVE ----------------------------
 
 const { showNarrativeScene } = useNarrativeScene()
-if (challenge?.narrativeScenes.introFirstTime && !gameStateStore.progression.completedNarrativeScenes.includes(challenge?.narrativeScenes.introFirstTime.id)) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
+if (challenge?.narrativeScenes.introFirstTime && !gameStateStore.progression.completedNarrativeScenes.includes(challenge.narrativeScenes.introFirstTime.id)) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
 else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
 else startCoding()
 
@@ -90,7 +90,7 @@ function showOutro(): void {
   if (challenge) {
     currentState.value = ChallengeStates.Outro
     const sceneToShow = challenge.narrativeScenes.win
-    showNarrativeScene(sceneToShow, () => exitChallenge())
+    showNarrativeScene(sceneToShow, () => { exitChallenge(); })
   }
 }
 
@@ -100,13 +100,12 @@ const codePoints = ref(0)
 let amountCoded = 0
 
 // Load some code.
-let sourceCode: string
+let sourceCode: string = SourceCode
 if (challenge?.sourceCode === 'helloWorld') sourceCode = SourceCodeHelloWorld
-else sourceCode = SourceCode
 
 // Pick a random start position for non-tutorial challenges.
 let sourceCodeCursorPosition = 0
-let lines: string[]
+let lines: string[] = []
 if (challenge?.challengeType !== 'tutorial') {
   lines = sourceCode.split('\n')
   while (!sourceCodeCursorPosition) {
@@ -185,7 +184,7 @@ async function input (): Promise<void> {
     codingEnded.value = DateTime.now()
     gameStateStore.progression.completedChallenges[challenge.id] = {
       score: codePoints.value,
-      durationISO: getChallengeDuration().toISO() || 'should never happen'
+      durationISO: getChallengeDuration().toISO() ?? 'should never happen'
     }
     // const previousResult = gameStateStore.progression.completedChallenges[challenge.id]
 
@@ -204,6 +203,7 @@ function codeToPoints (code: string): number {
   let points = 0
 
   // Add points for each non-whitespace, non-line-break character.
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of -- this is good as-is.
   for (let i = 0; i < code.length; i++) {
     if (code[i] !== ' ' && code[i] !== '\n') points++
   }
@@ -218,7 +218,7 @@ onKeyStroke((e) => {
       exitChallenge()
     } else if (windowIsInfocus.value && e.key.length === 1) {
       // e.preventDefault()
-      input()
+      void input()
     }
   }
   else if (currentState.value === ChallengeStates.Results) {

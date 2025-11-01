@@ -34,19 +34,19 @@ import { onKeyStroke, useWindowFocus } from '@vueuse/core';
 
 const emits = defineEmits(['done'])
 
-enum AnimationState {
-  Header = 1,
-  Gibberish1,
-  Wait,
-  CPU,
-  MemoryLabel,
-  MemTest,
-  OK,
-}
+const AnimationState = {
+  Header: 'Header',
+  Gibberish1: 'Gibberish1',
+  Wait: 'Wait',
+  CPU: 'CPU',
+  MemoryLabel: 'MemoryLabel',
+  MemTest: 'MemTest',
+  OK: 'OK',
+} as const
 
-const currentState = ref(AnimationState.Header)
+const currentState = ref<(typeof AnimationState)[keyof typeof AnimationState]>(AnimationState.Header)
 
-setTimeout(() => nextState(), 1000)
+setTimeout(() => { nextState(); }, 1000)
 
 function nextState(delay?: number): void {
   if (delay) {
@@ -77,6 +77,9 @@ function nextState(delay?: number): void {
       setTimeout(() => {
         emits('done')
       }, 1000)
+      break
+    case AnimationState.OK:
+      // Final state - nothing to do, just wait for user input or timeout
       break
   }
 }

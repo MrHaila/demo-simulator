@@ -1,8 +1,40 @@
 # Overview
 
-This
+This project is a game about programming.
+
+Tech stack:
+- Vue 3
+- Vite
+- TypeScript
+- Tailwind CSS
+- Pinia
+
+Commands:
+- Lint: pnpm lint
+- Type check: pnpm typecheck
+- Build: pnpm build
+- Run: pnpm dev
+
 
 ## TypeScript Best Practices
+
+### Avoid Enums - Use Const Dictionaries
+
+Prefer const dictionaries with `as const` over enums for better type safety and runtime behavior:
+
+```typescript
+// Instead of:
+export enum Scenes {
+  Boot = 'Boot',
+  Home = 'Home',
+}
+
+// Use:
+export const Scenes = {
+  Boot: 'Boot',
+  Home: 'Home',
+} as const
+```
 
 ### Handling Possibly Undefined Arrays
 
@@ -20,6 +52,7 @@ function processChallengeRow(): void {
 ```
 
 This pattern:
+
 - Provides immediate, clear error messages when array access fails
 - Prevents runtime errors from undefined array elements
 - Makes debugging easier by identifying the exact failure point

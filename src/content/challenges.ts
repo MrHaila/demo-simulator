@@ -43,10 +43,10 @@ export interface ChallengeScoreAttack extends ChallengeBase {
 export interface ChallengeCompo extends ChallengeBase {
   challengeType: 'compo'
   compoType: 'timeAttack' | 'scoreAttack' // TODO: figure this out later.
-  challengers: {
+  challengers: Array<{
     name: string,
     score: number
-  }[]
+  }>
 }
 
 export type UnknownChallenge = ChallengeCompo | ChallengeScoreAttack | ChallengeTimeAttack | ChallengeTutorial

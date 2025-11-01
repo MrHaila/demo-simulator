@@ -88,7 +88,7 @@ function getRandomOrder(): MwxEntry {
 let nextOrder = getRandomOrder()
 
 async function input (remainingAmountLeftToType?: number): Promise<void> {
-  let amountLeftToType = remainingAmountLeftToType || gameStateStore.profile.codingSpeed
+  let amountLeftToType = remainingAmountLeftToType ?? gameStateStore.profile.codingSpeed
 
   const currentOrder = displayedRows.value[displayedRows.value.length - 1]
 
@@ -146,7 +146,7 @@ async function input (remainingAmountLeftToType?: number): Promise<void> {
   }
 
   // If there are still characters left to type, then continue typing
-  if (amountLeftToType > 0) input(amountLeftToType)
+  if (amountLeftToType > 0) void input(amountLeftToType)
 
   // If there are more than 10 rows, then remove the first row
   if (displayedRows.value.length > 100) displayedRows.value.shift()
@@ -162,7 +162,7 @@ onKeyStroke((e) => {
     gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
   } else if (windowIsInfocus.value && e.key.length === 1) {
     // e.preventDefault()
-    input()
+    void input()
   }
 })
 
