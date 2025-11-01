@@ -68,7 +68,7 @@ onKeyStroke((e) => {
 })
 
 // Show the next dialogue in the current scene or remove the scene from the queue.
-function nextDialogue() {
+function nextDialogue(): void {
   if (dialogueIndex.value < props.narrativeScene.dialogue.length - 1) {
     dialogueIndex.value++
   }

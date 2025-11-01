@@ -181,8 +181,12 @@ if (challengeIds.length !== uniqueChallengeIds.size) {
 export const challengesAsRows = [[allChallenges[0]]]
 
 // For each challenge in the selected row, find all challenges that depend on it and add them to the next row.
-function processChallengeRow() {
+function processChallengeRow(): void {
+  if (!challengesAsRows[0]) throw new Error('No challenges in the first row.')
+
   for (const challengeToProcess of challengesAsRows[0]) {
+    if (!challengeToProcess) throw new Error('Challenge to process is undefined.')
+      
     const nextChallenges = allChallenges.filter(challenge => {
       if (Array.isArray(challenge.dependsOn)) {
         return challenge.dependsOn.includes(challengeToProcess.id)

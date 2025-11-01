@@ -30,7 +30,7 @@ export interface NarrativeScene {
   dialogue: NarrativeDialogue[]
 }
 
-export function getCharacterAvatarImageUrl(character?: PlotCharacters) {
+export function getCharacterAvatarImageUrl(character: PlotCharacters): string {
   switch (character) {
     case PlotCharacters.Koko:
       return AvatarUrlComputer

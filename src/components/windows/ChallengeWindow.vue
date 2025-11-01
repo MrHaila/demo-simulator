@@ -81,12 +81,12 @@ if (challenge?.narrativeScenes.introFirstTime && !gameStateStore.progression.com
 else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
 else startCoding()
 
-function startCoding () {
+function startCoding (): void {
   currentState.value = ChallengeStates.Coding
   codingStarted.value = DateTime.now()
 }
 
-function showOutro() {
+function showOutro(): void {
   if (challenge) {
     currentState.value = ChallengeStates.Outro
     const sceneToShow = challenge.narrativeScenes.win
@@ -111,7 +111,10 @@ if (challenge?.challengeType !== 'tutorial') {
   lines = sourceCode.split('\n')
   while (!sourceCodeCursorPosition) {
     const line = Math.floor(Math.random() * (lines.length - 1))
-    if (lines[line].length !== 0 && !lines[line].match(/^\s+|}/)) sourceCodeCursorPosition = SourceCode.indexOf(lines[line])
+    const selectedLine = lines[line]
+    if (selectedLine && selectedLine.length !== 0 && !/^\s+|}/.exec(selectedLine)) {
+      sourceCodeCursorPosition = SourceCode.indexOf(selectedLine)
+    }
   }
 }
 lines = []
@@ -132,7 +135,7 @@ const displayedCodeRows = ref<CodeLine[]>([
 
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
-async function input () {
+async function input (): Promise<void> {
   amountCoded += gameStateStore.profile.codingSpeed
 
   // Grab new characters from the source file and split by line breaks.
@@ -149,14 +152,19 @@ async function input () {
   sourceCodeCursorPosition += gameStateStore.profile.codingSpeed
 
   // Append first new row to the latest displayed row.
-  displayedCodeRows.value[displayedCodeRows.value.length - 1].text += newCodeRows[0]
+  const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
+  if (lastRow) {
+    lastRow.text += newCodeRows[0]
+  }
 
   // For each subsequent row...
   for (let i = 1; i < newCodeRows.length; i++) {
     // Directly add new rows to the display buffer.
+    const currentLastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
     displayedCodeRows.value.push({
-      lineNumber: displayedCodeRows.value[displayedCodeRows.value.length - 1].lineNumber + 1,
-      text: newCodeRows[i]
+      lineNumber: currentLastRow ? currentLastRow.lineNumber + 1 : 1,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- newCodeRows[i] is guaranteed to be a string.
+      text: newCodeRows[i]!
     })
 
     // Trim excess lines.
@@ -177,7 +185,7 @@ async function input () {
     codingEnded.value = DateTime.now()
     gameStateStore.progression.completedChallenges[challenge.id] = {
       score: codePoints.value,
-      durationISO: getChallengeDuration().toISO()
+      durationISO: getChallengeDuration().toISO() || 'should never happen'
     }
     // const previousResult = gameStateStore.progression.completedChallenges[challenge.id]
 
@@ -188,11 +196,11 @@ async function input () {
   }
 }
 
-function getChallengeDuration () {
+function getChallengeDuration (): Duration {
   return codingEnded.value.diff(codingStarted.value)
 }
 
-function codeToPoints (code: string) {
+function codeToPoints (code: string): number {
   let points = 0
 
   // Add points for each non-whitespace, non-line-break character.
@@ -220,7 +228,7 @@ onKeyStroke((e) => {
   }
 })
 
-function exitChallenge () {
+function exitChallenge (): void {
   gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList
   gameStateStore.currentChallenge = null
 }

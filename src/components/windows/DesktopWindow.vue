@@ -41,8 +41,7 @@ div(class="px-2")
 import OsAppShortcut from '@/components/OsAppShortcut.vue'
 import EliteOsLogo from '@/assets/EliteOsLogo.vue'
 
-import { useGameStateStore } from '@/stores/gameStateStore'
-import { EliteOsApps } from '@/stores/gameStateStore'
+import { useGameStateStore , EliteOsApps } from '@/stores/gameStateStore'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
 
 const gameStateStore = useGameStateStore()

@@ -606,7 +606,7 @@ export const names = [
   'Wilma Fingerdoo',
   'Woody Forrest',
   'Yuri Nator',
-]
+] as const
 
 export const countries = [
   'Afghanistan',
@@ -802,5 +802,5 @@ export const countries = [
   'Yemen',
   'Zambia',
   'Zimbabwe',
-]
+] as const
 

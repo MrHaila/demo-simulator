@@ -83,8 +83,7 @@ import MonkeyWorkWindow from '@/components/windows/MonkeyWorkWindow.vue'
 import ChallengesWindow from '@/components/windows/ChallengesListWindow.vue'
 import DesktopWindow from '@/components/windows/DesktopWindow.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
-import { useGameStateStore } from '@/stores/gameStateStore'
-import { EliteOsApps } from '@/stores/gameStateStore'
+import { useGameStateStore , EliteOsApps } from '@/stores/gameStateStore'
 
 import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 import { useNarrativeScene } from '@/components/composables/OsNarrativeScene'
@@ -164,7 +163,7 @@ if (gameStateStore.profile.name === '') {
   gameStateStore.currentEliteOsApp = EliteOsApps.EnterName
 }
 
-function RedactText(text: string, skip: boolean = false) {
+function RedactText(text: string, skip: boolean = false): string {
   if (!skip) text = text.replace(/./g, '?')
   return text
 }

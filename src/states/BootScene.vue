@@ -48,7 +48,7 @@ const currentState = ref(AnimationState.Header)
 
 setTimeout(() => nextState(), 1000)
 
-function nextState(delay?: number) {
+function nextState(delay?: number): void {
   if (delay) {
     setTimeout(() => {
       nextState()

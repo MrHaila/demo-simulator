@@ -77,7 +77,7 @@ onKeyStroke(['Escape'], () => {
   gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
 })
 
-function getChallengeStatus(challenge: UnknownChallenge) {
+function getChallengeStatus(challenge: UnknownChallenge): 'completed' | 'unlocked' | 'locked' {
   // Return completed if challenge id is in completedChallenges.
   if (gameStateStore.progression.completedChallenges[challenge.id]) return 'completed'
   
@@ -91,7 +91,7 @@ function getChallengeStatus(challenge: UnknownChallenge) {
   return 'locked'
 }
 
-function openChallenge(challenge: UnknownChallenge) {
+function openChallenge(challenge: UnknownChallenge): void {
   gameStateStore.currentChallenge = challenge
   gameStateStore.currentEliteOsApp = EliteOsApps.Challenge
 }

@@ -32,7 +32,7 @@ os-window(
     os-button(
       hotkey="Esc"
       @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
-      ) Whatever, I'm done
+      ) Save and close
 </template>
 
 <script lang="ts" setup>
@@ -56,7 +56,7 @@ interface MwxEntry {
   country: string
 }
 const displayedRows = ref<MwxEntry[]>([])
-function addEmptyOrder() {
+function addEmptyOrder(): void {
   displayedRows.value.push({
     id: '',
     type: '',
@@ -72,9 +72,11 @@ function getRandomOrder(): MwxEntry {
   const type = 'bananas'
   const quantity = Math.floor(Math.random() * 1000) + 1
   const nameIndex = Math.floor(Math.random() * (names.length - 1))
-  const name = names[nameIndex]
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- names is guaranteed to have at least one element.
+  const name = names[nameIndex]!
   const countryIndex = Math.floor(Math.random() * (countries.length - 1))
-  const country = countries[countryIndex]
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- countries is guaranteed to have at least one element.
+  const country = countries[countryIndex]!
   return { 
     id: id.toString(),
     type,
@@ -85,10 +87,12 @@ function getRandomOrder(): MwxEntry {
 }
 let nextOrder = getRandomOrder()
 
-async function input (remainingAmountLeftToType?: number) {
+async function input (remainingAmountLeftToType?: number): Promise<void> {
   let amountLeftToType = remainingAmountLeftToType || gameStateStore.profile.codingSpeed
 
-  let currentOrder = displayedRows.value[displayedRows.value.length - 1]
+  const currentOrder = displayedRows.value[displayedRows.value.length - 1]
+
+  if (!currentOrder) throw new Error('No current order.')
 
   // If there are characters left in amountLeftToType, then continue adding them to the current order's id
   if (currentOrder.id.length < nextOrder.id.length) {
@@ -162,7 +166,7 @@ onKeyStroke((e) => {
   }
 })
 
-function getNextIncompleteRowField (row: MwxEntry) {
+function getNextIncompleteRowField (row: MwxEntry): string | null {
   // Fix first field not being highlighted
   if (gameStateStore.profile.latestWorkId === Number(row.id)) {
     if (row.id !== nextOrder.id) return 'id'

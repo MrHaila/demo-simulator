@@ -23,15 +23,16 @@ const totalSubscribers = computed(() => subscribers.value.length)
  * - showOverlay: Function to show the overlay.
  * - hideOverlay: Function to hide the overlay.
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Vue composables do not need explicit return types
 export function useOverlay() {
   const id = uniqueId()
   
   /**
    * Function to show the overlay.
    */
-  function showOverlay() {
+  function showOverlay(): void {
     // If the overlay is already visible, don't add the subscriber again.
-    if (subscribers.value.indexOf(id) > -1) {
+    if (subscribers.value.includes(id)) {
       return
     }
 
@@ -41,7 +42,7 @@ export function useOverlay() {
   /**
    * Function to hide the overlay.
    */
-  function hideOverlay() {
+  function hideOverlay(): void {
     const index = subscribers.value.indexOf(id)
     if (index > -1) {
       subscribers.value.splice(index, 1)
@@ -58,6 +59,6 @@ export function useOverlay() {
 
 // Function to get a sequential unique ID.
 let id = 0
-export function uniqueId() {
+export function uniqueId(): number {
   return id++
 }
