@@ -7,7 +7,7 @@ div(class="px-2")
   //- Divider
   div(class="flex my-6 items-center gap-4 text-gray-600")
     p(class="uppercase") All Software
-    hr(class="flex-grow border-gray-600")
+    hr(class="grow border-gray-600")
   
   //- Apps
   div(class="flex justify-evenly space-x-2")

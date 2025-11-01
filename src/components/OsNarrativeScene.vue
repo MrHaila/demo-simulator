@@ -13,7 +13,7 @@ div(
     //- Speech bubbles for text with an author
     div(
       v-if="dialogue?.author"
-      :class="['bg-gray-900 backdrop-blur-sm bg-opacity-70 border-liver border-4 rounded-xl flex', { 'flex-row-reverse': dialogue?.alignment === 'right' }]"
+      :class="['bg-gray-900 backdrop-blur-xs bg-opacity-70 border-liver border-4 rounded-xl flex', { 'flex-row-reverse': dialogue?.alignment === 'right' }]"
       style="width: 35rem;"
       )
       img(
@@ -31,7 +31,7 @@ div(
     //- Text without an author
     div(
       v-else
-      class="bg-gray-900 backdrop-blur-sm bg-opacity-70 border-neutral-500 border-4 rounded-xl text-center px-5 py-2 italic"
+      class="bg-gray-900 backdrop-blur-xs bg-opacity-70 border-neutral-500 border-4 rounded-xl text-center px-5 py-2 italic"
       ) {{ dialogue?.text }}
 
   //- Input hint

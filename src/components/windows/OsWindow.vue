@@ -5,7 +5,7 @@ div(class="border-solid rounded-lg border-4 border-liver shadow-md flex flex-col
 
     slot(name="title-right")
   div(
-    :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded', 'grow', 'overflow-hidden']"
+    :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded-sm', 'grow', 'overflow-hidden']"
     @update="scrollToBottom"
     :ref="(el) => bodyElement = el"
     )
