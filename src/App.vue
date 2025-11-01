@@ -13,6 +13,7 @@ const gameStateStore = useGameStateStore()
 
 // Reset the game state if the save version is old
 if (gameStateStore.profile.saveVersion < currentSaveVersion) {
+  // eslint-disable-next-line no-console -- Debug message
   console.warn(`Resetting game state because save version is old. ${gameStateStore.profile.saveVersion} < ${currentSaveVersion}`)
   gameStateStore.resetGame()
 }

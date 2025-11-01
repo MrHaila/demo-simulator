@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- Large data file with names */
 export const names = [
   'Adam Baum',
   'Adam Zapel',

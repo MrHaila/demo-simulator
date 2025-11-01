@@ -30,7 +30,7 @@ export default [
     files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
     rules: {
       // Relaxed TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/unified-signatures': 'off',
       '@typescript-eslint/no-magic-numbers': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
