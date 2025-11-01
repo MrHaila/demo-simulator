@@ -9,27 +9,25 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@vueuse/core": "^9.10.0",
-    "pinia": "^2.0.29",
-    "tsparticles": "^2.7.1",
-    "tsparticles-engine": "^2.7.1",
-    "vue": "^3.2.45",
-    "vue3-particles": "^2.7.1"
+    "@vueuse/core": "^14.0.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.22",
+    "@tsparticles/slim": "^3.0.1"
   },
   "devDependencies": {
-    "@types/luxon": "^3.2.0",
-    "@types/node": "^18.11.18",
-    "@vitejs/plugin-vue": "^4.0.0",
-    "@volar/vue-language-plugin-pug": "^1.0.24",
-    "@vue/tsconfig": "^0.1.3",
-    "autoprefixer": "^10.4.13",
-    "luxon": "^3.2.1",
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^24.9.2",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/language-plugin-pug": "^3.1.2",
+    "@vue/tsconfig": "^0.8.1",
+    "autoprefixer": "^10.4.21",
+    "luxon": "^3.7.2",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.21",
-    "pug": "^3.0.2",
-    "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4",
-    "vue-tsc": "^1.0.24"
+    "postcss": "^8.5.6",
+    "pug": "^3.0.3",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vue-tsc": "^3.1.2"
   }
 }
