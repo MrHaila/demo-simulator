@@ -8,6 +8,7 @@ Tech stack:
 - TypeScript
 - Tailwind CSS
 - Pinia
+- pnpm instead of npm
 
 Commands:
 - Lint: pnpm lint

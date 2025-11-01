@@ -13,39 +13,39 @@ os-window(
     //- A challenge
     div(
       v-for="challenge in row"
-      :key="challenge.id"
+      :key="challenge!.id"
       class=" w-80 "
       )
       //- Completed
       div(
-        v-if="getChallengeStatus(challenge) === 'completed'"
+        v-if="getChallengeStatus(challenge!) === 'completed'"
         class="border-kombu border-4 rounded-lg p-3 bg-gray-800"
         )
         div(class="flex justify-between")
-          h2(class="") {{ challenge.name }}
+          h2(class="") {{ challenge!.name }}
           span(class="text-xs text-kombu") Completed
-        div(class="text-sm") {{ challenge.description }}
-        //div(class="text-xs") Depends on: {{ challenge.dependsOn }}
+        div(class="text-sm") {{ challenge!.description }}
+        //div(class="text-xs") Depends on: {{ challenge!.dependsOn }}
         div(class="flex justify-end mt-2")
-          os-button(@click="openChallenge(challenge)") Replay
+          os-button(@click="openChallenge(challenge!)") Replay
 
       //- Available
       div(
-        v-else-if="getChallengeStatus(challenge) === 'unlocked'"
+        v-else-if="getChallengeStatus(challenge!) === 'unlocked'"
         class="border-liver border-4 rounded-lg p-3 bg-gray-800"
         )
-        h2(class="") {{ challenge.name }}
-        div(class="text-sm") {{ challenge.description }}
+        h2(class="") {{ challenge!.name }}
+        div(class="text-sm") {{ challenge!.description }}
         div(class="flex justify-end mt-2")
-          os-button(@click="openChallenge(challenge)") Open
+          os-button(@click="openChallenge(challenge!)") Open
 
       //- Locked
       div(
         v-else
         class="border-gray-600 border-4 rounded-lg p-3 bg-gray-800"
         )
-        h2(class="text-gray-600") {{ challenge.name }}
-        div(class="text-sm text-gray-600") {{ challenge.description }}
+        h2(class="text-gray-600") {{ challenge!.name }}
+        div(class="text-sm text-gray-600") {{ challenge!.description }}
         div(class="flex justify-end mt-2")
           os-button Locked
       

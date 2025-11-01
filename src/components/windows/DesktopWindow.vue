@@ -48,6 +48,7 @@ const gameStateStore = useGameStateStore()
 const { showNarrativeScene } = useNarrativeScene()
 
 if (gameStateStore.narrativeSceneQueues.desktop.length > 0) {
+  if (!gameStateStore.narrativeSceneQueues.desktop[0]) throw new Error('Narrative scene queue is empty.')
   showNarrativeScene(gameStateStore.narrativeSceneQueues.desktop[0], () => {
     gameStateStore.narrativeSceneQueues.desktop.shift()
   })

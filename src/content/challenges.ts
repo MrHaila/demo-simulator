@@ -6,13 +6,13 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-import { PlotCharacters, type NarrativeDialogue, type NarrativeScene } from "./narrative"
+import { PlotCharacters, type PlotCharacter, type NarrativeDialogue, type NarrativeScene } from "./narrative"
 
 export interface ChallengeBase {
   id: number
   name: string
   description: string
-  descriptionAuthor?: PlotCharacters
+  descriptionAuthor?: PlotCharacter
   characterLimit?: number
   dependsOn: number | number[] | false
   sourceCode?: 'helloWorld' | 'quaternion'

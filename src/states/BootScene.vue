@@ -9,15 +9,15 @@ div(class="p-2 flex justify-between h-screen")
           p Copyleft (ɔ) 1987-2023, Hailasoft Oy Ab
 
       div(class="mt-5")
-        animated-text(:run="currentState === 2" text="OSFX VER:1.0 23/3/14" @done="nextState(300)")
-      div(v-show="currentState === 3" class="mt-10")
-        animated-text(:run="currentState === 3" :speed="200" text="WAIT..." @done="nextState(1300)")
+        animated-text(:run="currentState === AnimationState.Gibberish1" text="OSFX VER:1.0 23/3/14" @done="nextState(300)")
+      div(v-show="currentState === AnimationState.Wait" class="mt-10")
+        animated-text(:run="currentState === AnimationState.Wait" :speed="200" text="WAIT..." @done="nextState(1300)")
       div(class="mt-36")
-        animated-text(:run="currentState === 4" :speed="10" text="SKELETOR-1 CPU at 366MHz" @done="nextState()")
+        animated-text(:run="currentState === AnimationState.CPU" :speed="10" text="SKELETOR-1 CPU at 366MHz" @done="nextState()")
       div
-        animated-text(:run="currentState === 5" :speed="10" text="Memory Test :  " @done="nextState()")
-        animated-number(:run="currentState === 6" :number="65536" :speed="431" @done="nextState()")
-        span(v-show="currentState === 7")  OK
+        animated-text(:run="currentState === AnimationState.MemoryLabel" :speed="10" text="Memory Test :  " @done="nextState()")
+        animated-number(:run="currentState === AnimationState.MemTest" :number="65536" :speed="431" @done="nextState()")
+        span(v-show="currentState === AnimationState.OK")  OK
 
     div
       p Press #[span(class="text-earth") π] to enter SETUP, #[span(class="text-earth") ANY KEY] to skip memory test

@@ -7,7 +7,7 @@ div(class="border-solid rounded-lg border-4 border-liver shadow-md flex flex-col
   div(
     :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded-sm', 'grow', 'overflow-hidden']"
     @update="scrollToBottom"
-    :ref="(el) => bodyElement = el"
+    :ref="(el) => bodyElement = el as HTMLElement"
     )
     slot
       p Lorem ipsum dolor sit amet.
