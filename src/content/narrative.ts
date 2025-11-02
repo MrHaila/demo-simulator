@@ -1,6 +1,9 @@
 import AvatarUrlComputer from '@/assets/avatars/computer@1x.jpg'
 import { EliteOsApps } from '@/stores/gameStateStore'
 
+/**
+ * Narrative placement types
+ */
 export const NarrativePlacements = {
   Desktop: 'desktop',
   ChallengesList: 'challengesList',
@@ -15,7 +18,7 @@ export const PlotCharacters = {
   Bear: 'Russian Bear',
   Cod: 'English Cod',
   Universe: 'The Universe',
-  AutoMonkey: 'AutoMonkey',
+  OpenMonkey: 'OpenMonkey',
   Computer: 'Computer',
 } as const
 
@@ -28,11 +31,17 @@ export interface NarrativeDialogue {
   alignment?: 'left' | 'right'
 }
 
+/**
+ * A scene is a sequence of dialogues with a unique ID.
+ */
 export interface NarrativeScene {
   id: string
   dialogue: NarrativeDialogue[]
 }
 
+/**
+ * Returns the avatar image URL for a given plot character.
+ */
 export function getCharacterAvatarImageUrl(character: PlotCharacter): string {
   switch (character) {
     case PlotCharacters.Koko:
@@ -43,13 +52,16 @@ export function getCharacterAvatarImageUrl(character: PlotCharacter): string {
       return AvatarUrlComputer
     case PlotCharacters.Universe:
       return AvatarUrlComputer
-    case PlotCharacters.AutoMonkey:
+    case PlotCharacters.OpenMonkey:
       return AvatarUrlComputer
     case PlotCharacters.Computer:
       return AvatarUrlComputer
   }
 }
 
+/**
+ * An example scene.
+ */
 export const testScene = {
   id: 'test scene',
   dialogue: [

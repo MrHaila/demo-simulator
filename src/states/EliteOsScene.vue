@@ -3,40 +3,40 @@
   - Confetti? https://confetti.js.org/#
 
 vue-particles#tsparticlesdiv(
-  :options='particleOptions'
-  class='absolute top-0 left-0 -z-50 h-full w-full'
+  :options="particleOptions",
+  class="absolute top-0 left-0 -z-50 h-full w-full"
 )
 
 OsNarrativeScene(
-  v-if='currentNarrativeScene'
-  :narrativeScene='currentNarrativeScene'
+  v-if="currentNarrativeScene",
+  :narrativeScene="currentNarrativeScene"
 )
 
-div(class='flex h-full gap-2 p-2')
+div(class="flex h-full gap-2 p-2")
   //- Left column
   ChallengesWindow(
-    v-if='gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList'
-    class='grow'
+    v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList",
+    class="grow"
   )
   ChallengeWindow(
-    v-else-if='gameStateStore.currentEliteOsApp === EliteOsApps.Challenge'
-    class='grow'
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge",
+    class="grow"
   )
   MonkeyWorkWindow(
-    v-else-if='gameStateStore.currentEliteOsApp === EliteOsApps.Work'
-    class='grow'
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work",
+    class="grow"
   )
   //- TODO: ask for a name
   DesktopWindow(
-    v-else
-    class='grow'
+    v-else,
+    class="grow"
   )
 
   //- Right column
-  div(class='flex shrink-0 basis-80 flex-col gap-2')
+  div(class="flex shrink-0 basis-80 flex-col gap-2")
     OsWindow(
-      title='Profile'
-      class=''
+      title="Profile",
+      class=""
     )
       ul
         li {{ gameStateStore.profile.name }}
@@ -45,34 +45,34 @@ div(class='flex h-full gap-2 p-2')
         li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
 
     OsWindow(
-      v-if='gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge'
-      title='Assets'
-      class=''
+      v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge",
+      title="Assets",
+      class=""
     )
       ul
         li {{ RedactText('Scratches', !!gameStateStore.profile.backScratches) }}: {{ gameStateStore.profile.backScratches }}
         li {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}: {{ gameStateStore.profile.juiceBoxes }}
 
     OsWindow(
-      v-if='gameStateStore.currentEliteOsApp === EliteOsApps.Challenge'
-      title='Challenge Info'
-      class=''
+      v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge",
+      title="Challenge Info",
+      class=""
     )
       ul
         li {{ gameStateStore.currentChallenge?.description }}
 
     OsWindow(
-      title='Mission'
-      class='grow'
+      title="Mission",
+      class="grow"
     )
       ul
         li 1. Hello World
 
 //- TODO: fade
 div(
-  :class='["absolute bottom-0 left-0 right-0 top-0 bg-neutral-900 opacity-70 z-10 flex flex-col justify-end", { hidden: !isOverlayVisible }]'
+  :class="['absolute bottom-0 left-0 right-0 top-0 bg-neutral-900 opacity-70 z-10 flex flex-col justify-end', { hidden: !isOverlayVisible }]"
 )
-  div(class='w-full p-2 text-right text-xs text-gray-400') DEBUG: {{ totalSubscribers }} subscriber{{ totalSubscribers === 1 ? '' : 's' }}
+  div(class="w-full p-2 text-right text-xs text-gray-400") DEBUG: {{ totalSubscribers }} subscriber{{ totalSubscribers === 1 ? '' : 's' }}
 </template>
 
 <script lang="ts" setup>

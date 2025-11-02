@@ -1,6 +1,7 @@
 {
   "semi": false,
   "singleQuote": true,
+  "pugSingleQuote": false,
   "trailingComma": "all",
   "tabWidth": 2,
   "printWidth": 120,
@@ -13,7 +14,7 @@
       "options": {
         "parser": "vue",
         "pugClassNotation": "attribute",
-        "pugAttributeSeparator": "none",
+        "pugAttributeSeparator": "always",
         "pugWrapAttributesThreshold": 1
       }
     }

@@ -48,7 +48,7 @@ export const Scenes = {
 } as const
 
 // And create a helper type:
-type Scene = keyof typeof Scenes
+export type Scene = (typeof Scenes)[keyof typeof Scenes]
 ```
 
 ### Handling Possibly Undefined Arrays

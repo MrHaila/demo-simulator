@@ -18,11 +18,11 @@ os-window(
       :key='index'
     )
       tr(style='height: 33px')
-        td(class='border border-liver px-2 py-1') {{ row.id }}#[span(v-show='getNextIncompleteRowField(row) === \'id\' && windowIsInfocus' class='blink') █]
-        td(class='border border-liver px-2 py-1') {{ row.type }}#[span(v-show='getNextIncompleteRowField(row) === \'type\' && windowIsInfocus' class='blink') █]
-        td(class='border border-liver px-2 py-1') {{ row.quantity }}#[span(v-show='getNextIncompleteRowField(row) === \'quantity\' && windowIsInfocus' class='blink') █]
-        td(class='border border-liver px-2 py-1') {{ row.name }}#[span(v-show='getNextIncompleteRowField(row) === \'name\' && windowIsInfocus' class='blink') █]
-        td(class='border border-liver px-2 py-1') {{ row.country }}#[span(v-show='getNextIncompleteRowField(row) === \'country\' && windowIsInfocus' class='blink') █]
+        td(class='border border-liver px-2 py-1') {{ row.id }}#[span(v-show='getNextIncompleteRowField(row) === 'id' && windowIsInfocus' class='blink') \u2588]
+        td(class='border border-liver px-2 py-1') {{ row.type }}#[span(v-show='getNextIncompleteRowField(row) === 'type' && windowIsInfocus' class='blink') \u2588]
+        td(class='border border-liver px-2 py-1') {{ row.quantity }}#[span(v-show='getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus' class='blink') \u2588]
+        td(class='border border-liver px-2 py-1') {{ row.name }}#[span(v-show='getNextIncompleteRowField(row) === 'name' && windowIsInfocus' class='blink') \u2588]
+        td(class='border border-liver px-2 py-1') {{ row.country }}#[span(v-show='getNextIncompleteRowField(row) === 'country' && windowIsInfocus' class='blink') \u2588]
       tr(
         v-if='Number(row.id) % 10 === 0 && row.id !== displayedRows[0]!.id && row.id !== displayedRows[displayedRows.length - 1]!.id'
       )

@@ -1,53 +1,53 @@
 <template lang="pug">
-div(class='flex h-screen justify-between p-2')
-  div(class='flex flex-col justify-between')
+div(class="flex h-screen justify-between p-2")
+  div(class="flex flex-col justify-between")
     div
-      div(class='flex')
-        div(class='w-8') H
+      div(class="flex")
+        div(class="w-8") H
         div
           p Real Portable BIOS v4.51WEB, Assembly 2023 Build
           p Copyleft (ɔ) 1987-2023, Hailasoft Oy Ab
 
-      div(class='mt-5')
+      div(class="mt-5")
         animated-text(
-          :run='currentState === AnimationState.Gibberish1'
-          text='OSFX VER:1.0 23/3/14'
-          @done='nextState(300)'
+          :run="currentState === AnimationState.Gibberish1",
+          text="OSFX VER:1.0 23/3/14",
+          @done="nextState(300)"
         )
       div(
-        v-show='currentState === AnimationState.Wait'
-        class='mt-10'
+        v-show="currentState === AnimationState.Wait",
+        class="mt-10"
       )
         animated-text(
-          :run='currentState === AnimationState.Wait'
-          :speed='200'
-          text='WAIT...'
-          @done='nextState(1300)'
+          :run="currentState === AnimationState.Wait",
+          :speed="200",
+          text="WAIT...",
+          @done="nextState(1300)"
         )
-      div(class='mt-36')
+      div(class="mt-36")
         animated-text(
-          :run='currentState === AnimationState.CPU'
-          :speed='10'
-          text='SKELETOR-1 CPU at 366MHz'
-          @done='nextState()'
+          :run="currentState === AnimationState.CPU",
+          :speed="10",
+          text="SKELETOR-1 CPU at 366MHz",
+          @done="nextState()"
         )
       div
         animated-text(
-          :run='currentState === AnimationState.MemoryLabel'
-          :speed='10'
-          text='Memory Test :  '
-          @done='nextState()'
+          :run="currentState === AnimationState.MemoryLabel",
+          :speed="10",
+          text="Memory Test :  ",
+          @done="nextState()"
         )
         animated-number(
-          :run='currentState === AnimationState.MemTest'
-          :number='65536'
-          :speed='431'
-          @done='nextState()'
+          :run="currentState === AnimationState.MemTest",
+          :number="65536",
+          :speed="431",
+          @done="nextState()"
         )
-        span(v-show='currentState === AnimationState.OK') OK
+        span(v-show="currentState === AnimationState.OK") OK
 
     div
-      p Press #[span(class='text-earth') π] to enter SETUP, #[span(class='text-earth') ANY KEY] to skip memory test
+      p Press #[span(class="text-earth") π] to enter SETUP, #[span(class="text-earth") ANY KEY] to skip memory test
       p 23/6/1-ö092DX-2ASÅ190Z-00
 
   div ASSEMBLY LOGO

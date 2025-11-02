@@ -1,50 +1,50 @@
 <template lang="pug">
 OsWindow(
-  :title='`H4X_EDIT - ${challenge?.name}`'
-  no-padding
-  ref='h4xWindow'
+  :title="`H4X_EDIT - ${challenge?.name}`",
+  no-padding,
+  ref="h4xWindow"
 )
   template(#title-right)
-    span(v-if='challenge?.challengeType === "scoreAttack"') {{ codePoints }} points
+    span(v-if="challenge?.challengeType === 'scoreAttack'") {{ codePoints }} points
     //span(v-else-if="challenge?.challengeType === 'timeAttack'") {{ timeLeft }} seconds left
-    span(v-else-if='challenge?.challengeType === "tutorial"') {{ sourceCode.length - amountCoded }} characters left
+    span(v-else-if="challenge?.challengeType === 'tutorial'") {{ sourceCode.length - amountCoded }} characters left
 
-  table(class='table-fixed font-mono')
+  table(class="table-fixed font-mono")
     tbody
       tr(
-        v-for='(line, index) in displayedCodeRows'
-        :key='index'
+        v-for="(line, index) in displayedCodeRows",
+        :key="index"
       )
         td(
-          style='min-width: 3rem; padding-top: 0.32rem'
-          class='border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400'
+          style="min-width: 3rem; padding-top: 0.32rem",
+          class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
         ) {{ line.lineNumber }}
-        td(class='h-6 px-2 whitespace-pre-wrap') {{ line.text }}#[span(v-show='index === displayedCodeRows.length - 1 && windowIsInfocus' class='blink') █]
+        td(class="h-6 px-2 whitespace-pre-wrap") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus", class="blink") █]
 
   OsWindow(
-    v-if='currentState === ChallengeStates.Results'
-    title='Compiler Results'
-    class='absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2'
-    style='width: 30rem'
+    v-if="currentState === ChallengeStates.Results",
+    title="Compiler Results",
+    class="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2",
+    style="width: 30rem"
   )
-    h1(class='text-lg') Input
+    h1(class="text-lg") Input
     ul
       li {{ displayedCodeRows.length }} lines of code.
       li {{ amountCoded }} characters.
       li TBD seconds of programming time.
 
-    h2(class='mt-4 text-lg') Compilation status: #[span(class='text-olive') SUCCESS!]
+    h2(class="mt-4 text-lg") Compilation status: #[span(class="text-olive") SUCCESS!]
 
     template(#footer-right)
       os-button(
-        @click='showOutro'
-        hotkey='Enter'
+        @click="showOutro",
+        hotkey="Enter"
       ) Run
 
   template(#footer-right)
     os-button(
-      @click='exitChallenge'
-      hotkey='Esc'
+      @click="exitChallenge",
+      hotkey="Esc"
     ) Abort Challenge
 </template>
 
@@ -86,10 +86,13 @@ const { showNarrativeScene } = useNarrativeScene()
 if (
   challenge?.narrativeScenes.introFirstTime &&
   !gameStateStore.progression.completedNarrativeScenes.includes(challenge.narrativeScenes.introFirstTime.id)
-)
+) {
   showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
-else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
-else startCoding()
+} else if (challenge?.narrativeScenes.introRetry) {
+  showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
+} else {
+  startCoding()
+}
 
 function startCoding(): void {
   currentState.value = ChallengeStates.Coding

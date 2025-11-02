@@ -1,40 +1,40 @@
 <template lang="pug">
 //- Centered container
-div(class='absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify-end space-y-6 pb-20')
+div(class="absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify-end space-y-6 pb-20")
   //- Dialogue rows
   div(
-    v-for='(dialogue, index) in visibleDialogues'
-    :key='index'
-    :class='["flex", { "justify-end": dialogue?.alignment === "right", "justify-center": !dialogue?.author }]'
+    v-for="(dialogue, index) in visibleDialogues",
+    :key="index",
+    :class="['flex', { 'justify-end': dialogue?.alignment === 'right', 'justify-center': !dialogue?.author }]"
   )
     //- Speech bubbles for text with an author
     div(
-      v-if='dialogue?.author'
-      :class='["bg-gray-900 backdrop-blur-xs bg-opacity-70 border-liver border-4 rounded-xl flex", { "flex-row-reverse": dialogue?.alignment === "right" }]'
-      style='width: 35rem'
+      v-if="dialogue?.author",
+      :class="['bg-gray-900 backdrop-blur-xs bg-opacity-70 border-liver border-4 rounded-xl flex', { 'flex-row-reverse': dialogue?.alignment === 'right' }]",
+      style="width: 35rem"
     )
       img(
-        :src='getCharacterAvatarImageUrl(dialogue?.author)'
-        :class='["h-32 rounded-l-lg", { "rounded-l-none rounded-r-lg": dialogue?.alignment === "right" }]'
+        :src="getCharacterAvatarImageUrl(dialogue?.author)",
+        :class="['h-32 rounded-l-lg', { 'rounded-l-none rounded-r-lg': dialogue?.alignment === 'right' }]"
       )
       div(
-        :class='["grow flex flex-col rounded-r-lg border-liver", { "border-l-4": dialogue?.alignment !== "right" && dialogue?.author, "rounded-r-none rounded-l-lg border-r-4": dialogue?.alignment === "right" }]'
+        :class="['grow flex flex-col rounded-r-lg border-liver', { 'border-l-4': dialogue?.alignment !== 'right' && dialogue?.author, 'rounded-r-none rounded-l-lg border-r-4': dialogue?.alignment === 'right' }]"
       )
         div(
-          :class='["bg-liver px-3 py-1 relative -top-1 rounded-tr-lg", { "rounded-tl-lg rounded-tr-none": dialogue?.alignment === "right" }]'
+          :class="['bg-liver px-3 py-1 relative -top-1 rounded-tr-lg', { 'rounded-tl-lg rounded-tr-none': dialogue?.alignment === 'right' }]"
         )
-          aside(class='italic') {{ dialogue?.author }}
-        div(class='grow px-3 py-2')
-          h1(class='text-xl') "{{ dialogue.text }}"
+          aside(class="italic") {{ dialogue?.author }}
+        div(class="grow px-3 py-2")
+          h1(class="text-xl") "{{ dialogue.text }}"
 
     //- Text without an author
     div(
-      v-else
-      class='bg-opacity-70 rounded-xl border-4 border-neutral-500 bg-gray-900 px-5 py-2 text-center italic backdrop-blur-xs'
+      v-else,
+      class="bg-opacity-70 rounded-xl border-4 border-neutral-500 bg-gray-900 px-5 py-2 text-center italic backdrop-blur-xs"
     ) {{ dialogue?.text }}
 
   //- Input hint
-  p(class='my-3 animate-pulse text-center text-xs text-gray-400') Press any key to continue.
+  p(class="my-3 animate-pulse text-center text-xs text-gray-400") Press any key to continue.
 </template>
 
 <script lang="ts" setup>
