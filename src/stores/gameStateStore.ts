@@ -90,6 +90,7 @@ export const useGameStateStore = defineStore('game state', {
       this.profile = defaultProfile
       this.progression = defaultProgression
       this.narrativeSceneQueues = defaultNarrativeSceneQueues
+      this.currentChallenge = null
     },
   },
 })

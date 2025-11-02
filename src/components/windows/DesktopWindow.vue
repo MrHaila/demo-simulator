@@ -58,6 +58,7 @@ import { useNarrativeScene } from '../composables/OsNarrativeScene'
 const gameStateStore = useGameStateStore()
 const { showNarrativeScene } = useNarrativeScene()
 
+// Handle narrative scenes
 if (gameStateStore.narrativeSceneQueues.desktop.length > 0) {
   if (!gameStateStore.narrativeSceneQueues.desktop[0]) throw new Error('Narrative scene queue is empty.')
   showNarrativeScene(gameStateStore.narrativeSceneQueues.desktop[0], () => {

@@ -26,14 +26,17 @@ div(class="flex h-full gap-2 p-2")
     v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work",
     class="grow"
   )
-  //- TODO: ask for a name
+  EnterNameWindow(
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.EnterName",
+    class="grow"
+  )
   DesktopWindow(
     v-else,
     class="grow"
   )
 
   //- Right column
-  div(class="flex shrink-0 basis-80 flex-col gap-2")
+  div(class="flex shrink-0 basis-80 flex-col gap-2" v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.EnterName")
     OsWindow(
       title="Profile",
       class=""
@@ -43,6 +46,13 @@ div(class="flex h-full gap-2 p-2")
         li {{ gameStateStore.profile.title }}
         li {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}: {{ gameStateStore.profile.codingSpeed }}
         li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
+      
+      OsButton(
+        @click="resetAndReload",
+        variant="ghost",
+        size="sm",
+        class="text-xs text-gray-500"
+      ) Reset Game
 
     OsWindow(
       v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge",
@@ -79,9 +89,11 @@ div(
 import { useNarrativeScene } from '@/components/composables/OsNarrativeScene'
 import { useOverlay } from '@/components/composables/OsOverlay'
 import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
+import OsButton from '@/components/OsButton.vue'
 import ChallengesWindow from '@/components/windows/ChallengesListWindow.vue'
 import ChallengeWindow from '@/components/windows/ChallengeWindow.vue'
 import DesktopWindow from '@/components/windows/DesktopWindow.vue'
+import EnterNameWindow from '@/components/windows/EnterNameWindow.vue'
 import MonkeyWorkWindow from '@/components/windows/MonkeyWorkWindow.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
@@ -162,5 +174,13 @@ if (gameStateStore.profile.name === '') {
 function RedactText(text: string, skip = false): string {
   const result = skip ? text : text.replace(/./g, '?')
   return result
+}
+
+function resetAndReload(): void {
+  // Reset game state
+  gameStateStore.resetGame()
+  
+  // Reload the page to start fresh
+  window.location.reload()
 }
 </script>
