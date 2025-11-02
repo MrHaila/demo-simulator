@@ -1,7 +1,7 @@
 <template lang="pug">
 button(
   type="button",
-  class="inline-flex items-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm text-liver shadow-xs hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-400 focus:text-gray-900 focus:shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
+  class="inline-flex items-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm text-liver shadow-xs hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-400 focus:text-gray-900 focus:shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
   @click="handleClick"
 )
   slot TODO
@@ -12,10 +12,9 @@ button(
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
-import type { KeyboardKey } from '@/types/keyboard'
-import { getKeyDisplayName } from '@/types/keyboard'
+import { getKeyDisplayName, type KeyboardKey } from '@/types/keyboard'
 
 interface Props {
   /**
@@ -52,23 +51,48 @@ const displayKey = computed(() => {
 })
 
 // Handle button click
-const handleClick = () => {
+const handleClick = (): void => {
   emit('click')
 }
 
-// Automatically bind keyboard event when hotkey is specified
-if (props.hotkey) {
-  onKeyStroke([props.hotkey], (e) => {
-    // Check if window focus is required
-    if (props.requireFocus && !windowIsInFocus.value) {
-      return
-    }
-
-    // Prevent default browser behavior
-    e.preventDefault()
-
-    // Trigger the click handler
-    handleClick()
-  })
+// Map our KeyboardKey type to actual KeyboardEvent.key values
+function mapToKeyEvent(key: KeyboardKey): string {
+  switch (key) {
+    case 'Space':
+      return ' ' // Space bar key event is a literal space
+    default:
+      return key
+  }
 }
+
+// Set up keyboard listener reactively
+watch(
+  () => props.hotkey,
+  (newHotkey, oldHotkey) => {
+    // Clean up old listener if it existed
+    if (oldHotkey) {
+      // onKeyStroke automatically cleans up when the component unmounts,
+      // but we need to handle hotkey changes during component lifecycle
+    }
+    
+    // Set up new listener if hotkey is provided
+    if (newHotkey) {
+      const keyEventValue = mapToKeyEvent(newHotkey)
+      
+      onKeyStroke([keyEventValue], (e) => {
+        // Check if window focus is required
+        if (props.requireFocus && !windowIsInFocus.value) {
+          return
+        }
+
+        // Prevent default browser behavior
+        e.preventDefault()
+
+        // Trigger the click handler
+        handleClick()
+      })
+    }
+  },
+  { immediate: true } // Run immediately on component setup
+)
 </script>
