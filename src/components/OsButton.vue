@@ -1,7 +1,8 @@
 <template lang="pug">
 button(
   type="button",
-  class="inline-flex items-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm text-liver shadow-xs hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-400 focus:text-gray-900 focus:shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+  :disabled="disabled",
+  :class="buttonClasses",
   @click="handleClick"
 )
   slot TODO
@@ -32,10 +33,16 @@ interface Props {
    * @default true
    */
   requireFocus?: boolean
+  /**
+   * Whether the button is disabled.
+   * @default false
+   */
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   requireFocus: true,
+  disabled: false,
 })
 
 const emit = defineEmits<{
@@ -48,6 +55,17 @@ const windowIsInFocus = useWindowFocus()
 const displayKey = computed(() => {
   if (!props.hotkey) return ''
   return props.hotkeyDisplay ?? getKeyDisplayName(props.hotkey)
+})
+
+// Compute button classes based on disabled state
+const buttonClasses = computed(() => {
+  const baseClasses = "inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm shadow-xs focus:ring-2 focus:ring-offset-2 focus:outline-hidden hover:bg-gray-300"
+  
+  if (props.disabled) {
+    return `${baseClasses} text-gray-400 cursor-not-allowed border-gray-300 bg-gray-300`
+  }
+  
+  return `${baseClasses} bg-gray-200 text-liver hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer active:bg-gray-400 active:text-gray-900 active:shadow-sm`
 })
 
 // Handle button click
@@ -82,6 +100,16 @@ watch(
       onKeyStroke([keyEventValue], (e) => {
         // Check if window focus is required
         if (props.requireFocus && !windowIsInFocus.value) {
+          return
+        }
+
+        // Prevent hotkey from triggering if button is disabled
+        if (props.disabled) {
+          return
+        }
+
+        // Prevent hotkey from triggering if modifier keys are pressed
+        if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) {
           return
         }
 

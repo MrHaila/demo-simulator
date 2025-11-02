@@ -6,7 +6,7 @@ div(class="px-2")
 
   //- Divider
   div(class="my-6 flex items-center gap-4 text-gray-600")
-    p(class="uppercase") All Software
+    p(class="uppercase select-none") Official Software
     hr(class="grow border-gray-600")
 
   //- Apps
@@ -32,6 +32,14 @@ div(class="px-2")
       hotkey="s",
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
     )
+
+  //- Untrusted Software Section
+  div(class="my-6 flex items-center gap-4 text-gray-600")
+    p(class="uppercase select-none") Untrusted Software
+    hr(class="grow border-red-600")
+
+  //- Untrusted Apps
+  div(class="flex justify-center space-x-2")
     OsAppShortcut(
       title="silk_road.app",
       description="This is application is from an unidentified developer. It is not recommended to run this application.",

@@ -47,7 +47,7 @@ os-window(
         h2(class="text-gray-600") {{ challenge.name }}
         div(class="text-sm text-gray-600") {{ challenge.description }}
         div(class="mt-2 flex justify-end")
-          os-button Locked
+          os-button(disabled) Locked
 
   //pre(class="text-xs") {{ challengesAsRows }}
 
