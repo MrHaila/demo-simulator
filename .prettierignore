@@ -28,7 +28,3 @@ yarn.lock
 
 # Other
 coverage
-
-# Files with TypeScript non-null assertions in Pug templates
-# (Pug plugin doesn't support TS-specific syntax in interpolations)
-src/components/windows/ChallengesListWindow.vue
