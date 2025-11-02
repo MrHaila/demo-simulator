@@ -30,6 +30,10 @@ Commands:
 
 ## TypeScript Best Practices
 
+- Run the linter with auto fix after editing files (scope to modified files)
+- Check typecheck when done and before commit and fix any issues
+- Run format before commit (scope to modified files)
+
 ### Avoid Enums - Use Const Dictionaries
 
 Prefer const dictionaries with `as const` over enums for better type safety and runtime behavior:
