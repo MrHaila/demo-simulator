@@ -44,7 +44,7 @@ OsWindow(
   template(#footer-right)
     os-button(
       @click="exitChallenge",
-      hotkey="Esc"
+      hotkey="Escape"
     ) Abort Challenge
 </template>
 
@@ -232,17 +232,10 @@ function codeToPoints(code: string): number {
 
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
-  if (currentState.value === ChallengeStates.Coding) {
-    if (e.key === 'Escape') {
-      exitChallenge()
-    } else if (windowIsInfocus.value && e.key.length === 1) {
-      // e.preventDefault()
-      void input()
-    }
-  } else if (currentState.value === ChallengeStates.Results) {
-    if (e.key === 'Enter') {
-      showOutro()
-    }
+  // Handle generic text input (any single character key) during coding state
+  // Note: Escape and Enter keys are now handled by the OsButton components
+  if (currentState.value === ChallengeStates.Coding && windowIsInfocus.value && e.key.length === 1) {
+    void input()
   }
 })
 

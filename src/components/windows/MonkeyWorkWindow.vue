@@ -41,7 +41,7 @@ os-window(
 
   template(#footer-right)
     os-button(
-      hotkey='Esc'
+      hotkey='Escape'
       @click='gameStateStore.currentEliteOsApp = EliteOsApps.Desktop'
     ) Save and close
 </template>
@@ -178,10 +178,9 @@ async function input(remainingAmountLeftToType?: number): Promise<void> {
 
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
-  if (e.key === 'Escape') {
-    gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
-  } else if (windowIsInfocus.value && e.key.length === 1) {
-    // e.preventDefault()
+  // Handle generic text input (any single character key)
+  // Note: Escape key is now handled by the OsButton component
+  if (windowIsInfocus.value && e.key.length === 1) {
     void input()
   }
 })

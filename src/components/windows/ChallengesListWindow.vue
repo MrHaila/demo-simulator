@@ -54,7 +54,7 @@ os-window(
 
   template(#footer-right)
     OsButton(
-      hotkey="Esc"
+      hotkey="Escape"
       @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
       ) Back to Desktop
 
@@ -68,14 +68,9 @@ os-window(
 import OsWindow from '@/components/windows/OsWindow.vue'
 import OsButton from '@/components/OsButton.vue'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
-import { onKeyStroke } from '@vueuse/core'
 import { challengesAsRows, type UnknownChallenge } from '@/content/challenges'
 
 const gameStateStore = useGameStateStore()
-
-onKeyStroke(['Escape'], () => {
-  gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
-})
 
 function getChallengeStatus(challenge: UnknownChallenge): 'completed' | 'unlocked' | 'locked' {
   // Return completed if challenge id is in completedChallenges.
