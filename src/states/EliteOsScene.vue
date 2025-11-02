@@ -41,17 +41,21 @@ div(class="flex h-full gap-2 p-2")
       title="Profile",
       class=""
     )
-      ul
-        li {{ gameStateStore.profile.name }}
-        li {{ gameStateStore.profile.title }}
-        li {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}: {{ gameStateStore.profile.codingSpeed }}
-        li {{ RedactText('Power', !!gameStateStore.profile.codingSkill) }}: {{ gameStateStore.profile.codingSkill }}
+      div(class="space-y-2")
+        div(class="flex items-baseline gap-2")
+          span(class="font-medium") {{ gameStateStore.profile.name }}
+          span(class="text-sm text-gray-500") {{ gameStateStore.profile.title }}
+        div(class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm")
+          div {{ RedactText('Dexterity', !!gameStateStore.profile.codingSpeed) }}:
+          div(class="text-right font-mono") {{ gameStateStore.profile.codingSpeed }}
+          div {{ RedactText('Intelligence', !!gameStateStore.profile.codingSkill) }}:
+          div(class="text-right font-mono") {{ gameStateStore.profile.codingSkill }}
       
       OsButton(
         @click="resetAndReload",
         variant="ghost",
         size="sm",
-        class="text-xs text-gray-500"
+        class="text-xs text-gray-500 mt-2"
       ) Reset Game
 
     OsWindow(
@@ -59,9 +63,11 @@ div(class="flex h-full gap-2 p-2")
       title="Assets",
       class=""
     )
-      ul
-        li {{ RedactText('Scratches', !!gameStateStore.profile.scratches) }}: {{ gameStateStore.profile.scratches }}
-        li {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}: {{ gameStateStore.profile.juiceBoxes }}
+      div(class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm")
+        div {{ RedactText('Scratches', !!gameStateStore.profile.scratches) }}:
+        div(class="text-right font-mono") {{ gameStateStore.profile.scratches }}
+        div {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}:
+        div(class="text-right font-mono") {{ gameStateStore.profile.juiceBoxes }}
 
     OsWindow(
       v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge",

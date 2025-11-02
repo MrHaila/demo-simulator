@@ -32,13 +32,13 @@ OsWindow(
         AnimatedText(
           :run="true",
           text="Analyzing code structure...",
-          :speed="30"
+          :speed="15"
         )
       div(class="my-2")
         AsciiProgressBar(
           :run="analyzingProgress",
           :progress="100",
-          :speed="3",
+          :speed="4",
           @done="startCompiling"
         )
     
@@ -57,7 +57,7 @@ OsWindow(
                 AnimatedNumber(
                   :run="true",
                   :number="displayedCodeRows.length",
-                  :speed="50"
+                  :speed="25"
                 )
             tr
               td(class="px-3 py-2") Characters typed
@@ -65,7 +65,7 @@ OsWindow(
                 AnimatedNumber(
                   :run="true",
                   :number="amountCoded",
-                  :speed="100"
+                  :speed="50"
                 )
             tr
               td(class="px-3 py-2") Programming time
@@ -75,7 +75,7 @@ OsWindow(
         AnimatedText(
           :run="true",
           text="Compiling optimized bytecode...",
-          :speed="30"
+          :speed="15"
         )
 
       // Compilation progress bar (below analysis)
@@ -84,7 +84,7 @@ OsWindow(
         AsciiProgressBar(
           :run="compilingProgress",
           :progress="100",
-          :speed="2",
+          :speed="3",
           @done="showSuccess"
         )
     
