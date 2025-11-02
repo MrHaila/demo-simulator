@@ -59,12 +59,13 @@ const displayKey = computed(() => {
 
 // Compute button classes based on disabled state
 const buttonClasses = computed(() => {
-  const baseClasses = "inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm shadow-xs focus:ring-2 focus:ring-offset-2 focus:outline-hidden hover:bg-gray-300"
-  
+  const baseClasses =
+    'inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm shadow-xs focus:ring-2 focus:ring-offset-2 focus:outline-hidden hover:bg-gray-300'
+
   if (props.disabled) {
     return `${baseClasses} text-gray-400 cursor-not-allowed border-gray-300 bg-gray-300`
   }
-  
+
   return `${baseClasses} bg-gray-200 text-liver hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer active:bg-gray-400 active:text-gray-900 active:shadow-sm`
 })
 

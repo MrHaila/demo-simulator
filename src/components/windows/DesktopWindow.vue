@@ -36,7 +36,7 @@ div(class="px-2")
   //- Untrusted Software Section
   div(class="my-6 flex items-center gap-4 text-gray-600")
     p(class="uppercase select-none") Untrusted Software
-    hr(class="grow border-red-600")
+    hr(class="border-red-600 grow")
 
   //- Untrusted Apps
   div(class="flex justify-center space-x-2")
