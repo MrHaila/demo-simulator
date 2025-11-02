@@ -4,47 +4,50 @@ os-window(
   no-padding,
   ref="mwxWindow"
 )
-  //- TODO: move scrolling to the table body instead of all window contents
-  table(class="w-full table-fixed border-collapse font-mono")
-    thead(class="bg-gray-700 text-left")
-      tr
-        th(class="border border-liver px-2 py-1") Order Id
-        th(class="border border-liver px-2 py-1") Type
-        th(class="border border-liver px-2 py-1") Quantity
-        th(class="border border-liver px-2 py-1") Name
-        th(class="border border-liver px-2 py-1") Country
-    tbody(
-
-    )
-      template(
-        :key="index"
-        v-for="(row, index) in displayedRows",
-      )
-        tr(style="height: 33px")
-          td(class="border border-liver px-2 py-1") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus.value", class="blink") \u2588]
-          td(class="border border-liver px-2 py-1") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus.value", class="blink") \u2588]
-          td(class="border border-liver px-2 py-1") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus.value", class="blink") \u2588]
-          td(class="border border-liver px-2 py-1") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus.value", class="blink") \u2588]
-          td(class="border border-liver px-2 py-1") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus.value", class="blink") \u2588]
-        tr(
-          v-if="Number(row.id) % 10 === 9 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id"
+  div(
+    ref="tableContainer",
+    class="h-full overflow-y-auto scrollbar-hide",
+    @wheel.prevent
+    @touchmove.prevent
+  )
+    table(class="w-full table-fixed border-collapse font-mono")
+      thead(class="bg-gray-700 text-left sticky -top-0.5 z-10 shadow-md")
+        tr
+          th(class="border border-liver px-2 py-1") Order Id
+          th(class="border border-liver px-2 py-1") Type
+          th(class="border border-liver px-2 py-1") Quantity
+          th(class="border border-liver px-2 py-1") Name
+          th(class="border border-liver px-2 py-1") Country
+      tbody
+        template(
+          :key="index"
+          v-for="(row, index) in displayedRows",
         )
+          tr(style="height: 33px")
+            td(class="border border-liver px-2 py-1") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus.value", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus.value", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus.value", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus.value", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus.value", class="blink") \u2588]
+          tr(
+            v-if="Number(row.id) % 10 === 9 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id"
+          )
+            td(
+              colspan="5",
+              class="border border-liver bg-gray-700 px-2 py-3 text-center font-sans"
+            )
+              p You have earned a back scratch from {{ PlotCharacters.Koko }}.
+              aside(class="text-xl text-liver") +1 Back Scratch
+        tr()
           td(
             colspan="5",
-            class="border border-liver bg-gray-700 px-2 py-3 text-center font-sans"
-          )
-            p You have earned a back scratch from {{ PlotCharacters.Koko }}.
-            aside(class="text-xl text-liver") +1 Back Scratch
-      tr()
-        td(
-          colspan="5",
-          class="p w-full pt-2 text-center font-sans text-sm text-gray-500"
-        ) {{ gameStateStore.profile.latestWorkId % 10 }}/10 to next reward.
-      tr(v-if="displayedRows.length === 1")
-        td(
-          colspan="5",
-          class="p w-full animate-pulse text-center font-sans text-sm text-gray-500 italic"
-        ) Press any key to do work.
+            class="p w-full pt-2 text-center font-sans text-sm text-gray-500"
+          ) {{ gameStateStore.profile.latestWorkId % 10 }}/10 to next reward.
+        tr(v-if="displayedRows.length === 1")
+          td(
+            colspan="5",
+            class="p w-full animate-pulse text-center font-sans text-sm text-gray-500 italic"
+          ) Press any key to do work.
 
   template(#footer-right)
     os-button(
@@ -65,6 +68,7 @@ import OsWindow from './OsWindow.vue'
 const gameStateStore = useGameStateStore()
 
 const mwxWindow = ref<InstanceType<typeof OsWindow> | null>(null)
+const tableContainer = ref<HTMLDivElement | null>(null)
 
 interface MwxEntry {
   id: string // always increment by one
@@ -178,9 +182,11 @@ async function input(remainingAmountLeftToType?: number): Promise<void> {
   // If there are more than 10 rows, then remove the first row
   if (displayedRows.value.length > 100) displayedRows.value.shift()
 
-  // Keep new code visible.
+  // Keep new code visible - scroll to bottom
   await nextTick() // Wait for a DOM update.
-  mwxWindow.value?.scrollToBottom()
+  if (tableContainer.value) {
+    tableContainer.value.scrollTop = tableContainer.value.scrollHeight
+  }
 }
 
 const windowIsInfocus = useWindowFocus()
