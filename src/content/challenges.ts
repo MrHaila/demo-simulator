@@ -56,7 +56,7 @@ export const allChallenges: UnknownChallenge[] = [
     id: 0,
     challengeType: 'tutorial',
     name: 'Hello World',
-    description: 'Buttons make clicky noises. Press buttons. Make clicky noises.',
+    description: 'Buttons make clicky noises.\nPress buttons.\nMake clicky noises.',
     dependsOn: false,
     sourceCode: 'helloWorld',
     narrativeScenes: {

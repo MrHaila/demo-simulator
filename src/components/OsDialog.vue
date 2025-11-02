@@ -3,25 +3,18 @@ teleport(to="body")
   transition(name="os-dialog" appear)
     div(
       v-if="isVisible",
-      class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none",
+      class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none ",
       @click="handleBackdropClick"
     )
       // Dialog
       div(
         ref="dialogElement",
-        class="relative mx-4 max-w-md transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl pointer-events-auto",
+        class="relative mx-4 max-w-md transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl pointer-events-auto min-w-xl",
         @click.stop
       )
         // Header
         div(class="flex shrink-0 basis-8 items-center justify-between bg-liver px-3 py-1 font-bold")
           h1 {{ title }}
-          OsButton(
-            v-if="showCloseButton",
-            @click="close",
-            variant="ghost",
-            size="sm",
-            class="ml-2"
-          ) ✕
         
         // Body
         div(class="p-4")
@@ -34,19 +27,16 @@ teleport(to="body")
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
 import { useOverlay } from '@/components/composables/OsOverlay'
-import OsButton from '@/components/OsButton.vue'
 
 interface Props {
   title: string
-  showCloseButton?: boolean
   closeOnBackdropClick?: boolean
   modelValue?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showCloseButton: true,
   closeOnBackdropClick: true,
   modelValue: false
 })

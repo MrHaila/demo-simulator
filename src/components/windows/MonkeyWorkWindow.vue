@@ -36,8 +36,8 @@ os-window(
               colspan="5",
               class="border border-liver bg-gray-700 px-2 py-3 text-center font-sans"
             )
-              p You have earned a back scratch from {{ PlotCharacters.Koko }}.
-              aside(class="text-xl text-liver") +1 Back Scratch
+              p You have earned a scratch from {{ PlotCharacters.Koko }}.
+              aside(class="text-xl text-liver") +1 Scratch
         tr()
           td(
             colspan="5",
@@ -168,7 +168,7 @@ async function input(remainingAmountLeftToType?: number): Promise<void> {
   ) {
     // If the current id modulo 10 is 9, add a reward
     if (gameStateStore.profile.latestWorkId !== 0 && gameStateStore.profile.latestWorkId % 10 === 9) {
-      gameStateStore.profile.backScratches++
+      gameStateStore.profile.scratches++
     }
 
     gameStateStore.profile.latestWorkId++

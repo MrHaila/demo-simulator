@@ -38,7 +38,7 @@ const defaultProfile: {
   name: string
   codingSpeed: number
   codingSkill: number
-  backScratches: number
+  scratches: number
   juiceBoxes: number
   latestWorkId: number
   title: Title
@@ -47,7 +47,7 @@ const defaultProfile: {
   name: '',
   codingSpeed: 1,
   codingSkill: 1,
-  backScratches: 0,
+  scratches: 0,
   juiceBoxes: 0,
   latestWorkId: 0,
   title: Titles.Chimp as Title,

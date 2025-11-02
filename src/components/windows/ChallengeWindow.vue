@@ -21,24 +21,100 @@ OsWindow(
         ) {{ line.lineNumber }}
         td(class="h-6 px-2 whitespace-pre-wrap") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus", class="blink") █]
 
-  OsWindow(
-    v-if="currentState === ChallengeStates.Results",
-    title="Compiler Results",
-    class="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2",
-    style="width: 30rem"
+  OsDialog(
+    v-if="showResultsDialog",
+    :title="getDialogTitle()",
+    v-model="showResultsDialog"
   )
-    h1(class="text-lg") Input
-    ul
-      li {{ displayedCodeRows.length }} lines of code.
-      li {{ amountCoded }} characters.
-      li {{ humanizedProgrammingTime }} of programming time.
+    // Analyzing phase
+    div(v-if="currentState === ChallengeStates.Analyzing")
+      div(class="mb-4")
+        AnimatedText(
+          :run="true",
+          text="Analyzing code structure...",
+          :speed="30"
+        )
+      div(class="my-2")
+        AsciiProgressBar(
+          :run="analyzingProgress",
+          :progress="100",
+          :speed="3",
+          @done="startCompiling"
+        )
+    
+    // Compilation phase with analysis results and compilation bar below
+    div(v-else-if="currentState === ChallengeStates.Compiling")
+      // Analysis results table (stays visible)
+      div(class="mt-4 mb-6 border border-liver rounded")
+        table(class="w-full font-mono text-sm")
+          tbody
+            tr(class="border-b border-liver")
+              td(class="px-3 py-2 bg-gray-800 font-semibold") Code Analysis
+              td(class="px-3 py-2 bg-gray-800 font-semibold text-right") Result
+            tr
+              td(class="px-3 py-2") Lines of code
+              td(class="px-3 py-2 text-right")
+                AnimatedNumber(
+                  :run="true",
+                  :number="displayedCodeRows.length",
+                  :speed="50"
+                )
+            tr
+              td(class="px-3 py-2") Characters typed
+              td(class="px-3 py-2 text-right")
+                AnimatedNumber(
+                  :run="true",
+                  :number="amountCoded",
+                  :speed="100"
+                )
+            tr
+              td(class="px-3 py-2") Programming time
+              td(class="px-3 py-2 text-right") {{ humanizedProgrammingTime }}
+      
+      div(class="mt-4")
+        AnimatedText(
+          :run="true",
+          text="Compiling optimized bytecode...",
+          :speed="30"
+        )
 
-    h2(class="mt-4 text-lg") Compilation status: #[span(class="text-olive") SUCCESS!]
+      // Compilation progress bar (below analysis)
+      div(class="mb-4")
+        div(class="text-sm text-gray-400 mb-2") Compilation Progress
+        AsciiProgressBar(
+          :run="compilingProgress",
+          :progress="100",
+          :speed="2",
+          @done="showSuccess"
+        )
+    
+    // Success phase with compilation status and analysis results
+    div(v-else-if="currentState === ChallengeStates.Success")
+      
+      // Analysis results remain visible
+      div(class="border border-liver rounded")
+        table(class="w-full font-mono text-sm")
+          tbody
+            tr(class="border-b border-liver")
+              td(class="px-3 py-2 bg-gray-800 font-semibold") Code Analysis
+              td(class="px-3 py-2 bg-gray-800 font-semibold text-right") Result
+            tr
+              td(class="px-3 py-2") Lines of code
+              td(class="px-3 py-2 text-right") {{ displayedCodeRows.length }}
+            tr
+              td(class="px-3 py-2") Characters typed
+              td(class="px-3 py-2 text-right") {{ amountCoded }}
+            tr
+              td(class="px-3 py-2") Programming time
+              td(class="px-3 py-2 text-right") {{ humanizedProgrammingTime }}
 
-    template(#footer-right)
+      h2(class="text-lg mt-4") Compilation status: #[span(class="text-olive") SUCCESS!]
+
+    template(#footer)
       os-button(
         @click="showOutro",
-        hotkey="Enter"
+        hotkey="Enter",
+        :disabled="currentState !== ChallengeStates.Success"
       ) Run
 
   template(#footer-right)
@@ -53,6 +129,10 @@ import { nextTick, ref, computed } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
 import OsButton from '@/components/OsButton.vue'
+import OsDialog from '@/components/OsDialog.vue'
+import AnimatedNumber from '@/components/AnimatedNumber.vue'
+import AnimatedText from '@/components/AnimatedText.vue'
+import AsciiProgressBar from '@/components/AsciiProgressBar.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
@@ -75,9 +155,16 @@ const ChallengeStates = {
   Intro: 'intro',
   Coding: 'coding',
   Results: 'results',
+  Compiling: 'compiling',
+  Analyzing: 'analyzing',
+  Success: 'success',
   Outro: 'outro',
 } as const
 const currentState = ref<(typeof ChallengeStates)[keyof typeof ChallengeStates]>(ChallengeStates.Intro)
+const showResultsDialog = ref(false)
+const compilationStep = ref(0)
+const analyzingProgress = ref(false)
+const compilingProgress = ref(false)
 const codingStarted = ref<DateTime>(DateTime.now())
 const codingEnded = ref<DateTime>(DateTime.now())
 
@@ -100,7 +187,43 @@ function startCoding(): void {
   codingStarted.value = DateTime.now()
 }
 
+function startAnalyzing(): void {
+  currentState.value = ChallengeStates.Analyzing
+  // Reset and start analyzing progress
+  analyzingProgress.value = false
+  void nextTick(() => {
+    analyzingProgress.value = true
+  })
+}
+
+function startCompiling(): void {
+  currentState.value = ChallengeStates.Compiling
+  // Reset and start compiling progress
+  compilingProgress.value = false
+  void nextTick(() => {
+    compilingProgress.value = true
+  })
+}
+
+function showSuccess(): void {
+  currentState.value = ChallengeStates.Success
+}
+
+function getDialogTitle(): string {
+  switch (currentState.value) {
+    case ChallengeStates.Analyzing:
+      return 'Analyzing Code...'
+    case ChallengeStates.Compiling:
+      return 'Compiling...'
+    case ChallengeStates.Success:
+      return 'Compiler Results'
+    default:
+      return 'Compiler Results'
+  }
+}
+
 function showOutro(): void {
+  showResultsDialog.value = false
   if (challenge) {
     currentState.value = ChallengeStates.Outro
     const sceneToShow = challenge.narrativeScenes.win
@@ -200,12 +323,13 @@ async function input(): Promise<void> {
 
   // If the challenge is a tutorial, check if the player has coded enough.
   if (challenge?.challengeType === 'tutorial' && amountCoded >= sourceCode.length) {
-    currentState.value = ChallengeStates.Results
     codingEnded.value = DateTime.now()
     gameStateStore.progression.completedChallenges[challenge.id] = {
       score: codePoints.value,
       durationISO: getChallengeDuration().toISO() ?? 'should never happen',
     }
+    startAnalyzing()
+    showResultsDialog.value = true
     // const previousResult = gameStateStore.progression.completedChallenges[challenge.id]
 
     // gameStateStore.progression.completedChallenges[challenge.id] = {

@@ -60,7 +60,7 @@ div(class="flex h-full gap-2 p-2")
       class=""
     )
       ul
-        li {{ RedactText('Scratches', !!gameStateStore.profile.backScratches) }}: {{ gameStateStore.profile.backScratches }}
+        li {{ RedactText('Scratches', !!gameStateStore.profile.scratches) }}: {{ gameStateStore.profile.scratches }}
         li {{ RedactText('Juice boxes', !!gameStateStore.profile.juiceBoxes) }}: {{ gameStateStore.profile.juiceBoxes }}
 
     OsWindow(
