@@ -31,7 +31,7 @@ OsWindow(
     ul
       li {{ displayedCodeRows.length }} lines of code.
       li {{ amountCoded }} characters.
-      li TBD seconds of programming time.
+      li {{ humanizedProgrammingTime }} of programming time.
 
     h2(class="mt-4 text-lg") Compilation status: #[span(class="text-olive") SUCCESS!]
 
@@ -49,7 +49,7 @@ OsWindow(
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, computed } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
 import OsButton from '@/components/OsButton.vue'
@@ -58,6 +58,7 @@ import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
+import { humanizeDuration } from '@/utils/time'
 
 /*
   TODO:
@@ -217,6 +218,13 @@ async function input(): Promise<void> {
 function getChallengeDuration(): Duration {
   return codingEnded.value.diff(codingStarted.value)
 }
+
+const humanizedProgrammingTime = computed(() => {
+  if (currentState.value === ChallengeStates.Results) {
+    return humanizeDuration(getChallengeDuration().toMillis())
+  }
+  return '0 sec'
+})
 
 function codeToPoints(code: string): number {
   let points = 0
