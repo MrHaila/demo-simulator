@@ -1,19 +1,22 @@
 <template lang="pug">
-div(class="border-solid rounded-lg border-4 border-liver shadow-md flex flex-col")
-  div(class="bg-liver flex items-center justify-between px-3 pb-1 font-bold basis-8 shrink-0")
+div(class='flex flex-col rounded-lg border-4 border-solid border-liver shadow-md')
+  div(class='flex shrink-0 basis-8 items-center justify-between bg-liver px-3 pb-1 font-bold')
     h1 {{ title }}
 
-    slot(name="title-right")
+    slot(name='title-right')
   div(
-    :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded-sm', 'grow', 'overflow-hidden']"
-    @update="scrollToBottom"
-    :ref="(el) => bodyElement = el as HTMLElement"
-    )
+    :class='[{ "p-3": !noPadding }, "bg-gray-900", "rounded-sm", "grow", "overflow-hidden"]'
+    @update='scrollToBottom'
+    :ref='(el) => (bodyElement = el as HTMLElement)'
+  )
     slot
       p Lorem ipsum dolor sit amet.
 
-  div(class="bg-liver flex items-center justify-end px-3 pt-2 pb-1 font-bold space-x-2" v-if="$slots['footer-right']")
-    slot(name="footer-right")
+  div(
+    v-if='$slots["footer-right"]'
+    class='flex items-center justify-end space-x-2 bg-liver px-3 pt-2 pb-1 font-bold'
+  )
+    slot(name='footer-right')
 </template>
 
 <script lang="ts" setup>
@@ -27,7 +30,7 @@ defineProps<{
 
 // Keep scrolled to the bottom. Needs to be called on nextTick().
 const bodyElement = ref<HTMLElement | null>(null)
-function scrollToBottom (): void {
+function scrollToBottom(): void {
   if (bodyElement.value) bodyElement.value.scrollTop = bodyElement.value.scrollHeight
 }
 defineExpose({ scrollToBottom })

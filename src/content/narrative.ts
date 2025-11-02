@@ -1,13 +1,13 @@
-import { EliteOsApps } from "@/stores/gameStateStore"
 import AvatarUrlComputer from '@/assets/avatars/computer@1x.jpg'
+import { EliteOsApps } from '@/stores/gameStateStore'
 
 export const NarrativePlacements = {
-  Desktop: "desktop",
-  ChallengesList: "challengesList",
-  Challenge: "challenge",
-  Work: "work",
-  PowerShop: "powerShop",
-  AchievementShop: "achievementShop",
+  Desktop: 'desktop',
+  ChallengesList: 'challengesList',
+  Challenge: 'challenge',
+  Work: 'work',
+  PowerShop: 'powerShop',
+  AchievementShop: 'achievementShop',
 } as const
 
 export const PlotCharacters = {
@@ -64,6 +64,6 @@ export const testScene = {
     },
     {
       text: 'You come away impressed.',
-    }
+    },
   ],
 } satisfies NarrativeScene

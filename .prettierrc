@@ -1,0 +1,24 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "printWidth": 120,
+  "arrowParens": "always",
+  "plugins": ["@prettier/plugin-pug", "@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/assets/index.css",
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": {
+        "parser": "vue",
+        "pugClassNotation": "attribute",
+        "pugAttributeSeparator": "none",
+        "pugWrapAttributesThreshold": 1
+      }
+    }
+  ],
+  "importOrder": ["^vue$", "^@vue/(.*)$", "<THIRD_PARTY_MODULES>", "^@/(.*)$", "^[./]"],
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.0.0"
+}

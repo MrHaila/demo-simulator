@@ -5,10 +5,14 @@ span {{ displayedText }}
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const { run, number, speed = 66 } = defineProps<{
-  run?: boolean,
-  number: number,
-  speed?: number,
+const {
+  run,
+  number,
+  speed = 66,
+} = defineProps<{
+  run?: boolean
+  number: number
+  speed?: number
 }>()
 
 const emits = defineEmits(['done'])
@@ -26,5 +30,4 @@ const interval = setInterval(() => {
     displayedText.value = counter.toString()
   }
 }, 10)
-
 </script>

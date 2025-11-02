@@ -1,48 +1,59 @@
 <template lang="pug">
 os-window(
-  title="Monkey Works X Pro - Orderbook.mwx"
+  title='Monkey Works X Pro - Orderbook.mwx'
   no-padding
-  ref="mwxWindow"
+  ref='mwxWindow'
 )
   //- TODO: move scrolling to the table body instead of all window contents
-  table(class="table-fixed font-mono border-collapse w-full")
-    thead(class="text-left bg-gray-700")
+  table(class='w-full table-fixed border-collapse font-mono')
+    thead(class='bg-gray-700 text-left')
       tr
-        th(class="border border-liver py-1 px-2") Order Id
-        th(class="border border-liver py-1 px-2") Type
-        th(class="border border-liver py-1 px-2") Quantity
-        th(class="border border-liver py-1 px-2") Name
-        th(class="border border-liver py-1 px-2") Country
-    tbody(v-for="(row, index) in displayedRows" :key="index")
-      tr(style="height: 33px")
-        td(class="border border-liver py-1 px-2") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus" class="blink") █]
-        td(class="border border-liver py-1 px-2") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus" class="blink") █]
-        td(class="border border-liver py-1 px-2") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus" class="blink") █]
-        td(class="border border-liver py-1 px-2") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus" class="blink") █]
-        td(class="border border-liver py-1 px-2") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus" class="blink") █]
-      tr(v-if="Number(row.id) % 10 === 0 && row.id !== displayedRows[0]!.id && row.id !== displayedRows[displayedRows.length - 1]!.id")
-        td(colspan="5" class="text-center font-sans py-3 bg-gray-700 border border-liver px-2")
+        th(class='border border-liver px-2 py-1') Order Id
+        th(class='border border-liver px-2 py-1') Type
+        th(class='border border-liver px-2 py-1') Quantity
+        th(class='border border-liver px-2 py-1') Name
+        th(class='border border-liver px-2 py-1') Country
+    tbody(
+      v-for='(row, index) in displayedRows'
+      :key='index'
+    )
+      tr(style='height: 33px')
+        td(class='border border-liver px-2 py-1') {{ row.id }}#[span(v-show='getNextIncompleteRowField(row) === \'id\' && windowIsInfocus' class='blink') █]
+        td(class='border border-liver px-2 py-1') {{ row.type }}#[span(v-show='getNextIncompleteRowField(row) === \'type\' && windowIsInfocus' class='blink') █]
+        td(class='border border-liver px-2 py-1') {{ row.quantity }}#[span(v-show='getNextIncompleteRowField(row) === \'quantity\' && windowIsInfocus' class='blink') █]
+        td(class='border border-liver px-2 py-1') {{ row.name }}#[span(v-show='getNextIncompleteRowField(row) === \'name\' && windowIsInfocus' class='blink') █]
+        td(class='border border-liver px-2 py-1') {{ row.country }}#[span(v-show='getNextIncompleteRowField(row) === \'country\' && windowIsInfocus' class='blink') █]
+      tr(
+        v-if='Number(row.id) % 10 === 0 && row.id !== displayedRows[0]!.id && row.id !== displayedRows[displayedRows.length - 1]!.id'
+      )
+        td(
+          colspan='5'
+          class='border border-liver bg-gray-700 px-2 py-3 text-center font-sans'
+        )
           p You have earned a back scratch from {{ PlotCharacters.Koko }}.
-          aside(class="text-xl text-liver") +1 Back Scratch
-      tr(v-if="displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1]!.id")
+          aside(class='text-xl text-liver') +1 Back Scratch
+      tr(v-if='displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1]!.id')
         //- TODO: animate?
-        td(colspan="5" class="w-full text-center p font-sans italic text-sm pt-2 text-gray-500 animate-pulse") Press any key to do work.
+        td(
+          colspan='5'
+          class='p w-full animate-pulse pt-2 text-center font-sans text-sm text-gray-500 italic'
+        ) Press any key to do work.
 
   template(#footer-right)
     os-button(
-      hotkey="Esc"
-      @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
-      ) Save and close
+      hotkey='Esc'
+      @click='gameStateStore.currentEliteOsApp = EliteOsApps.Desktop'
+    ) Save and close
 </template>
 
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue'
-import OsWindow from './OsWindow.vue'
-import { countries, names } from '@/source_code/work'
-import { useGameStateStore, EliteOsApps } from '@/stores/gameStateStore'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import OsButton from '@/components/OsButton.vue'
 import { PlotCharacters } from '@/content/narrative'
+import { countries, names } from '@/source_code/work'
+import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
+import OsWindow from './OsWindow.vue'
 
 const gameStateStore = useGameStateStore()
 
@@ -77,7 +88,7 @@ function getRandomOrder(): MwxEntry {
   const countryIndex = Math.floor(Math.random() * (countries.length - 1))
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- countries is guaranteed to have at least one element.
   const country = countries[countryIndex]!
-  return { 
+  return {
     id: id.toString(),
     type,
     quantity: quantity.toString(),
@@ -88,7 +99,7 @@ function getRandomOrder(): MwxEntry {
 let nextOrder = getRandomOrder()
 
 // eslint-disable-next-line complexity -- I accept
-async function input (remainingAmountLeftToType?: number): Promise<void> {
+async function input(remainingAmountLeftToType?: number): Promise<void> {
   let amountLeftToType = remainingAmountLeftToType ?? gameStateStore.profile.codingSpeed
 
   const currentOrder = displayedRows.value[displayedRows.value.length - 1]
@@ -112,7 +123,10 @@ async function input (remainingAmountLeftToType?: number): Promise<void> {
   // If there are characters left in amountLeftToType, then continue adding them to the current order's quantity
   if (currentOrder.quantity.length < nextOrder.quantity.length) {
     const amountToType = Math.min(amountLeftToType, nextOrder.quantity.length - currentOrder.quantity.length)
-    currentOrder.quantity += nextOrder.quantity.slice(currentOrder.quantity.length, currentOrder.quantity.length + amountToType)
+    currentOrder.quantity += nextOrder.quantity.slice(
+      currentOrder.quantity.length,
+      currentOrder.quantity.length + amountToType,
+    )
     amountLeftToType -= amountToType
   }
 
@@ -126,16 +140,21 @@ async function input (remainingAmountLeftToType?: number): Promise<void> {
   // If there are characters left in amountLeftToType, then continue adding them to the current order's country
   if (currentOrder.country.length < nextOrder.country.length) {
     const amountToType = Math.min(amountLeftToType, nextOrder.country.length - currentOrder.country.length)
-    currentOrder.country += nextOrder.country.slice(currentOrder.country.length, currentOrder.country.length + amountToType)
+    currentOrder.country += nextOrder.country.slice(
+      currentOrder.country.length,
+      currentOrder.country.length + amountToType,
+    )
     amountLeftToType -= amountToType
   }
 
   // If the current order is complete, then add a new empty order and count points
-  if (currentOrder.id.length === nextOrder.id.length &&
-      currentOrder.type.length === nextOrder.type.length &&
-      currentOrder.quantity.length === nextOrder.quantity.length &&
-      currentOrder.name.length === nextOrder.name.length &&
-      currentOrder.country.length === nextOrder.country.length) {
+  if (
+    currentOrder.id.length === nextOrder.id.length &&
+    currentOrder.type.length === nextOrder.type.length &&
+    currentOrder.quantity.length === nextOrder.quantity.length &&
+    currentOrder.name.length === nextOrder.name.length &&
+    currentOrder.country.length === nextOrder.country.length
+  ) {
     // If the current id was divisible by 10, add points
     if (gameStateStore.profile.latestWorkId !== 0 && gameStateStore.profile.latestWorkId % 10 === 0) {
       gameStateStore.profile.backScratches++
@@ -159,7 +178,7 @@ async function input (remainingAmountLeftToType?: number): Promise<void> {
 
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
-  if (e.key === "Escape") {
+  if (e.key === 'Escape') {
     gameStateStore.currentEliteOsApp = EliteOsApps.Desktop
   } else if (windowIsInfocus.value && e.key.length === 1) {
     // e.preventDefault()
@@ -167,7 +186,7 @@ onKeyStroke((e) => {
   }
 })
 
-function getNextIncompleteRowField (row: MwxEntry): string | null {
+function getNextIncompleteRowField(row: MwxEntry): string | null {
   // Fix first field not being highlighted
   if (gameStateStore.profile.latestWorkId === Number(row.id)) {
     if (row.id !== nextOrder.id) return 'id'

@@ -649,7 +649,7 @@ export const countries = [
   'Comoros',
   'Congo',
   'Costa Rica',
-  'Côte d\'Ivoire',
+  "Côte d'Ivoire",
   'Croatia',
   'Cuba',
   'Cyprus',
@@ -804,4 +804,3 @@ export const countries = [
   'Zambia',
   'Zimbabwe',
 ] as const
-

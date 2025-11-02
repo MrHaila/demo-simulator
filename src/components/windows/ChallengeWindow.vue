@@ -1,57 +1,63 @@
 <template lang="pug">
 OsWindow(
-  :title="`H4X_EDIT - ${challenge?.name}`"
+  :title='`H4X_EDIT - ${challenge?.name}`'
   no-padding
-  ref="h4xWindow"
+  ref='h4xWindow'
 )
   template(#title-right)
-    span(v-if="challenge?.challengeType === 'scoreAttack'") {{ codePoints }} points
+    span(v-if='challenge?.challengeType === "scoreAttack"') {{ codePoints }} points
     //span(v-else-if="challenge?.challengeType === 'timeAttack'") {{ timeLeft }} seconds left
-    span(v-else-if="challenge?.challengeType === 'tutorial'") {{ sourceCode.length - amountCoded }} characters left
+    span(v-else-if='challenge?.challengeType === "tutorial"') {{ sourceCode.length - amountCoded }} characters left
 
-  table(class="table-fixed font-mono")
+  table(class='table-fixed font-mono')
     tbody
-      tr(v-for="(line, index) in displayedCodeRows" :key="index")
-        td(class="text-right px-2 bg-gray-800 text-gray-400 border-r-gray-700 border-r-2 text-xs align-top" style="min-width: 3rem; padding-top: 0.32rem;") {{ line.lineNumber }}
-        td(class="whitespace-pre-wrap h-6 px-2") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
+      tr(
+        v-for='(line, index) in displayedCodeRows'
+        :key='index'
+      )
+        td(
+          style='min-width: 3rem; padding-top: 0.32rem'
+          class='border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400'
+        ) {{ line.lineNumber }}
+        td(class='h-6 px-2 whitespace-pre-wrap') {{ line.text }}#[span(v-show='index === displayedCodeRows.length - 1 && windowIsInfocus' class='blink') █]
 
   OsWindow(
-    v-if="currentState === ChallengeStates.Results"
-    title="Compiler Results"
-    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-    style="width: 30rem;"
+    v-if='currentState === ChallengeStates.Results'
+    title='Compiler Results'
+    class='absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2'
+    style='width: 30rem'
   )
-    h1(class="text-lg") Input
+    h1(class='text-lg') Input
     ul
       li {{ displayedCodeRows.length }} lines of code.
       li {{ amountCoded }} characters.
       li TBD seconds of programming time.
 
-    h2(class="text-lg mt-4") Compilation status: #[span(class="text-olive") SUCCESS!]
+    h2(class='mt-4 text-lg') Compilation status: #[span(class='text-olive') SUCCESS!]
 
     template(#footer-right)
       os-button(
-        @click="showOutro"
-        hotkey="Enter"
-        ) Run
+        @click='showOutro'
+        hotkey='Enter'
+      ) Run
 
   template(#footer-right)
     os-button(
-      @click="exitChallenge"
-      hotkey="Esc"
-      ) Abort Challenge
+      @click='exitChallenge'
+      hotkey='Esc'
+    ) Abort Challenge
 </template>
 
 <script lang="ts" setup>
-import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
-import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
-import OsWindow from '@/components/windows/OsWindow.vue'
+import { onKeyStroke, useWindowFocus } from '@vueuse/core'
+import { DateTime, Duration } from 'luxon'
 import OsButton from '@/components/OsButton.vue'
+import OsWindow from '@/components/windows/OsWindow.vue'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
+import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
-import { DateTime, Duration } from 'luxon'
 
 /*
   TODO:
@@ -77,11 +83,15 @@ const codingEnded = ref<DateTime>(DateTime.now())
 // NARRATIVE ----------------------------
 
 const { showNarrativeScene } = useNarrativeScene()
-if (challenge?.narrativeScenes.introFirstTime && !gameStateStore.progression.completedNarrativeScenes.includes(challenge.narrativeScenes.introFirstTime.id)) showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
+if (
+  challenge?.narrativeScenes.introFirstTime &&
+  !gameStateStore.progression.completedNarrativeScenes.includes(challenge.narrativeScenes.introFirstTime.id)
+)
+  showNarrativeScene(challenge.narrativeScenes.introFirstTime, startCoding)
 else if (challenge?.narrativeScenes.introRetry) showNarrativeScene(challenge.narrativeScenes.introRetry, startCoding)
 else startCoding()
 
-function startCoding (): void {
+function startCoding(): void {
   currentState.value = ChallengeStates.Coding
   codingStarted.value = DateTime.now()
 }
@@ -90,7 +100,9 @@ function showOutro(): void {
   if (challenge) {
     currentState.value = ChallengeStates.Outro
     const sceneToShow = challenge.narrativeScenes.win
-    showNarrativeScene(sceneToShow, () => { exitChallenge(); })
+    showNarrativeScene(sceneToShow, () => {
+      exitChallenge()
+    })
   }
 }
 
@@ -128,18 +140,21 @@ interface CodeLine {
 const displayedCodeRows = ref<CodeLine[]>([
   {
     lineNumber: 1,
-    text: ''
-  }
+    text: '',
+  },
 ])
 
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 
 // eslint-disable-next-line complexity -- I accept
-async function input (): Promise<void> {
+async function input(): Promise<void> {
   amountCoded += gameStateStore.profile.codingSpeed
 
   // Grab new characters from the source file and split by line breaks.
-  let newCode = sourceCode.substring(sourceCodeCursorPosition, sourceCodeCursorPosition + gameStateStore.profile.codingSpeed)
+  let newCode = sourceCode.substring(
+    sourceCodeCursorPosition,
+    sourceCodeCursorPosition + gameStateStore.profile.codingSpeed,
+  )
 
   // If the source file ran out in a non-tutorial challenge...
   if (newCode.length !== gameStateStore.profile.codingSpeed && challenge?.challengeType !== 'tutorial') {
@@ -164,7 +179,7 @@ async function input (): Promise<void> {
     displayedCodeRows.value.push({
       lineNumber: currentLastRow ? currentLastRow.lineNumber + 1 : 1,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- newCodeRows[i] is guaranteed to be a string.
-      text: newCodeRows[i]!
+      text: newCodeRows[i]!,
     })
 
     // Trim excess lines.
@@ -185,7 +200,7 @@ async function input (): Promise<void> {
     codingEnded.value = DateTime.now()
     gameStateStore.progression.completedChallenges[challenge.id] = {
       score: codePoints.value,
-      durationISO: getChallengeDuration().toISO() ?? 'should never happen'
+      durationISO: getChallengeDuration().toISO() ?? 'should never happen',
     }
     // const previousResult = gameStateStore.progression.completedChallenges[challenge.id]
 
@@ -196,11 +211,11 @@ async function input (): Promise<void> {
   }
 }
 
-function getChallengeDuration (): Duration {
+function getChallengeDuration(): Duration {
   return codingEnded.value.diff(codingStarted.value)
 }
 
-function codeToPoints (code: string): number {
+function codeToPoints(code: string): number {
   let points = 0
 
   // Add points for each non-whitespace, non-line-break character.
@@ -215,21 +230,20 @@ function codeToPoints (code: string): number {
 const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
   if (currentState.value === ChallengeStates.Coding) {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       exitChallenge()
     } else if (windowIsInfocus.value && e.key.length === 1) {
       // e.preventDefault()
       void input()
     }
-  }
-  else if (currentState.value === ChallengeStates.Results) {
-    if (e.key === "Enter") {
+  } else if (currentState.value === ChallengeStates.Results) {
+    if (e.key === 'Enter') {
       showOutro()
     }
   }
 })
 
-function exitChallenge (): void {
+function exitChallenge(): void {
   gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList
   gameStateStore.currentChallenge = null
 }

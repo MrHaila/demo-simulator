@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
 import type { UnknownChallenge } from '@/content/challenges'
-import { NarrativePlacements, testScene, type NarrativeScene, type NarrativePlacement } from '@/content/narrative'
+import { NarrativePlacements, testScene, type NarrativePlacement, type NarrativeScene } from '@/content/narrative'
 
 export const Scenes = {
   Boot: 'Boot',
@@ -54,10 +54,13 @@ const defaultProfile: {
 }
 
 const defaultProgression: {
-  completedChallenges: Record<number, { 
-    score: number
-    durationISO: string
-  }>
+  completedChallenges: Record<
+    number,
+    {
+      score: number
+      durationISO: string
+    }
+  >
   completedNarrativeScenes: string[]
 } = {
   completedChallenges: {},
@@ -87,6 +90,6 @@ export const useGameStateStore = defineStore('game state', {
       this.profile = defaultProfile
       this.progression = defaultProgression
       this.narrativeSceneQueues = defaultNarrativeSceneQueues
-    }
-  }
+    },
+  },
 })

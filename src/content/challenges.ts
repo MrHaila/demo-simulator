@@ -6,7 +6,7 @@
   - MAYBE: challenge genres to have a prestige mechanic or parallel progression?
 */
 
-import { PlotCharacters, type PlotCharacter, type NarrativeDialogue, type NarrativeScene } from "./narrative"
+import { PlotCharacters, type NarrativeDialogue, type NarrativeScene, type PlotCharacter } from './narrative'
 
 export interface ChallengeBase {
   id: number
@@ -44,7 +44,7 @@ export interface ChallengeCompo extends ChallengeBase {
   challengeType: 'compo'
   compoType: 'timeAttack' | 'scoreAttack' // TODO: figure this out later.
   challengers: Array<{
-    name: string,
+    name: string
     score: number
   }>
 }
@@ -66,7 +66,7 @@ export const allChallenges: UnknownChallenge[] = [
           { text: 'The empty text editor is strangely inviting.' },
           { text: 'You feel compelled to type something.' },
           { text: 'With a trembling hand, you reach out to...' },
-        ]
+        ],
       },
       win: {
         id: 'hello world win',
@@ -74,9 +74,9 @@ export const allChallenges: UnknownChallenge[] = [
           {
             text: 'Hello, world!',
             author: PlotCharacters.Computer,
-          }
+          },
         ],
-      }
+      },
     },
   },
   {
@@ -91,17 +91,13 @@ export const allChallenges: UnknownChallenge[] = [
     narrativeScenes: {
       introFirstTime: {
         id: 'score attack first time intro',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
       win: {
         id: 'score attack win',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
-    }
+    },
   },
   {
     id: 2,
@@ -124,17 +120,13 @@ export const allChallenges: UnknownChallenge[] = [
     narrativeScenes: {
       introFirstTime: {
         id: 'score attack compo first time intro',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
       win: {
         id: 'score attack compo win',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
-    }
+    },
   },
   {
     id: 3,
@@ -157,22 +149,18 @@ export const allChallenges: UnknownChallenge[] = [
     narrativeScenes: {
       introFirstTime: {
         id: 'time attack compo first time intro',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
       win: {
         id: 'time attack compo win',
-        dialogue: [
-          { text: 'TBD' },
-        ]
+        dialogue: [{ text: 'TBD' }],
       },
-    }
-  }
+    },
+  },
 ]
 
 // Throw and error if there are multiple challenges with the same id.
-const challengeIds = allChallenges.map(challenge => challenge.id)
+const challengeIds = allChallenges.map((challenge) => challenge.id)
 const uniqueChallengeIds = new Set(challengeIds)
 if (challengeIds.length !== uniqueChallengeIds.size) {
   throw new Error('There are multiple challenges with the same id.')
@@ -186,8 +174,8 @@ function processChallengeRow(): void {
 
   for (const challengeToProcess of challengesAsRows[0]) {
     if (!challengeToProcess) throw new Error('Challenge to process is undefined.')
-      
-    const nextChallenges = allChallenges.filter(challenge => {
+
+    const nextChallenges = allChallenges.filter((challenge) => {
       if (Array.isArray(challenge.dependsOn)) {
         return challenge.dependsOn.includes(challengeToProcess.id)
       } else {

@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, ref } from "vue"
+import { computed, onBeforeUnmount, ref } from 'vue'
 
 /**
  * List of subscribers to the overlay.
@@ -26,7 +26,7 @@ const totalSubscribers = computed(() => subscribers.value.length)
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Vue composables do not need explicit return types
 export function useOverlay() {
   const id = uniqueId()
-  
+
   /**
    * Function to show the overlay.
    */
@@ -48,7 +48,7 @@ export function useOverlay() {
       subscribers.value.splice(index, 1)
     }
   }
-  
+
   // Hide the overlay when the component is unmounted.
   onBeforeUnmount(() => {
     hideOverlay()

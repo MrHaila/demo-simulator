@@ -1,6 +1,6 @@
+import vueTypeScript from '@vue/eslint-config-typescript'
 import love from 'eslint-config-love'
 import pluginVue from 'eslint-plugin-vue'
-import vueTypeScript from '@vue/eslint-config-typescript'
 
 export default [
   love,
@@ -8,8 +8,8 @@ export default [
   ...vueTypeScript({
     supportedScriptLangs: {
       ts: true,
-      tsx: true
-    }
+      tsx: true,
+    },
   }),
   {
     files: ['**/*.vue'],
@@ -23,8 +23,8 @@ export default [
       // Allow Pug templates in Vue
       'vue/html-indent': 'off',
       'vue/max-attributes-per-line': 'off',
-      'vue/html-self-closing': 'off'
-    }
+      'vue/html-self-closing': 'off',
+    },
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
@@ -44,8 +44,8 @@ export default [
       'no-plusplus': 'off',
       'prefer-const': 'warn',
       'import/no-duplicates': 'error',
-      'no-console': 'warn'
-    }
+      'no-console': 'warn',
+    },
   },
   {
     ignores: [
@@ -55,7 +55,7 @@ export default [
       '*.d.ts',
       'vite.config.ts',
       'eslint.config.js',
-      'postcss.config.js'
-    ]
-  }
+      'postcss.config.js',
+    ],
+  },
 ]

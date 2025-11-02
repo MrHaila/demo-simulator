@@ -1,6 +1,6 @@
-import { onUnmounted, ref } from "vue"
-import type { NarrativeScene } from "@/content/narrative"
-import { useGameStateStore } from "@/stores/gameStateStore"
+import { onUnmounted, ref } from 'vue'
+import type { NarrativeScene } from '@/content/narrative'
+import { useGameStateStore } from '@/stores/gameStateStore'
 
 const currentNarrativeScene = ref<NarrativeScene>()
 const currentNarrativeSceneCallback = ref<() => void>()
@@ -13,14 +13,14 @@ export function useNarrativeScene() {
     currentNarrativeScene.value = narrativeScene
     currentNarrativeSceneCallback.value = callback
   }
-  
+
   function clearCurrentNarrativeScene(): void {
     // If the current scene has not already been listed in completed scenes, add it.
     const id = currentNarrativeScene.value?.id
     if (id && !gameStateStore.progression.completedNarrativeScenes.includes(id)) {
       gameStateStore.progression.completedNarrativeScenes.push(id)
     }
-  
+
     currentNarrativeScene.value = undefined
     currentNarrativeSceneCallback.value = undefined
   }
@@ -33,6 +33,6 @@ export function useNarrativeScene() {
     showNarrativeScene,
     currentNarrativeScene,
     currentNarrativeSceneCallback,
-    clearCurrentNarrativeScene
+    clearCurrentNarrativeScene,
   }
 }
