@@ -15,24 +15,28 @@ div(class="px-2")
       title="Elite Road",
       description="So, you think you can code? Prove it.",
       buttonLabel="Open Challenges",
+      hotkey="c",
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.ChallengesList"
     )
     OsAppShortcut(
       title="Monkey Works X Pro",
       description="You have been assigned a floating license for Monkey Works X Pro by Koko Group Global Ltd.",
       buttonLabel="Open Work",
+      hotkey="w",
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Work"
     )
     OsAppShortcut(
       title="Kokoshop",
       description="Itching for skills? Old Koko has what you need... if you've got the scratch for it.",
       buttonLabel="Open Shop",
+      hotkey="s",
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
     )
     OsAppShortcut(
       title="silk_road.app",
       description="This is application is from an unidentified developer. It is not recommended to run this application.",
       buttonLabel="Open App",
+      hotkey="r",
       @button="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
     )
 </template>

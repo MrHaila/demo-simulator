@@ -1,48 +1,48 @@
 <template lang="pug">
 os-window(
-  title='Monkey Works X Pro - Orderbook.mwx'
-  no-padding
-  ref='mwxWindow'
+  title="Monkey Works X Pro - Orderbook.mwx",
+  no-padding,
+  ref="mwxWindow"
 )
   //- TODO: move scrolling to the table body instead of all window contents
-  table(class='w-full table-fixed border-collapse font-mono')
-    thead(class='bg-gray-700 text-left')
+  table(class="w-full table-fixed border-collapse font-mono")
+    thead(class="bg-gray-700 text-left")
       tr
-        th(class='border border-liver px-2 py-1') Order Id
-        th(class='border border-liver px-2 py-1') Type
-        th(class='border border-liver px-2 py-1') Quantity
-        th(class='border border-liver px-2 py-1') Name
-        th(class='border border-liver px-2 py-1') Country
+        th(class="border border-liver px-2 py-1") Order Id
+        th(class="border border-liver px-2 py-1") Type
+        th(class="border border-liver px-2 py-1") Quantity
+        th(class="border border-liver px-2 py-1") Name
+        th(class="border border-liver px-2 py-1") Country
     tbody(
-      v-for='(row, index) in displayedRows'
-      :key='index'
+      v-for="(row, index) in displayedRows",
+      :key="index"
     )
-      tr(style='height: 33px')
-        td(class='border border-liver px-2 py-1') {{ row.id }}#[span(v-show='getNextIncompleteRowField(row) === 'id' && windowIsInfocus' class='blink') \u2588]
-        td(class='border border-liver px-2 py-1') {{ row.type }}#[span(v-show='getNextIncompleteRowField(row) === 'type' && windowIsInfocus' class='blink') \u2588]
-        td(class='border border-liver px-2 py-1') {{ row.quantity }}#[span(v-show='getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus' class='blink') \u2588]
-        td(class='border border-liver px-2 py-1') {{ row.name }}#[span(v-show='getNextIncompleteRowField(row) === 'name' && windowIsInfocus' class='blink') \u2588]
-        td(class='border border-liver px-2 py-1') {{ row.country }}#[span(v-show='getNextIncompleteRowField(row) === 'country' && windowIsInfocus' class='blink') \u2588]
+      tr(style="height: 33px")
+        td(class="border border-liver px-2 py-1") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus.value", class="blink") \u2588]
+        td(class="border border-liver px-2 py-1") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus.value", class="blink") \u2588]
+        td(class="border border-liver px-2 py-1") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus.value", class="blink") \u2588]
+        td(class="border border-liver px-2 py-1") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus.value", class="blink") \u2588]
+        td(class="border border-liver px-2 py-1") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus.value", class="blink") \u2588]
       tr(
-        v-if='Number(row.id) % 10 === 0 && row.id !== displayedRows[0]!.id && row.id !== displayedRows[displayedRows.length - 1]!.id'
+        v-if="Number(row.id) % 10 === 0 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id"
       )
         td(
-          colspan='5'
-          class='border border-liver bg-gray-700 px-2 py-3 text-center font-sans'
+          colspan="5",
+          class="border border-liver bg-gray-700 px-2 py-3 text-center font-sans"
         )
           p You have earned a back scratch from {{ PlotCharacters.Koko }}.
-          aside(class='text-xl text-liver') +1 Back Scratch
-      tr(v-if='displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1]!.id')
+          aside(class="text-xl text-liver") +1 Back Scratch
+      tr(v-if="displayedRows.length === 1 && row.id === displayedRows[displayedRows.length - 1].id")
         //- TODO: animate?
         td(
-          colspan='5'
-          class='p w-full animate-pulse pt-2 text-center font-sans text-sm text-gray-500 italic'
+          colspan="5",
+          class="p w-full animate-pulse pt-2 text-center font-sans text-sm text-gray-500 italic"
         ) Press any key to do work.
 
   template(#footer-right)
     os-button(
-      hotkey='Escape'
-      @click='gameStateStore.currentEliteOsApp = EliteOsApps.Desktop'
+      hotkey="Escape",
+      @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
     ) Save and close
 </template>
 

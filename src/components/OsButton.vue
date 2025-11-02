@@ -74,11 +74,11 @@ watch(
       // onKeyStroke automatically cleans up when the component unmounts,
       // but we need to handle hotkey changes during component lifecycle
     }
-    
+
     // Set up new listener if hotkey is provided
     if (newHotkey) {
       const keyEventValue = mapToKeyEvent(newHotkey)
-      
+
       onKeyStroke([keyEventValue], (e) => {
         // Check if window focus is required
         if (props.requireFocus && !windowIsInFocus.value) {
@@ -93,6 +93,6 @@ watch(
       })
     }
   },
-  { immediate: true } // Run immediately on component setup
+  { immediate: true }, // Run immediately on component setup
 )
 </script>

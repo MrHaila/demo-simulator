@@ -4,16 +4,18 @@ div(class="flex w-56 flex-col rounded-lg border-4 border-liver bg-gray-900 px-2 
   h2(class="mb-1 font-bold") {{ title }}
   div(class="mb-3 grow text-sm font-light") {{ description }}
   div
-    os-button(@click="emits('button')") {{ buttonLabel }}
+    os-button(:hotkey="hotkey" @click="emits('button')") {{ buttonLabel }}
 </template>
 
 <script lang="ts" setup>
 import OsButton from '@/components/OsButton.vue'
+import type { KeyboardKey } from '@/types/keyboard'
 
 defineProps<{
   title: string
   description: string
   buttonLabel: string
+  hotkey?: KeyboardKey
 }>()
 
 const emits = defineEmits(['button'])
