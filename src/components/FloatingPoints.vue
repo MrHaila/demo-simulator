@@ -3,7 +3,6 @@ div(
   v-if="show"
   class="floating-points"
   :class="qualityClass"
-  :style="positionStyle"
 ) +{{ points }}
 </template>
 
@@ -14,8 +13,6 @@ import type { CodeQuality } from '@/composables/useCodeInput'
 interface Props {
   points: number
   quality: CodeQuality
-  x: number
-  y: number
 }
 
 const props = defineProps<Props>()
@@ -46,16 +43,13 @@ const qualityClass = computed(() => {
       return 'quality-mundane'
   }
 })
-
-const positionStyle = computed(() => ({
-  left: `${props.x}px`,
-  top: `${props.y}px`,
-}))
 </script>
 
 <style scoped>
 .floating-points {
   position: absolute;
+  left: 50%;
+  bottom: 100%;
   font-weight: bold;
   font-size: 0.875rem;
   pointer-events: none;

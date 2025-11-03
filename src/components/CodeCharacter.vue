@@ -1,15 +1,29 @@
 <template lang="pug">
-span(:class="characterClass") {{ char }}
+span(
+  class="char-container"
+  :class="characterClass"
+)
+  | {{ char }}
+  FloatingPoints(
+    v-if="floatingPoint"
+    :points="floatingPoint.points"
+    :quality="floatingPoint.quality"
+  )
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import FloatingPoints from '@/components/FloatingPoints.vue'
 import type { CodeQuality } from '@/composables/useCodeInput'
 
 interface Props {
   char: string
   isNew: boolean
   quality: CodeQuality
+  floatingPoint?: {
+    points: number
+    quality: CodeQuality
+  }
 }
 
 const props = defineProps<Props>()
@@ -24,6 +38,10 @@ const characterClass = computed(() => ({
 </script>
 
 <style scoped>
+.char-container {
+  position: relative;
+}
+
 .char-new {
   animation: char-flash 0.3s ease-out;
 }

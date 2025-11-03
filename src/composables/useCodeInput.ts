@@ -9,19 +9,15 @@ export interface CodeCharacter {
   timestamp: number
   isNew: boolean
   quality: CodeQuality
+  floatingPoint?: {
+    points: number
+    quality: CodeQuality
+  }
 }
 
 export interface CodeLine {
   lineNumber: number
   characters: CodeCharacter[]
-}
-
-export interface FloatingPoint {
-  id: number
-  points: number
-  quality: CodeQuality
-  lineIndex: number
-  charIndex: number
 }
 
 interface Challenge {
@@ -47,10 +43,8 @@ interface UseCodeInputReturn {
   codePoints: Ref<number>
   amountCoded: Ref<number>
   displayedCodeRows: Ref<CodeLine[]>
-  floatingPoints: Ref<FloatingPoint[]>
   input: (windowRef: Ref<WindowRef | null>) => Promise<void>
   setupKeyboardHandling: (windowRef: Ref<WindowRef | null>) => void
-  removeFloatingPoint: (id: number) => void
 }
 
 export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
@@ -65,10 +59,8 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       characters: [],
     },
   ])
-  const floatingPoints = ref<FloatingPoint[]>([])
 
   let sourceCodeCursorPosition = initialCursorPosition
-  let floatingPointId = 0
 
   // eslint-disable-next-line complexity -- word detection and quality logic adds complexity
   function checkWordCompletion(newCode: string, timestamp: number): void {
@@ -109,7 +101,11 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     // Work backwards to find word start (previous space, tab, or line start)
     let wordStartIndex = 0
     for (let i = wordEndIndex - 1; i >= 0; i--) {
-      if (targetRow.characters[i]?.char === ' ' || targetRow.characters[i]?.char === '\t' || targetRow.characters[i]?.char === '\n') {
+      if (
+        targetRow.characters[i]?.char === ' ' ||
+        targetRow.characters[i]?.char === '\t' ||
+        targetRow.characters[i]?.char === '\n'
+      ) {
         wordStartIndex = i + 1
         break
       }
@@ -150,18 +146,19 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     const wordCharacters = targetRow.characters.slice(wordStartIndex, wordEndIndex)
     const wordPoints = codeToPoints(wordCharacters)
 
-    // Add floating point above the word
-    const lineIndex = displayedCodeRows.value.indexOf(targetRow)
+    // Attach floating point to middle character
     const charIndex = Math.floor((wordStartIndex + wordEndIndex) / 2)
-    const id = floatingPointId++
+    const middleChar = targetRow.characters[charIndex]
 
-    floatingPoints.value.push({
-      id,
+    middleChar.floatingPoint = {
       points: wordPoints,
       quality,
-      lineIndex,
-      charIndex,
-    })
+    }
+
+    // Clear floating point after animation completes
+    setTimeout(() => {
+      middleChar.floatingPoint = undefined
+    }, 1000)
   }
 
   function codeToPoints(characters: CodeCharacter[]): number {
@@ -291,18 +288,11 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     })
   }
 
-  function removeFloatingPoint(id: number): void {
-    const index = floatingPoints.value.findIndex((fp) => fp.id === id)
-    if (index !== -1) floatingPoints.value.splice(index, 1)
-  }
-
   return {
     codePoints,
     amountCoded,
     displayedCodeRows,
-    floatingPoints,
     input,
     setupKeyboardHandling,
-    removeFloatingPoint,
   }
 }

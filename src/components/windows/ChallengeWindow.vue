@@ -33,6 +33,7 @@ OsWindow(
                 :char="char.char"
                 :is-new="char.isNew"
                 :quality="char.quality"
+                :floating-point="char.floatingPoint"
               )
               span(
                 v-show="index === displayedCodeRows.length - 1 && windowIsInfocus"
@@ -40,16 +41,6 @@ OsWindow(
               ) █
             template(v-else)
               span {{ lineToPlainText(line) }}
-
-    FloatingPoints(
-      v-for="fp in floatingPoints"
-      :key="fp.id"
-      :points="fp.points"
-      :quality="fp.quality"
-      :x="calculateFloatingPointX(fp.charIndex, fp.lineIndex)"
-      :y="calculateFloatingPointY(fp.lineIndex)"
-      @complete="removeFloatingPoint(fp.id)"
-    )
 
   ChallengeResultsDialog(
     v-model="showResultsDialog"
@@ -76,7 +67,6 @@ import { computed, nextTick, ref, type Ref } from 'vue'
 import { useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
 import CodeCharacter from '@/components/CodeCharacter.vue'
-import FloatingPoints from '@/components/FloatingPoints.vue'
 import OsButton from '@/components/OsButton.vue'
 import ChallengeResultsDialog from '@/components/windows/ChallengeResultsDialog.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
@@ -204,15 +194,14 @@ function onChallengeComplete(): void {
   showResultsDialog.value = true
 }
 
-const { codePoints, amountCoded, displayedCodeRows, floatingPoints, setupKeyboardHandling, removeFloatingPoint } =
-  useCodeInput({
-    sourceCode,
-    initialCursorPosition: sourceCodeCursorPosition,
-    challenge,
-    onChallengeComplete,
-    currentState,
-    codingStateValue: ChallengeStates.Coding,
-  })
+const { codePoints, amountCoded, displayedCodeRows, setupKeyboardHandling } = useCodeInput({
+  sourceCode,
+  initialCursorPosition: sourceCodeCursorPosition,
+  challenge,
+  onChallengeComplete,
+  currentState,
+  codingStateValue: ChallengeStates.Coding,
+})
 
 setupKeyboardHandling(tableContainer as Ref<{ scrollTop: number; scrollHeight: number } | null>)
 
@@ -224,31 +213,6 @@ function shouldRenderAsCharacterComponents(lineIndex: number): boolean {
 
 function lineToPlainText(line: { characters: Array<{ char: string }> }): string {
   return line.characters.map((c) => c.char).join('')
-}
-
-function calculateFloatingPointX(charIndex: number, lineIndex: number): number {
-  const lineNumberWidth = 48
-  const cellPadding = 8
-  const charWidth = 10
-  const tabWidth = 36 // ~4 spaces
-
-  const line = displayedCodeRows.value[lineIndex]
-
-  let visualWidth = 0
-  for (let i = 0; i < charIndex && i < line.characters.length; i++) {
-    const char = line.characters[i]?.char
-    visualWidth += char === '\t' ? tabWidth : charWidth
-  }
-
-  return lineNumberWidth + cellPadding + visualWidth
-}
-
-function calculateFloatingPointY(lineIndex: number): number {
-  const lineHeight = 24
-  const offsetAbove = 26
-  const padding = 5
-  const maxY = (tableContainer.value?.clientHeight ?? 600) - padding
-  return Math.min(lineIndex * lineHeight + offsetAbove, maxY)
 }
 
 function getChallengeDuration(): Duration {
