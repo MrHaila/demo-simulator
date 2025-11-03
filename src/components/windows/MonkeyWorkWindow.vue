@@ -115,8 +115,6 @@ async function input(remainingAmountLeftToType?: number): Promise<void> {
 
   const currentOrder = displayedRows.value[displayedRows.value.length - 1]
 
-  if (!currentOrder) throw new Error('No current order.')
-
   // If there are characters left in amountLeftToType, then continue adding them to the current order's id
   if (currentOrder.id.length < nextOrder.id.length) {
     const amountToType = Math.min(amountLeftToType, nextOrder.id.length - currentOrder.id.length)

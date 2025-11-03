@@ -32,6 +32,7 @@ OsWindow(
                 :key="`${index}-${charIndex}`"
                 :char="char.char"
                 :is-new="char.isNew"
+                :quality="char.quality"
               )
               span(
                 v-show="index === displayedCodeRows.length - 1 && windowIsInfocus"

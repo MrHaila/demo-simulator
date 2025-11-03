@@ -2,10 +2,13 @@ import { nextTick, ref, type Ref } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { useGameStateStore } from '@/stores/gameStateStore'
 
+export type CodeQuality = 'mundane' | 'efficient' | 'creative' | 'perfect'
+
 export interface CodeCharacter {
   char: string
   timestamp: number
   isNew: boolean
+  quality: CodeQuality
 }
 
 export interface CodeLine {
@@ -55,13 +58,71 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
 
   let sourceCodeCursorPosition = initialCursorPosition
 
-  function codeToPoints(code: string): number {
+  // eslint-disable-next-line complexity -- word detection and efficiency logic adds complexity
+  function checkWordCompletion(newCode: string, timestamp: number): void {
+    // Check if the new code contains a space (word completion)
+    if (!newCode.includes(' ')) return
+
+    // Roll for efficiency: 10% * skill level
+    const efficiencyChance = 0.1 * gameStateStore.profile.codingSkill
+    const isWordEfficient = Math.random() < efficiencyChance
+
+    if (!isWordEfficient) return
+
+    // Find the completed word by working backwards from the space
+    const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
+    let wordEndIndex = -1
+
+    // Find the space character we just added
+    for (let i = lastRow.characters.length - 1; i >= 0; i--) {
+      if (lastRow.characters[i]?.timestamp === timestamp && lastRow.characters[i]?.char === ' ') {
+        wordEndIndex = i
+        break
+      }
+    }
+
+    if (wordEndIndex === -1) return
+
+    // Work backwards to find word start (previous space or line start)
+    let wordStartIndex = 0
+    for (let i = wordEndIndex - 1; i >= 0; i--) {
+      if (lastRow.characters[i]?.char === ' ' || lastRow.characters[i]?.char === '\n') {
+        wordStartIndex = i + 1
+        break
+      }
+    }
+
+    // Skip leading whitespace/tabs at word start
+    while (wordStartIndex < wordEndIndex && /\s/.test(lastRow.characters[wordStartIndex]?.char ?? '')) {
+      wordStartIndex++
+    }
+
+    // Mark all characters in the word as efficient
+    for (let i = wordStartIndex; i < wordEndIndex; i++) {
+      lastRow.characters[i].quality = 'efficient'
+    }
+  }
+
+  function codeToPoints(characters: CodeCharacter[]): number {
     let points = 0
 
     // Add points for each non-whitespace, non-line-break character.
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- need index access
-    for (let i = 0; i < code.length; i++) {
-      if (code[i] !== ' ' && code[i] !== '\n') points++
+    for (const char of characters) {
+      if (char.char !== ' ' && char.char !== '\n') {
+        switch (char.quality) {
+          case 'efficient':
+            points += 5
+            break
+          case 'creative':
+            points += 2
+            break
+          case 'perfect':
+            points += 10
+            break
+          default:
+            points += 1
+        }
+      }
     }
 
     return points
@@ -95,6 +156,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       char,
       timestamp,
       isNew: true,
+      quality: 'mundane' as CodeQuality,
     }))
     lastRow.characters.push(...firstRowChars)
 
@@ -106,6 +168,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
         char,
         timestamp,
         isNew: true,
+        quality: 'mundane' as CodeQuality,
       }))
       displayedCodeRows.value.push({
         lineNumber: currentLastRow.lineNumber + 1,
@@ -115,6 +178,19 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       // Trim excess lines.
       if (displayedCodeRows.value.length > 300) {
         displayedCodeRows.value.shift()
+      }
+    }
+
+    // Check for word completion and efficiency rolls
+    checkWordCompletion(newCode, timestamp)
+
+    // Collect all newly added characters for point calculation
+    const newChars: CodeCharacter[] = []
+    for (const row of displayedCodeRows.value) {
+      for (const char of row.characters) {
+        if (char.timestamp === timestamp) {
+          newChars.push(char)
+        }
       }
     }
 
@@ -129,7 +205,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       }
     }, 300)
 
-    codePoints.value += codeToPoints(newCode)
+    codePoints.value += codeToPoints(newChars)
 
     // Keep new code visible.
     await nextTick()
