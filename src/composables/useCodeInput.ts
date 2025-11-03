@@ -282,7 +282,15 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     const windowIsInfocus = useWindowFocus()
     onKeyStroke((e) => {
       // Handle generic text input (any single character key) during coding state
-      if (currentState.value === codingStateValue && windowIsInfocus.value && e.key.length === 1) {
+      // Ignore if any modifier keys are pressed
+      if (
+        currentState.value === codingStateValue &&
+        windowIsInfocus.value &&
+        e.key.length === 1 &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey
+      ) {
         void input(windowRef)
       }
     })

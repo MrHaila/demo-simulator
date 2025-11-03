@@ -191,7 +191,8 @@ const windowIsInfocus = useWindowFocus()
 onKeyStroke((e) => {
   // Handle generic text input (any single character key)
   // Note: Escape key is now handled by the OsButton component
-  if (windowIsInfocus.value && e.key.length === 1) {
+  // Ignore if any modifier keys are pressed
+  if (windowIsInfocus.value && e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
     void input()
   }
 })
