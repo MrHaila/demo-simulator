@@ -6,12 +6,12 @@ os-window(
 )
   div(
     ref="tableContainer",
-    class="h-full overflow-y-auto scrollbar-hide",
-    @wheel.prevent
+    class="scrollbar-hide h-full overflow-y-auto",
+    @wheel.prevent,
     @touchmove.prevent
   )
     table(class="w-full table-fixed border-collapse font-mono")
-      thead(class="bg-gray-700 text-left sticky -top-0.5 z-10 shadow-md")
+      thead(class="sticky -top-0.5 z-10 bg-gray-700 text-left shadow-md")
         tr
           th(class="border border-liver px-2 py-1") Order Id
           th(class="border border-liver px-2 py-1") Type
@@ -20,15 +20,15 @@ os-window(
           th(class="border border-liver px-2 py-1") Country
       tbody
         template(
-          :key="index"
-          v-for="(row, index) in displayedRows",
+          :key="index",
+          v-for="(row, index) in displayedRows"
         )
           tr(style="height: 33px")
-            td(class="border border-liver px-2 py-1") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus.value", class="blink") \u2588]
-            td(class="border border-liver px-2 py-1") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus.value", class="blink") \u2588]
-            td(class="border border-liver px-2 py-1") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus.value", class="blink") \u2588]
-            td(class="border border-liver px-2 py-1") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus.value", class="blink") \u2588]
-            td(class="border border-liver px-2 py-1") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus.value", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.id }}#[span(v-show="getNextIncompleteRowField(row) === 'id' && windowIsInfocus", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.type }}#[span(v-show="getNextIncompleteRowField(row) === 'type' && windowIsInfocus", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.quantity }}#[span(v-show="getNextIncompleteRowField(row) === 'quantity' && windowIsInfocus", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.name }}#[span(v-show="getNextIncompleteRowField(row) === 'name' && windowIsInfocus", class="blink") \u2588]
+            td(class="border border-liver px-2 py-1") {{ row.country }}#[span(v-show="getNextIncompleteRowField(row) === 'country' && windowIsInfocus", class="blink") \u2588]
           tr(
             v-if="Number(row.id) % 10 === 9 && row.id !== displayedRows[0].id && row.id !== displayedRows[displayedRows.length - 1].id"
           )
@@ -38,7 +38,7 @@ os-window(
             )
               p You have earned a scratch from {{ PlotCharacters.Koko }}.
               aside(class="text-xl text-liver") +1 Scratch
-        tr()
+        tr
           td(
             colspan="5",
             class="p w-full pt-2 text-center font-sans text-sm text-gray-500"
@@ -94,11 +94,11 @@ function getRandomOrder(): MwxEntry {
   const type = 'bananas'
   const quantity = Math.floor(Math.random() * 1000) + 1
   const nameIndex = Math.floor(Math.random() * (names.length - 1))
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- names is guaranteed to have at least one element.
-  const name = names[nameIndex]!
+
+  const name = names[nameIndex]
   const countryIndex = Math.floor(Math.random() * (countries.length - 1))
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- countries is guaranteed to have at least one element.
-  const country = countries[countryIndex]!
+
+  const country = countries[countryIndex]
   return {
     id: id.toString(),
     type,

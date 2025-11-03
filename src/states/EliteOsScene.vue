@@ -36,7 +36,10 @@ div(class="flex h-full gap-2 p-2")
   )
 
   //- Right column
-  div(class="flex shrink-0 basis-80 flex-col gap-2" v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.EnterName")
+  div(
+    class="flex shrink-0 basis-80 flex-col gap-2",
+    v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.EnterName"
+  )
     OsWindow(
       title="Profile",
       class=""
@@ -50,12 +53,12 @@ div(class="flex h-full gap-2 p-2")
           div(class="text-right font-mono") {{ gameStateStore.profile.codingSpeed }}
           div {{ RedactText('Intelligence', !!gameStateStore.profile.codingSkill) }}:
           div(class="text-right font-mono") {{ gameStateStore.profile.codingSkill }}
-      
+
       OsButton(
         @click="resetAndReload",
         variant="ghost",
         size="sm",
-        class="text-xs text-gray-500 mt-2"
+        class="mt-2 text-xs text-gray-500"
       ) Reset Game
 
     OsWindow(
@@ -94,8 +97,8 @@ div(
 <script lang="ts" setup>
 import { useNarrativeScene } from '@/components/composables/OsNarrativeScene'
 import { useOverlay } from '@/components/composables/OsOverlay'
-import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 import OsButton from '@/components/OsButton.vue'
+import OsNarrativeScene from '@/components/OsNarrativeScene.vue'
 import ChallengesWindow from '@/components/windows/ChallengesListWindow.vue'
 import ChallengeWindow from '@/components/windows/ChallengeWindow.vue'
 import DesktopWindow from '@/components/windows/DesktopWindow.vue'
@@ -185,7 +188,7 @@ function RedactText(text: string, skip = false): string {
 function resetAndReload(): void {
   // Reset game state
   gameStateStore.resetGame()
-  
+
   // Reload the page to start fresh
   window.location.reload()
 }

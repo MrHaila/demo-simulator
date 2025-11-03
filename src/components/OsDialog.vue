@@ -1,33 +1,39 @@
 <template lang="pug">
 teleport(to="body")
-  transition(name="os-dialog" appear)
+  transition(
+    name="os-dialog",
+    appear
+  )
     div(
       v-if="isVisible",
-      class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none ",
+      class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center",
       @click="handleBackdropClick"
     )
       // Dialog
       div(
         ref="dialogElement",
-        class="relative mx-4 max-w-md transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl pointer-events-auto min-w-xl",
+        class="pointer-events-auto relative mx-4 max-w-md min-w-xl transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl",
         @click.stop
       )
         // Header
         div(class="flex shrink-0 basis-8 items-center justify-between bg-liver px-3 py-1 font-bold")
           h1 {{ title }}
-        
+
         // Body
         div(class="p-4")
           slot
             p Default content
-        
+
         // Footer
-        div(v-if="$slots.footer", class="flex items-center justify-end space-x-2 bg-liver px-3 pt-2 pb-1 font-bold")
+        div(
+          v-if="$slots.footer",
+          class="flex items-center justify-end space-x-2 bg-liver px-3 pt-2 pb-1 font-bold"
+        )
           slot(name="footer")
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useOverlay } from '@/components/composables/OsOverlay'
 
 interface Props {
@@ -38,13 +44,13 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   closeOnBackdropClick: true,
-  modelValue: false
+  modelValue: false,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  'close': []
-  'open': []
+  close: []
+  open: []
 }>()
 
 const { showOverlay, hideOverlay } = useOverlay()
@@ -79,10 +85,10 @@ const handleBackdropClick = (): void => {
 
 const trapFocus = (): void => {
   if (!dialogElement.value) return
-  
+
   // Save previously focused element
   previouslyFocusedElement = document.activeElement
-  
+
   // Get focusable elements within dialog
   const focusable = dialogElement.value.querySelectorAll(focusableElements)
   if (focusable.length > 0) {
@@ -91,7 +97,7 @@ const trapFocus = (): void => {
       firstElement.focus()
     }
   }
-  
+
   // Add keydown listener for tab trapping
   document.addEventListener('keydown', handleKeydown)
 }
@@ -105,19 +111,19 @@ const restoreFocus = (): void => {
 
 const handleKeydown = (event: KeyboardEvent): void => {
   if (!dialogElement.value) return
-  
+
   if (event.key === 'Escape') {
     close()
     return
   }
-  
+
   if (event.key === 'Tab') {
     const focusable = dialogElement.value.querySelectorAll(focusableElements)
     if (focusable.length === 0) return
-    
+
     const firstElement = focusable[0]
     const lastElement = focusable[focusable.length - 1]
-    
+
     if (firstElement instanceof HTMLElement && lastElement instanceof HTMLElement) {
       if (event.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -125,23 +131,26 @@ const handleKeydown = (event: KeyboardEvent): void => {
           lastElement.focus()
         }
       } else if (document.activeElement === lastElement) {
-          event.preventDefault()
-          firstElement.focus()
-        }
+        event.preventDefault()
+        firstElement.focus()
       }
     }
   }
+}
 
 // Watch for external model value changes
-watch(() => props.modelValue, (newValue) => {
-  if (newValue !== isVisible.value) {
-    if (newValue) {
-      open()
-    } else {
-      close()
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue !== isVisible.value) {
+      if (newValue) {
+        open()
+      } else {
+        close()
+      }
     }
-  }
-})
+  },
+)
 
 // Watch internal visibility changes
 watch(isVisible, (newValue) => {
@@ -155,7 +164,7 @@ watch(isVisible, (newValue) => {
 // Expose methods
 defineExpose({
   open,
-  close
+  close,
 })
 
 onBeforeUnmount(() => {

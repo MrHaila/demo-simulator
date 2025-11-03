@@ -45,7 +45,7 @@ os-window(
         class="rounded-lg border-4 border-gray-600 bg-gray-800 p-3"
       )
         h2(class="text-gray-600") {{ challenge.name }}
-        div(class="text-sm text-gray-600 whitespace-pre-line") {{ challenge.description }}
+        div(class="text-sm whitespace-pre-line text-gray-600") {{ challenge.description }}
         div(class="mt-2 flex justify-end")
           os-button(disabled) Locked
 

@@ -6,7 +6,7 @@ HackerNameDialog(
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import HackerNameDialog from '@/components/HackerNameDialog.vue'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 
