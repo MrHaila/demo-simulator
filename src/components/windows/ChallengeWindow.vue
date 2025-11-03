@@ -1,6 +1,6 @@
 <template lang="pug">
 OsWindow(
-  :title="`NEO_H4X_EDIT - ${challenge?.name}`"
+  title="NEO_H4X_EDIT"
   no-padding
   ref="h4xWindow"
 )
@@ -17,6 +17,15 @@ OsWindow(
   )
     table(class="table-fixed font-mono")
       tbody
+        tr
+          td(
+            style="min-width: 3rem; padding-top: 0.32rem"
+            class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
+          )
+          td(class="p-2 whitespace-pre-wrap text-xs text-gray-400")
+            div File: {{ toSnakeCase(challenge?.name || '') }}.h4x
+            div Date: {{ currentDate }}
+            div Author: {{ gameStateStore.profile.name }}
         tr(
           v-for="(line, index) in displayedCodeRows"
           :key="index"
@@ -63,7 +72,7 @@ OsWindow(
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, type Ref } from 'vue'
+import { computed, nextTick, onMounted, ref, type Ref } from 'vue'
 import { useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
 import CodeCharacter from '@/components/CodeCharacter.vue'
@@ -75,7 +84,12 @@ import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
 import { humanizeDuration } from '@/utils/time'
+import { toSnakeCase } from '@/utils/string'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
+
+onMounted(() => {
+  currentDate.value = DateTime.now().toFormat('yyyy-MM-dd')
+})
 
 /*
   TODO:
@@ -86,6 +100,7 @@ import { useNarrativeScene } from '../composables/OsNarrativeScene'
 
 const gameStateStore = useGameStateStore()
 const windowIsInfocus = useWindowFocus()
+const currentDate = ref('')
 
 const challenge = gameStateStore.currentChallenge
 
