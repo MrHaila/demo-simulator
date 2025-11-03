@@ -1,22 +1,22 @@
 <template lang="pug">
 OsDialog(
-  v-if="modelValue",
-  :title="getDialogTitle()",
+  v-if="modelValue"
+  :title="getDialogTitle()"
   v-model="localModelValue"
 )
   // Analyzing phase
   div(v-if="currentState === ChallengeStates.Analyzing")
     div(class="mb-4")
       AnimatedText(
-        :run="true",
-        text="Analyzing code structure...",
+        :run="true"
+        text="Analyzing code structure..."
         :speed="15"
       )
     div(class="my-2")
       AsciiProgressBar(
-        :run="analyzingProgress",
-        :progress="100",
-        :speed="4",
+        :run="analyzingProgress"
+        :progress="100"
+        :speed="4"
         @done="$emit('startCompiling')"
       )
 
@@ -24,17 +24,17 @@ OsDialog(
   div(v-else-if="currentState === ChallengeStates.Compiling")
     // Analysis results table (stays visible)
     OsTable(
-      :lines-of-code="displayedCodeRows.length",
-      :characters-typed="amountCoded",
-      :programming-time="humanizedProgrammingTime",
-      :animate="true",
+      :lines-of-code="displayedCodeRows.length"
+      :characters-typed="amountCoded"
+      :programming-time="humanizedProgrammingTime"
+      :animate="true"
       class="mt-4 mb-6"
     )
 
     div(class="mt-4")
       AnimatedText(
-        :run="true",
-        text="Compiling optimized bytecode...",
+        :run="true"
+        text="Compiling optimized bytecode..."
         :speed="15"
       )
 
@@ -42,9 +42,9 @@ OsDialog(
     div(class="mb-4")
       div(class="mb-2 text-sm text-gray-400") Compilation Progress
       AsciiProgressBar(
-        :run="compilingProgress",
-        :progress="100",
-        :speed="3",
+        :run="compilingProgress"
+        :progress="100"
+        :speed="3"
         @done="$emit('showSuccess')"
       )
 
@@ -52,8 +52,8 @@ OsDialog(
   div(v-else-if="currentState === ChallengeStates.Success")
     // Analysis results remain visible
     OsTable(
-      :lines-of-code="displayedCodeRows.length",
-      :characters-typed="amountCoded",
+      :lines-of-code="displayedCodeRows.length"
+      :characters-typed="amountCoded"
       :programming-time="humanizedProgrammingTime"
     )
 
@@ -61,8 +61,8 @@ OsDialog(
 
   template(#footer)
     os-button(
-      @click="$emit('run')",
-      hotkey="Enter",
+      @click="$emit('run')"
+      hotkey="Enter"
       :disabled="currentState !== ChallengeStates.Success"
     ) Run
 </template>

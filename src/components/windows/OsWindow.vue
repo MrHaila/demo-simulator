@@ -5,15 +5,15 @@ div(class="flex flex-col rounded-lg border-4 border-solid border-liver shadow-md
 
     slot(name="title-right")
   div(
-    :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded-sm', 'grow', 'overflow-hidden']",
-    @update="scrollToBottom",
+    :class="[{ 'p-3': !noPadding }, 'bg-gray-900', 'rounded-sm', 'grow', 'overflow-hidden']"
+    @update="scrollToBottom"
     :ref="bodyElement"
   )
     slot
       p Lorem ipsum dolor sit amet.
 
   div(
-    v-if="$slots['footer-right']",
+    v-if="$slots['footer-right']"
     class="flex items-center justify-end space-x-2 bg-liver px-3 pt-2 pb-1 font-bold"
   )
     slot(name="footer-right")

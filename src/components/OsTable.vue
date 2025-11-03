@@ -3,15 +3,15 @@ div(class="rounded border border-liver")
   table(class="w-full font-mono text-sm")
     tbody
       tr(class="border-b border-liver")
-        td(class="bg-gray-800 px-3 py-2 rounded-tl-sm font-semibold") Code Analysis
-        td(class="bg-gray-800 px-3 py-2 text-right rounded-tr-sm font-semibold") Result
+        td(class="rounded-tl-sm bg-gray-800 px-3 py-2 font-semibold") Code Analysis
+        td(class="rounded-tr-sm bg-gray-800 px-3 py-2 text-right font-semibold") Result
       tr
         td(class="px-3 py-2") Lines of code
         td(class="px-3 py-2 text-right")
           AnimatedNumber(
-            v-if="animate",
-            :run="true",
-            :number="linesOfCode",
+            v-if="animate"
+            :run="true"
+            :number="linesOfCode"
             :speed="25"
           )
           span(v-else) {{ linesOfCode }}
@@ -19,9 +19,9 @@ div(class="rounded border border-liver")
         td(class="px-3 py-2") Characters typed
         td(class="px-3 py-2 text-right")
           AnimatedNumber(
-            v-if="animate",
-            :run="true",
-            :number="charactersTyped",
+            v-if="animate"
+            :run="true"
+            :number="charactersTyped"
             :speed="50"
           )
           span(v-else) {{ charactersTyped }}

@@ -3,45 +3,45 @@
   - Confetti? https://confetti.js.org/#
 
 vue-particles#tsparticlesdiv(
-  :options="particleOptions",
+  :options="particleOptions"
   class="absolute top-0 left-0 -z-50 h-full w-full"
 )
 
 OsNarrativeScene(
-  v-if="currentNarrativeScene",
+  v-if="currentNarrativeScene"
   :narrativeScene="currentNarrativeScene"
 )
 
 div(class="flex h-full gap-2 p-2")
   //- Left column
   ChallengesWindow(
-    v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList",
+    v-if="gameStateStore.currentEliteOsApp === EliteOsApps.ChallengesList"
     class="grow"
   )
   ChallengeWindow(
-    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge",
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
     class="grow"
   )
   MonkeyWorkWindow(
-    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work",
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.Work"
     class="grow"
   )
   EnterNameWindow(
-    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.EnterName",
+    v-else-if="gameStateStore.currentEliteOsApp === EliteOsApps.EnterName"
     class="grow"
   )
   DesktopWindow(
-    v-else,
+    v-else
     class="grow"
   )
 
   //- Right column
   div(
-    class="flex shrink-0 basis-80 flex-col gap-2",
+    class="flex shrink-0 basis-80 flex-col gap-2"
     v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.EnterName"
   )
     OsWindow(
-      title="Profile",
+      title="Profile"
       class=""
     )
       div(class="space-y-2")
@@ -55,15 +55,15 @@ div(class="flex h-full gap-2 p-2")
           div(class="text-right font-mono") {{ gameStateStore.profile.codingSkill }}
 
       OsButton(
-        @click="resetAndReload",
-        variant="ghost",
-        size="sm",
+        @click="resetAndReload"
+        variant="ghost"
+        size="sm"
         class="mt-2 text-xs text-gray-500"
       ) Reset Game
 
     OsWindow(
-      v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge",
-      title="Assets",
+      v-if="gameStateStore.currentEliteOsApp !== EliteOsApps.Challenge"
+      title="Assets"
       class=""
     )
       div(class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm")
@@ -73,15 +73,15 @@ div(class="flex h-full gap-2 p-2")
         div(class="text-right font-mono") {{ gameStateStore.profile.juiceBoxes }}
 
     OsWindow(
-      v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge",
-      title="Challenge Info",
+      v-if="gameStateStore.currentEliteOsApp === EliteOsApps.Challenge"
+      title="Challenge Info"
       class=""
     )
       ul
         li {{ gameStateStore.currentChallenge?.description }}
 
     OsWindow(
-      title="Mission",
+      title="Mission"
       class="grow"
     )
       ul

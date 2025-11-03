@@ -1,7 +1,7 @@
 <template lang="pug">
 OsWindow(
-  :title="`NEO_H4X_EDIT - ${challenge?.name}`",
-  no-padding,
+  :title="`NEO_H4X_EDIT - ${challenge?.name}`"
+  no-padding
   ref="h4xWindow"
 )
   template(#title-right)
@@ -12,31 +12,31 @@ OsWindow(
   table(class="table-fixed font-mono")
     tbody
       tr(
-        v-for="(line, index) in displayedCodeRows",
+        v-for="(line, index) in displayedCodeRows"
         :key="index"
       )
         td(
-          style="min-width: 3rem; padding-top: 0.32rem",
+          style="min-width: 3rem; padding-top: 0.32rem"
           class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
         ) {{ line.lineNumber }}
-        td(class="h-6 px-2 whitespace-pre-wrap") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus", class="blink") █]
+        td(class="h-6 px-2 whitespace-pre-wrap") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
 
   ChallengeResultsDialog(
-    v-model="showResultsDialog",
-    :current-state="currentState",
-    :analyzing-progress="analyzingProgress",
-    :compiling-progress="compilingProgress",
-    :displayed-code-rows="displayedCodeRows",
-    :amount-coded="amountCoded",
-    :humanized-programming-time="humanizedProgrammingTime",
-    @start-compiling="startCompiling",
-    @show-success="showSuccess",
+    v-model="showResultsDialog"
+    :current-state="currentState"
+    :analyzing-progress="analyzingProgress"
+    :compiling-progress="compilingProgress"
+    :displayed-code-rows="displayedCodeRows"
+    :amount-coded="amountCoded"
+    :humanized-programming-time="humanizedProgrammingTime"
+    @start-compiling="startCompiling"
+    @show-success="showSuccess"
     @run="showOutro"
   )
 
   template(#footer-right)
     os-button(
-      @click="exitChallenge",
+      @click="exitChallenge"
       hotkey="Escape"
     ) Abort Challenge
 </template>

@@ -1,8 +1,8 @@
 <template lang="pug">
 OsDialog(
-  title="Enter Your Hacker Name",
-  :show-close-button="false",
-  :close-on-backdrop-click="false",
+  title="Enter Your Hacker Name"
+  :show-close-button="false"
+  :close-on-backdrop-click="false"
   v-model="isVisible"
 )
   div(class="space-y-4")
@@ -11,34 +11,34 @@ OsDialog(
 
     div(class="space-y-2")
       label(
-        for="hacker-name",
+        for="hacker-name"
         class="block text-sm font-medium text-gray-400"
       )
         | Hacker Name
       input#hacker-name(
-        v-model="hackerName",
-        ref="inputElement",
-        type="text",
-        :maxlength="maxLength",
-        placeholder="eg. 1337-m4st3r",
-        class="text-white focus:border-blue-500 focus:ring-blue-500 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 placeholder-gray-500 focus:ring-1 focus:outline-none",
+        v-model="hackerName"
+        ref="inputElement"
+        type="text"
+        :maxlength="maxLength"
+        placeholder="eg. 1337-m4st3r"
+        class="text-white focus:border-blue-500 focus:ring-blue-500 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 placeholder-gray-500 focus:ring-1 focus:outline-none"
         @keydown.enter="handleSubmit"
       )
       div(class="flex justify-between text-xs text-gray-500")
         span {{ hackerName.length }} / {{ maxLength }} characters
 
     div(
-      v-if="error",
+      v-if="error"
       class="text-red-400 text-sm"
     )
       | {{ error }}
 
   template(#footer)
     OsButton(
-      @click="handleSubmit",
-      :disabled="!isValid",
-      hotkey="Enter",
-      hotkeyDisplay="Enter",
+      @click="handleSubmit"
+      :disabled="!isValid"
+      hotkey="Enter"
+      hotkeyDisplay="Enter"
       variant="primary"
     )
       | Save

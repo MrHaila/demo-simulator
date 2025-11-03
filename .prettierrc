@@ -14,7 +14,7 @@
       "options": {
         "parser": "vue",
         "pugClassNotation": "attribute",
-        "pugAttributeSeparator": "always",
+        "pugAttributeSeparator": "none",
         "pugWrapAttributesThreshold": 1
       }
     }

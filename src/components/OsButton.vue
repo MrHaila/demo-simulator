@@ -1,13 +1,13 @@
 <template lang="pug">
 button(
-  type="button",
-  :disabled="disabled",
-  :class="buttonClasses",
+  type="button"
+  :disabled="disabled"
+  :class="buttonClasses"
   @click="handleClick"
 )
   slot TODO
   span(
-    v-if="hotkey",
+    v-if="hotkey"
     class="ml-2 rounded-sm border border-neutral-400 bg-neutral-300 px-1 py-0.5 text-xs font-normal text-gray-500"
   ) {{ displayKey }}
 </template>

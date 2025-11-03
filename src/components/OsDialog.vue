@@ -1,18 +1,18 @@
 <template lang="pug">
 teleport(to="body")
   transition(
-    name="os-dialog",
+    name="os-dialog"
     appear
   )
     div(
-      v-if="isVisible",
-      class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center",
+      v-if="isVisible"
+      class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center"
       @click="handleBackdropClick"
     )
       // Dialog
       div(
-        ref="dialogElement",
-        class="pointer-events-auto relative mx-4 max-w-md min-w-xl transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl",
+        ref="dialogElement"
+        class="pointer-events-auto relative mx-4 max-w-md min-w-xl transform rounded-lg border-4 border-liver bg-gray-900 shadow-xl"
         @click.stop
       )
         // Header
@@ -26,7 +26,7 @@ teleport(to="body")
 
         // Footer
         div(
-          v-if="$slots.footer",
+          v-if="$slots.footer"
           class="flex items-center justify-end space-x-2 bg-liver px-3 pt-2 pb-1 font-bold"
         )
           slot(name="footer")

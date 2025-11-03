@@ -1,24 +1,24 @@
 <template lang="pug">
 os-window(
-  title="Elite Road Browser (build 1337)",
-  no-padding,
+  title="Elite Road Browser (build 1337)"
+  no-padding
   ref="challengesWindow"
 )
   //- Rows of challenges
   div(
-    v-for="(row, index) in challengesAsRows",
-    :key="index",
+    v-for="(row, index) in challengesAsRows"
+    :key="index"
     class="my-2 flex justify-center gap-2"
   )
     //- A challenge
     div(
-      v-for="challenge in row",
-      :key="challenge.id",
+      v-for="challenge in row"
+      :key="challenge.id"
       class="w-80"
     )
       //- Completed
       div(
-        v-if="getChallengeStatus(challenge) === 'completed'",
+        v-if="getChallengeStatus(challenge) === 'completed'"
         class="rounded-lg border-4 border-kombu bg-gray-800 p-3"
       )
         div(class="flex justify-between")
@@ -31,7 +31,7 @@ os-window(
 
       //- Available
       div(
-        v-else-if="getChallengeStatus(challenge) === 'unlocked'",
+        v-else-if="getChallengeStatus(challenge) === 'unlocked'"
         class="rounded-lg border-4 border-liver bg-gray-800 p-3"
       )
         h2(class="") {{ challenge.name }}
@@ -41,7 +41,7 @@ os-window(
 
       //- Locked
       div(
-        v-else,
+        v-else
         class="rounded-lg border-4 border-gray-600 bg-gray-800 p-3"
       )
         h2(class="text-gray-600") {{ challenge.name }}
@@ -53,7 +53,7 @@ os-window(
 
   template(#footer-right)
     OsButton(
-      hotkey="Escape",
+      hotkey="Escape"
       @click="gameStateStore.currentEliteOsApp = EliteOsApps.Desktop"
     ) Back to Desktop
 

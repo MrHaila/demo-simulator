@@ -1,6 +1,6 @@
 <template lang="pug">
 HackerNameDialog(
-  v-model="isVisible",
+  v-model="isVisible"
   @submit="handleSubmit"
 )
 </template>

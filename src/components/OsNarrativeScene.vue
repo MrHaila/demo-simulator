@@ -3,18 +3,18 @@
 div(class="absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify-end space-y-6 pb-20")
   //- Dialogue rows
   div(
-    v-for="(dialogue, index) in visibleDialogues",
-    :key="index",
+    v-for="(dialogue, index) in visibleDialogues"
+    :key="index"
     :class="['flex', { 'justify-end': dialogue?.alignment === 'right', 'justify-center': !dialogue?.author }]"
   )
     //- Speech bubbles for text with an author
     div(
-      v-if="dialogue?.author",
-      :class="['bg-gray-900 backdrop-blur-xs bg-opacity-70 border-liver border-4 rounded-xl flex', { 'flex-row-reverse': dialogue?.alignment === 'right' }]",
+      v-if="dialogue?.author"
+      :class="['bg-gray-900 backdrop-blur-xs bg-opacity-70 border-liver border-4 rounded-xl flex', { 'flex-row-reverse': dialogue?.alignment === 'right' }]"
       style="width: 35rem"
     )
       img(
-        :src="getCharacterAvatarImageUrl(dialogue?.author)",
+        :src="getCharacterAvatarImageUrl(dialogue?.author)"
         :class="['h-32 rounded-l-lg', { 'rounded-l-none rounded-r-lg': dialogue?.alignment === 'right' }]"
       )
       div(
@@ -29,7 +29,7 @@ div(class="absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify
 
     //- Text without an author
     div(
-      v-else,
+      v-else
       class="bg-opacity-70 rounded-xl border-4 border-neutral-500 bg-gray-900 px-5 py-2 text-center italic backdrop-blur-xs"
     ) {{ dialogue?.text }}
 

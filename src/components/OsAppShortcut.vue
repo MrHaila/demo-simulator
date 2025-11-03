@@ -5,7 +5,7 @@ div(class="flex w-56 flex-col rounded-lg border-4 border-liver bg-gray-900 px-2 
   div(class="mb-3 grow text-sm font-light") {{ description }}
   div
     os-button(
-      :hotkey="hotkey",
+      :hotkey="hotkey"
       @click="emits('button')"
     ) {{ buttonLabel }}
 </template>

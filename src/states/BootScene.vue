@@ -10,38 +10,38 @@ div(class="flex h-screen justify-between p-2")
 
       div(class="mt-5")
         animated-text(
-          :run="currentState === AnimationState.Gibberish1",
-          text="OSFX VER:1.0 23/3/14",
+          :run="currentState === AnimationState.Gibberish1"
+          text="OSFX VER:1.0 23/3/14"
           @done="nextState(300)"
         )
       div(
-        v-show="currentState === AnimationState.Wait",
+        v-show="currentState === AnimationState.Wait"
         class="mt-10"
       )
         animated-text(
-          :run="currentState === AnimationState.Wait",
-          :speed="200",
-          text="WAIT...",
+          :run="currentState === AnimationState.Wait"
+          :speed="200"
+          text="WAIT..."
           @done="nextState(1300)"
         )
       div(class="mt-36")
         animated-text(
-          :run="currentState === AnimationState.CPU",
-          :speed="10",
-          text="SKELETOR-1 CPU at 366MHz",
+          :run="currentState === AnimationState.CPU"
+          :speed="10"
+          text="SKELETOR-1 CPU at 366MHz"
           @done="nextState()"
         )
       div
         animated-text(
-          :run="currentState === AnimationState.MemoryLabel",
-          :speed="10",
-          text="Memory Test :  ",
+          :run="currentState === AnimationState.MemoryLabel"
+          :speed="10"
+          text="Memory Test :  "
           @done="nextState()"
         )
         animated-number(
-          :run="currentState === AnimationState.MemTest",
-          :number="65536",
-          :speed="431",
+          :run="currentState === AnimationState.MemTest"
+          :number="65536"
+          :speed="431"
           @done="nextState()"
         )
         span(v-show="currentState === AnimationState.OK") OK
