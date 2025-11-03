@@ -2,9 +2,15 @@ import { nextTick, ref, type Ref } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import { useGameStateStore } from '@/stores/gameStateStore'
 
-interface CodeLine {
+export interface CodeCharacter {
+  char: string
+  timestamp: number
+  isNew: boolean
+}
+
+export interface CodeLine {
   lineNumber: number
-  text: string
+  characters: CodeCharacter[]
 }
 
 interface Challenge {
@@ -22,7 +28,8 @@ interface UseCodeInputParams {
 }
 
 interface WindowRef {
-  scrollToBottom: () => void
+  scrollTop: number
+  scrollHeight: number
 }
 
 interface UseCodeInputReturn {
@@ -42,7 +49,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
   const displayedCodeRows = ref<CodeLine[]>([
     {
       lineNumber: 1,
-      text: '',
+      characters: [],
     },
   ])
 
@@ -60,6 +67,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     return points
   }
 
+  // eslint-disable-next-line complexity -- character animation tracking adds complexity
   async function input(windowRef: Ref<WindowRef | null>): Promise<void> {
     amountCoded.value += gameStateStore.profile.codingSpeed
 
@@ -79,17 +87,29 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     const newCodeRows = newCode.split('\n')
     sourceCodeCursorPosition += gameStateStore.profile.codingSpeed
 
+    const timestamp = Date.now()
+
     // Append first new row to the latest displayed row.
     const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
-    lastRow.text += newCodeRows[0]
+    const firstRowChars = (newCodeRows[0] ?? '').split('').map((char) => ({
+      char,
+      timestamp,
+      isNew: true,
+    }))
+    lastRow.characters.push(...firstRowChars)
 
     // For each subsequent row...
     for (let i = 1; i < newCodeRows.length; i++) {
       // Directly add new rows to the display buffer.
       const currentLastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
+      const chars = (newCodeRows[i] ?? '').split('').map((char) => ({
+        char,
+        timestamp,
+        isNew: true,
+      }))
       displayedCodeRows.value.push({
         lineNumber: currentLastRow.lineNumber + 1,
-        text: newCodeRows[i],
+        characters: chars,
       })
 
       // Trim excess lines.
@@ -98,11 +118,25 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       }
     }
 
+    // Mark characters as no longer new after animation duration
+    setTimeout(() => {
+      for (const row of displayedCodeRows.value) {
+        for (const char of row.characters) {
+          if (char.timestamp === timestamp) {
+            char.isNew = false
+          }
+        }
+      }
+    }, 300)
+
     codePoints.value += codeToPoints(newCode)
 
     // Keep new code visible.
     await nextTick()
-    windowRef.value?.scrollToBottom()
+    const container = windowRef.value
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
 
     // If the challenge is a tutorial, check if the player has coded enough.
     if (challenge?.challengeType === 'tutorial' && amountCoded.value >= sourceCode.length) {

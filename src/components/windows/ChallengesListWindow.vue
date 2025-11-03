@@ -73,13 +73,13 @@ const gameStateStore = useGameStateStore()
 
 function getChallengeStatus(challenge: UnknownChallenge): 'completed' | 'unlocked' | 'locked' {
   // Return completed if challenge id is in completedChallenges.
-  if (gameStateStore.progression.completedChallenges[challenge.id]) return 'completed'
+  if (challenge.id in gameStateStore.progression.completedChallenges) return 'completed'
 
   // Return unlocked if challenge has no dependencies, or if all dependencies are completed.
   let dependencies = challenge.dependsOn
   if (typeof dependencies === 'number') dependencies = [dependencies]
   if (!dependencies) return 'unlocked'
-  if (dependencies.every((dependency) => gameStateStore.progression.completedChallenges[dependency])) return 'unlocked'
+  if (dependencies.every((dependency) => dependency in gameStateStore.progression.completedChallenges)) return 'unlocked'
 
   // Otherwise, return locked.
   return 'locked'

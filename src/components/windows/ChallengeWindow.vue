@@ -9,17 +9,33 @@ OsWindow(
     //span(v-else-if="challenge?.challengeType === 'timeAttack'") {{ timeLeft }} seconds left
     span(v-else-if="challenge?.challengeType === 'tutorial'") {{ sourceCode.length - amountCoded }} characters left
 
-  table(class="table-fixed font-mono")
-    tbody
-      tr(
-        v-for="(line, index) in displayedCodeRows"
-        :key="index"
-      )
-        td(
-          style="min-width: 3rem; padding-top: 0.32rem"
-          class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
-        ) {{ line.lineNumber }}
-        td(class="h-6 px-2 whitespace-pre-wrap") {{ line.text }}#[span(v-show="index === displayedCodeRows.length - 1 && windowIsInfocus" class="blink") █]
+  div(
+    ref="tableContainer"
+    class="scrollbar-hide h-full overflow-y-auto"
+    @wheel.prevent
+    @touchmove.prevent
+  )
+    table(class="table-fixed font-mono")
+      tbody
+        tr(
+          v-for="(line, index) in displayedCodeRows"
+          :key="index"
+        )
+          td(
+            style="min-width: 3rem; padding-top: 0.32rem"
+            class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
+          ) {{ line.lineNumber }}
+          td(class="h-6 px-2 whitespace-pre-wrap")
+            CodeCharacter(
+              v-for="(char, charIndex) in line.characters"
+              :key="`${index}-${charIndex}`"
+              :char="char.char"
+              :is-new="char.isNew"
+            )
+            span(
+              v-show="index === displayedCodeRows.length - 1 && windowIsInfocus"
+              class="blink"
+            ) █
 
   ChallengeResultsDialog(
     v-model="showResultsDialog"
@@ -45,6 +61,7 @@ OsWindow(
 import { computed, nextTick, ref, type Ref } from 'vue'
 import { useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
+import CodeCharacter from '@/components/CodeCharacter.vue'
 import OsButton from '@/components/OsButton.vue'
 import ChallengeResultsDialog from '@/components/windows/ChallengeResultsDialog.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
@@ -159,6 +176,7 @@ lines = []
 // INPUT HANDLING ----------------------------
 
 const h4xWindow = ref<InstanceType<typeof OsWindow> | null>(null)
+const tableContainer = ref<HTMLDivElement | null>(null)
 
 function onChallengeComplete(): void {
   codingEnded.value = DateTime.now()
@@ -180,8 +198,7 @@ const { codePoints, amountCoded, displayedCodeRows, setupKeyboardHandling } = us
   codingStateValue: ChallengeStates.Coding,
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- h4xWindow conforms to WindowRef interface
-setupKeyboardHandling(h4xWindow as Ref<{ scrollToBottom: () => void } | null>)
+setupKeyboardHandling(tableContainer as Ref<{ scrollTop: number; scrollHeight: number } | null>)
 
 function getChallengeDuration(): Duration {
   return codingEnded.value.diff(codingStarted.value)

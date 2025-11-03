@@ -74,6 +74,7 @@ import AsciiProgressBar from '@/components/AsciiProgressBar.vue'
 import OsButton from '@/components/OsButton.vue'
 import OsDialog from '@/components/OsDialog.vue'
 import OsTable from '@/components/OsTable.vue'
+import type { CodeLine } from '@/composables/useCodeInput'
 
 const ChallengeStates = {
   Intro: 'intro',
@@ -84,11 +85,6 @@ const ChallengeStates = {
   Success: 'success',
   Outro: 'outro',
 } as const
-
-interface CodeLine {
-  lineNumber: number
-  text: string
-}
 
 interface Props {
   modelValue: boolean
