@@ -16,6 +16,14 @@ export interface CodeLine {
   characters: CodeCharacter[]
 }
 
+export interface FloatingPoint {
+  id: number
+  points: number
+  quality: CodeQuality
+  lineIndex: number
+  charIndex: number
+}
+
 interface Challenge {
   id: number
   challengeType: 'tutorial' | 'scoreAttack' | 'timeAttack' | 'compo'
@@ -39,6 +47,7 @@ interface UseCodeInputReturn {
   codePoints: Ref<number>
   amountCoded: Ref<number>
   displayedCodeRows: Ref<CodeLine[]>
+  floatingPoints: Ref<FloatingPoint[]>
   input: (windowRef: Ref<WindowRef | null>) => Promise<void>
   setupKeyboardHandling: (windowRef: Ref<WindowRef | null>) => void
 }
@@ -55,43 +64,15 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       characters: [],
     },
   ])
+  const floatingPoints = ref<FloatingPoint[]>([])
 
   let sourceCodeCursorPosition = initialCursorPosition
+  let floatingPointId = 0
 
   // eslint-disable-next-line complexity -- word detection and quality logic adds complexity
   function checkWordCompletion(newCode: string, timestamp: number): void {
     // Check if the new code contains a space (word completion)
     if (!newCode.includes(' ')) return
-
-    // Roll for creativity and efficiency
-    const creativityChance = 0.1 * gameStateStore.profile.codingCreativity
-    const efficiencyChance = 0.1 * gameStateStore.profile.codingSkill
-    const isCreative = Math.random() < creativityChance
-    const isEfficient = Math.random() < efficiencyChance
-
-    // Determine quality based on unlock status
-    const hasPerfectCodeUnlock = gameStateStore.profile.unlocks.includes('perfectCode')
-    let quality: CodeQuality = 'mundane'
-
-    if (hasPerfectCodeUnlock) {
-      // If perfectCode unlocked, check both rolls
-      if (isCreative && isEfficient) {
-        quality = 'perfect'
-      } else if (isCreative) {
-        quality = 'creative'
-      } else if (isEfficient) {
-        quality = 'efficient'
-      } else {
-        return // No upgrade
-      }
-    } else if (isCreative) {
-      // If perfectCode not unlocked, creativity takes precedence
-      quality = 'creative'
-    } else if (isEfficient) {
-      quality = 'efficient'
-    } else {
-      return // No upgrade
-    }
 
     // Find the completed word by working backwards from the space
     const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
@@ -121,10 +102,59 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       wordStartIndex++
     }
 
+    // Roll for creativity and efficiency to determine quality upgrade
+    const creativityChance = 0.1 * gameStateStore.profile.codingCreativity
+    const efficiencyChance = 0.1 * gameStateStore.profile.codingSkill
+    const isCreative = Math.random() < creativityChance
+    const isEfficient = Math.random() < efficiencyChance
+
+    // Determine quality based on unlock status
+    const hasPerfectCodeUnlock = gameStateStore.profile.unlocks.includes('perfectCode')
+    let quality: CodeQuality = 'mundane'
+
+    if (hasPerfectCodeUnlock) {
+      // If perfectCode unlocked, check both rolls
+      if (isCreative && isEfficient) {
+        quality = 'perfect'
+      } else if (isCreative) {
+        quality = 'creative'
+      } else if (isEfficient) {
+        quality = 'efficient'
+      }
+    } else if (isCreative) {
+      // If perfectCode not unlocked, creativity takes precedence
+      quality = 'creative'
+    } else if (isEfficient) {
+      quality = 'efficient'
+    }
+
     // Mark all characters in the word with the determined quality
     for (let i = wordStartIndex; i < wordEndIndex; i++) {
       lastRow.characters[i].quality = quality
     }
+
+    // Calculate points for this word
+    const wordCharacters = lastRow.characters.slice(wordStartIndex, wordEndIndex)
+    const wordPoints = codeToPoints(wordCharacters)
+
+    // Add floating point above the word
+    const lineIndex = displayedCodeRows.value.length - 1
+    const charIndex = Math.floor((wordStartIndex + wordEndIndex) / 2)
+    const id = floatingPointId++
+
+    floatingPoints.value.push({
+      id,
+      points: wordPoints,
+      quality,
+      lineIndex,
+      charIndex,
+    })
+
+    // Remove after animation completes
+    setTimeout(() => {
+      const index = floatingPoints.value.findIndex((fp) => fp.id === id)
+      if (index !== -1) floatingPoints.value.splice(index, 1)
+    }, 1000)
   }
 
   function codeToPoints(characters: CodeCharacter[]): number {
@@ -258,6 +288,7 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     codePoints,
     amountCoded,
     displayedCodeRows,
+    floatingPoints,
     input,
     setupKeyboardHandling,
   }

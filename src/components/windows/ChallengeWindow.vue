@@ -41,6 +41,15 @@ OsWindow(
             template(v-else)
               span {{ lineToPlainText(line) }}
 
+    FloatingPoints(
+      v-for="fp in floatingPoints"
+      :key="fp.id"
+      :points="fp.points"
+      :quality="fp.quality"
+      :x="calculateFloatingPointX(fp.charIndex)"
+      :y="calculateFloatingPointY(fp.lineIndex)"
+    )
+
   ChallengeResultsDialog(
     v-model="showResultsDialog"
     :current-state="currentState"
@@ -66,6 +75,7 @@ import { computed, nextTick, ref, type Ref } from 'vue'
 import { useWindowFocus } from '@vueuse/core'
 import { DateTime, Duration } from 'luxon'
 import CodeCharacter from '@/components/CodeCharacter.vue'
+import FloatingPoints from '@/components/FloatingPoints.vue'
 import OsButton from '@/components/OsButton.vue'
 import ChallengeResultsDialog from '@/components/windows/ChallengeResultsDialog.vue'
 import OsWindow from '@/components/windows/OsWindow.vue'
@@ -193,7 +203,7 @@ function onChallengeComplete(): void {
   showResultsDialog.value = true
 }
 
-const { codePoints, amountCoded, displayedCodeRows, setupKeyboardHandling } = useCodeInput({
+const { codePoints, amountCoded, displayedCodeRows, floatingPoints, setupKeyboardHandling } = useCodeInput({
   sourceCode,
   initialCursorPosition: sourceCodeCursorPosition,
   challenge,
@@ -212,6 +222,19 @@ function shouldRenderAsCharacterComponents(lineIndex: number): boolean {
 
 function lineToPlainText(line: { characters: Array<{ char: string }> }): string {
   return line.characters.map((c) => c.char).join('')
+}
+
+function calculateFloatingPointX(charIndex: number): number {
+  const lineNumberWidth = 48
+  const cellPadding = 8
+  const charWidth = 9
+  return lineNumberWidth + cellPadding + charIndex * charWidth
+}
+
+function calculateFloatingPointY(lineIndex: number): number {
+  const lineHeight = 24
+  const offsetAbove = 2
+  return lineIndex * lineHeight - offsetAbove
 }
 
 function getChallengeDuration(): Duration {
