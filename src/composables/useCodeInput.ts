@@ -106,18 +106,13 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- targetRow could be undefined in edge cases
     if (wordEndIndex === -1 || !targetRow) return
 
-    // Work backwards to find word start (previous space or line start)
+    // Work backwards to find word start (previous space, tab, or line start)
     let wordStartIndex = 0
     for (let i = wordEndIndex - 1; i >= 0; i--) {
-      if (targetRow.characters[i]?.char === ' ' || targetRow.characters[i]?.char === '\n') {
+      if (targetRow.characters[i]?.char === ' ' || targetRow.characters[i]?.char === '\t' || targetRow.characters[i]?.char === '\n') {
         wordStartIndex = i + 1
         break
       }
-    }
-
-    // Skip leading whitespace/tabs at word start
-    while (wordStartIndex < wordEndIndex && /\s/.test(targetRow.characters[wordStartIndex]?.char ?? '')) {
-      wordStartIndex++
     }
 
     // Roll for creativity and efficiency to determine quality upgrade
