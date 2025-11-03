@@ -53,6 +53,8 @@ div(class="flex h-full gap-2 p-2")
           div(class="text-right font-mono") {{ gameStateStore.profile.codingSpeed }}
           div {{ RedactText('Intelligence', !!gameStateStore.profile.codingSkill) }}:
           div(class="text-right font-mono") {{ gameStateStore.profile.codingSkill }}
+          div {{ RedactText('Creativity', !!gameStateStore.profile.codingCreativity) }}:
+          div(class="text-right font-mono") {{ gameStateStore.profile.codingCreativity }}
 
       OsButton(
         @click="resetAndReload"

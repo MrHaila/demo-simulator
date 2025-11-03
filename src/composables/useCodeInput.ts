@@ -58,16 +58,40 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
 
   let sourceCodeCursorPosition = initialCursorPosition
 
-  // eslint-disable-next-line complexity -- word detection and efficiency logic adds complexity
+  // eslint-disable-next-line complexity -- word detection and quality logic adds complexity
   function checkWordCompletion(newCode: string, timestamp: number): void {
     // Check if the new code contains a space (word completion)
     if (!newCode.includes(' ')) return
 
-    // Roll for efficiency: 10% * skill level
+    // Roll for creativity and efficiency
+    const creativityChance = 0.1 * gameStateStore.profile.codingCreativity
     const efficiencyChance = 0.1 * gameStateStore.profile.codingSkill
-    const isWordEfficient = Math.random() < efficiencyChance
+    const isCreative = Math.random() < creativityChance
+    const isEfficient = Math.random() < efficiencyChance
 
-    if (!isWordEfficient) return
+    // Determine quality based on unlock status
+    const hasPerfectCodeUnlock = gameStateStore.profile.unlocks.includes('perfectCode')
+    let quality: CodeQuality = 'mundane'
+
+    if (hasPerfectCodeUnlock) {
+      // If perfectCode unlocked, check both rolls
+      if (isCreative && isEfficient) {
+        quality = 'perfect'
+      } else if (isCreative) {
+        quality = 'creative'
+      } else if (isEfficient) {
+        quality = 'efficient'
+      } else {
+        return // No upgrade
+      }
+    } else if (isCreative) {
+      // If perfectCode not unlocked, creativity takes precedence
+      quality = 'creative'
+    } else if (isEfficient) {
+      quality = 'efficient'
+    } else {
+      return // No upgrade
+    }
 
     // Find the completed word by working backwards from the space
     const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
@@ -97,9 +121,9 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       wordStartIndex++
     }
 
-    // Mark all characters in the word as efficient
+    // Mark all characters in the word with the determined quality
     for (let i = wordStartIndex; i < wordEndIndex; i++) {
-      lastRow.characters[i].quality = 'efficient'
+      lastRow.characters[i].quality = quality
     }
   }
 

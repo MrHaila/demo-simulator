@@ -30,6 +30,7 @@ export const Titles = {
 export type Scene = (typeof Scenes)[keyof typeof Scenes]
 export type EliteOsApp = (typeof EliteOsApps)[keyof typeof EliteOsApps]
 export type Title = (typeof Titles)[keyof typeof Titles]
+export type Unlock = 'perfectCode'
 
 export const currentSaveVersion = 6
 
@@ -38,6 +39,8 @@ const defaultProfile: {
   name: string
   codingSpeed: number
   codingSkill: number
+  codingCreativity: number
+  unlocks: Unlock[]
   scratches: number
   juiceBoxes: number
   latestWorkId: number
@@ -46,7 +49,9 @@ const defaultProfile: {
   saveVersion: currentSaveVersion,
   name: '',
   codingSpeed: 1,
-  codingSkill: 1,
+  codingSkill: 5,
+  codingCreativity: 5,
+  unlocks: ['perfectCode'],
   scratches: 0,
   juiceBoxes: 0,
   latestWorkId: 0,

@@ -56,4 +56,40 @@ const characterClass = computed(() => ({
     box-shadow: none;
   }
 }
+
+.char-creative {
+  color: rgb(236, 72, 153);
+  animation: creative-glow 1s ease-out;
+}
+
+@keyframes creative-glow {
+  0% {
+    color: rgb(255, 255, 255);
+    background-color: rgba(236, 72, 153, 0.4);
+    box-shadow: 0 0 24px 4px rgba(236, 72, 153, 0.8);
+  }
+  100% {
+    color: rgb(236, 72, 153);
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.char-perfect {
+  color: rgb(234, 179, 8);
+  animation: perfect-glow 1s ease-out;
+}
+
+@keyframes perfect-glow {
+  0% {
+    color: rgb(255, 255, 255);
+    background-color: rgba(234, 179, 8, 0.4);
+    box-shadow: 0 0 24px 4px rgba(234, 179, 8, 0.8);
+  }
+  100% {
+    color: rgb(234, 179, 8);
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
 </style>

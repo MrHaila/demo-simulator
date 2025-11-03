@@ -173,8 +173,6 @@ function processChallengeRow(): void {
   if (!challengesAsRows[0]) throw new Error('No challenges in the first row.')
 
   for (const challengeToProcess of challengesAsRows[0]) {
-    if (!challengeToProcess) throw new Error('Challenge to process is undefined.')
-
     const nextChallenges = allChallenges.filter((challenge) => {
       if (Array.isArray(challenge.dependsOn)) {
         return challenge.dependsOn.includes(challengeToProcess.id)
