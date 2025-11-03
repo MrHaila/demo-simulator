@@ -1,6 +1,9 @@
 <template lang="pug">
 //- Centered container
-div(class="absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify-end space-y-6 pb-20")
+div(
+  class="absolute top-0 right-1/4 bottom-0 left-1/4 z-20 flex flex-col justify-end space-y-6 pb-20"
+  @click="nextDialogue"
+)
   //- Dialogue rows
   div(
     v-for="(dialogue, index) in visibleDialogues"

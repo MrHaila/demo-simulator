@@ -22,7 +22,7 @@ OsWindow(
             style="min-width: 3rem; padding-top: 0.32rem"
             class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
           )
-          td(class="p-2 whitespace-pre-wrap text-xs text-gray-400")
+          td(class="p-2 text-xs whitespace-pre-wrap text-gray-400")
             div File: {{ toSnakeCase(challenge?.name || '') }}.h4x
             div Date: {{ currentDate }}
             div Author: {{ gameStateStore.profile.name }}
@@ -83,8 +83,8 @@ import { useCodeInput } from '@/composables/useCodeInput'
 import SourceCode from '@/source_code/code'
 import SourceCodeHelloWorld from '@/source_code/helloWorld'
 import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
-import { humanizeDuration } from '@/utils/time'
 import { toSnakeCase } from '@/utils/string'
+import { humanizeDuration } from '@/utils/time'
 import { useNarrativeScene } from '../composables/OsNarrativeScene'
 
 onMounted(() => {
@@ -235,7 +235,11 @@ function getChallengeDuration(): Duration {
 }
 
 const humanizedProgrammingTime = computed(() => {
-  if (currentState.value === ChallengeStates.Results) {
+  if (
+    currentState.value === ChallengeStates.Analyzing ||
+    currentState.value === ChallengeStates.Compiling ||
+    currentState.value === ChallengeStates.Success
+  ) {
     return humanizeDuration(getChallengeDuration().toMillis())
   }
   return '0 sec'
