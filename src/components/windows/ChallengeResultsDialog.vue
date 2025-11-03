@@ -23,31 +23,13 @@ OsDialog(
   // Compilation phase with analysis results and compilation bar below
   div(v-else-if="currentState === ChallengeStates.Compiling")
     // Analysis results table (stays visible)
-    div(class="mt-4 mb-6 rounded border border-liver")
-      table(class="w-full font-mono text-sm")
-        tbody
-          tr(class="border-b border-liver")
-            td(class="bg-gray-800 px-3 py-2 font-semibold") Code Analysis
-            td(class="bg-gray-800 px-3 py-2 text-right font-semibold") Result
-          tr
-            td(class="px-3 py-2") Lines of code
-            td(class="px-3 py-2 text-right")
-              AnimatedNumber(
-                :run="true",
-                :number="displayedCodeRows.length",
-                :speed="25"
-              )
-          tr
-            td(class="px-3 py-2") Characters typed
-            td(class="px-3 py-2 text-right")
-              AnimatedNumber(
-                :run="true",
-                :number="amountCoded",
-                :speed="50"
-              )
-          tr
-            td(class="px-3 py-2") Programming time
-            td(class="px-3 py-2 text-right") {{ humanizedProgrammingTime }}
+    OsTable(
+      :lines-of-code="displayedCodeRows.length",
+      :characters-typed="amountCoded",
+      :programming-time="humanizedProgrammingTime",
+      :animate="true",
+      class="mt-4 mb-6"
+    )
 
     div(class="mt-4")
       AnimatedText(
@@ -69,21 +51,11 @@ OsDialog(
   // Success phase with compilation status and analysis results
   div(v-else-if="currentState === ChallengeStates.Success")
     // Analysis results remain visible
-    div(class="rounded border border-liver")
-      table(class="w-full font-mono text-sm")
-        tbody
-          tr(class="border-b border-liver")
-            td(class="bg-gray-800 px-3 py-2 font-semibold") Code Analysis
-            td(class="bg-gray-800 px-3 py-2 text-right font-semibold") Result
-          tr
-            td(class="px-3 py-2") Lines of code
-            td(class="px-3 py-2 text-right") {{ displayedCodeRows.length }}
-          tr
-            td(class="px-3 py-2") Characters typed
-            td(class="px-3 py-2 text-right") {{ amountCoded }}
-          tr
-            td(class="px-3 py-2") Programming time
-            td(class="px-3 py-2 text-right") {{ humanizedProgrammingTime }}
+    OsTable(
+      :lines-of-code="displayedCodeRows.length",
+      :characters-typed="amountCoded",
+      :programming-time="humanizedProgrammingTime"
+    )
 
     h2(class="mt-4 text-lg") Compilation status: #[span(class="text-olive") SUCCESS!]
 
@@ -97,11 +69,11 @@ OsDialog(
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import AnimatedNumber from '@/components/AnimatedNumber.vue'
 import AnimatedText from '@/components/AnimatedText.vue'
 import AsciiProgressBar from '@/components/AsciiProgressBar.vue'
 import OsButton from '@/components/OsButton.vue'
 import OsDialog from '@/components/OsDialog.vue'
+import OsTable from '@/components/OsTable.vue'
 
 const ChallengeStates = {
   Intro: 'intro',
