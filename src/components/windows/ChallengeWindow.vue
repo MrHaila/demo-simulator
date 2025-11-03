@@ -26,16 +26,19 @@ OsWindow(
             class="border-r-2 border-r-gray-700 bg-gray-800 px-2 text-right align-top text-xs text-gray-400"
           ) {{ line.lineNumber }}
           td(class="h-6 px-2 whitespace-pre-wrap")
-            CodeCharacter(
-              v-for="(char, charIndex) in line.characters"
-              :key="`${index}-${charIndex}`"
-              :char="char.char"
-              :is-new="char.isNew"
-            )
-            span(
-              v-show="index === displayedCodeRows.length - 1 && windowIsInfocus"
-              class="blink"
-            ) █
+            template(v-if="shouldRenderAsCharacterComponents(index)")
+              CodeCharacter(
+                v-for="(char, charIndex) in line.characters"
+                :key="`${index}-${charIndex}`"
+                :char="char.char"
+                :is-new="char.isNew"
+              )
+              span(
+                v-show="index === displayedCodeRows.length - 1 && windowIsInfocus"
+                class="blink"
+              ) █
+            template(v-else)
+              span {{ lineToPlainText(line) }}
 
   ChallengeResultsDialog(
     v-model="showResultsDialog"
@@ -199,6 +202,16 @@ const { codePoints, amountCoded, displayedCodeRows, setupKeyboardHandling } = us
 })
 
 setupKeyboardHandling(tableContainer as Ref<{ scrollTop: number; scrollHeight: number } | null>)
+
+const RENDER_AS_COMPONENTS_LINE_COUNT = 50
+
+function shouldRenderAsCharacterComponents(lineIndex: number): boolean {
+  return lineIndex >= displayedCodeRows.value.length - RENDER_AS_COMPONENTS_LINE_COUNT
+}
+
+function lineToPlainText(line: { characters: Array<{ char: string }> }): string {
+  return line.characters.map((c) => c.char).join('')
+}
 
 function getChallengeDuration(): Duration {
   return codingEnded.value.diff(codingStarted.value)

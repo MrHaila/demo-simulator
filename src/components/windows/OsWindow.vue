@@ -20,7 +20,7 @@ div(class="flex flex-col rounded-lg border-4 border-solid border-liver shadow-md
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, type VNodeRef } from 'vue'
 import OsButton from '@/components/OsButton.vue'
 
 defineProps<{
@@ -29,9 +29,13 @@ defineProps<{
 }>()
 
 // Keep scrolled to the bottom. Needs to be called on nextTick().
-const bodyElement = ref<HTMLElement | null>(null)
+const bodyElement = ref<VNodeRef>()
 function scrollToBottom(): void {
-  if (bodyElement.value) bodyElement.value.scrollTop = bodyElement.value.scrollHeight
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- SIGH
+  const element = bodyElement.value as unknown as HTMLElement
+  if ('scrollTop' in element) {
+    element.scrollTop = element.scrollHeight
+  }
 }
 defineExpose({ scrollToBottom })
 </script>

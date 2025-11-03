@@ -79,7 +79,9 @@ function getChallengeStatus(challenge: UnknownChallenge): 'completed' | 'unlocke
   let dependencies = challenge.dependsOn
   if (typeof dependencies === 'number') dependencies = [dependencies]
   if (!dependencies) return 'unlocked'
-  if (dependencies.every((dependency) => dependency in gameStateStore.progression.completedChallenges)) return 'unlocked'
+  if (dependencies.every((dependency) => dependency in gameStateStore.progression.completedChallenges)) {
+    return 'unlocked'
+  }
 
   // Otherwise, return locked.
   return 'locked'
