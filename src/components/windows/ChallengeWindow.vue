@@ -46,8 +46,9 @@ OsWindow(
       :key="fp.id"
       :points="fp.points"
       :quality="fp.quality"
-      :x="calculateFloatingPointX(fp.charIndex)"
+      :x="calculateFloatingPointX(fp.charIndex, fp.lineIndex)"
       :y="calculateFloatingPointY(fp.lineIndex)"
+      @complete="removeFloatingPoint(fp.id)"
     )
 
   ChallengeResultsDialog(
@@ -203,14 +204,15 @@ function onChallengeComplete(): void {
   showResultsDialog.value = true
 }
 
-const { codePoints, amountCoded, displayedCodeRows, floatingPoints, setupKeyboardHandling } = useCodeInput({
-  sourceCode,
-  initialCursorPosition: sourceCodeCursorPosition,
-  challenge,
-  onChallengeComplete,
-  currentState,
-  codingStateValue: ChallengeStates.Coding,
-})
+const { codePoints, amountCoded, displayedCodeRows, floatingPoints, setupKeyboardHandling, removeFloatingPoint } =
+  useCodeInput({
+    sourceCode,
+    initialCursorPosition: sourceCodeCursorPosition,
+    challenge,
+    onChallengeComplete,
+    currentState,
+    codingStateValue: ChallengeStates.Coding,
+  })
 
 setupKeyboardHandling(tableContainer as Ref<{ scrollTop: number; scrollHeight: number } | null>)
 
@@ -224,17 +226,29 @@ function lineToPlainText(line: { characters: Array<{ char: string }> }): string 
   return line.characters.map((c) => c.char).join('')
 }
 
-function calculateFloatingPointX(charIndex: number): number {
+function calculateFloatingPointX(charIndex: number, lineIndex: number): number {
   const lineNumberWidth = 48
   const cellPadding = 8
-  const charWidth = 9
-  return lineNumberWidth + cellPadding + charIndex * charWidth
+  const charWidth = 10
+  const tabWidth = 36 // ~4 spaces
+
+  const line = displayedCodeRows.value[lineIndex]
+
+  let visualWidth = 0
+  for (let i = 0; i < charIndex && i < line.characters.length; i++) {
+    const char = line.characters[i]?.char
+    visualWidth += char === '\t' ? tabWidth : charWidth
+  }
+
+  return lineNumberWidth + cellPadding + visualWidth
 }
 
 function calculateFloatingPointY(lineIndex: number): number {
   const lineHeight = 24
-  const offsetAbove = 2
-  return lineIndex * lineHeight - offsetAbove
+  const offsetAbove = 26
+  const padding = 5
+  const maxY = (tableContainer.value?.clientHeight ?? 600) - padding
+  return Math.min(lineIndex * lineHeight + offsetAbove, maxY)
 }
 
 function getChallengeDuration(): Duration {

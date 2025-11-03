@@ -50,6 +50,7 @@ interface UseCodeInputReturn {
   floatingPoints: Ref<FloatingPoint[]>
   input: (windowRef: Ref<WindowRef | null>) => Promise<void>
   setupKeyboardHandling: (windowRef: Ref<WindowRef | null>) => void
+  removeFloatingPoint: (id: number) => void
 }
 
 export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
@@ -71,34 +72,51 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
 
   // eslint-disable-next-line complexity -- word detection and quality logic adds complexity
   function checkWordCompletion(newCode: string, timestamp: number): void {
-    // Check if the new code contains a space (word completion)
-    if (!newCode.includes(' ')) return
+    // Check if the new code contains a space or newline (word completion)
+    if (!newCode.includes(' ') && !newCode.includes('\n')) return
 
-    // Find the completed word by working backwards from the space
+    // Check current row for space-ended words
     const lastRow = displayedCodeRows.value[displayedCodeRows.value.length - 1]
     let wordEndIndex = -1
+    let targetRow = lastRow
 
-    // Find the space character we just added
+    // Find the space or newline character we just added
     for (let i = lastRow.characters.length - 1; i >= 0; i--) {
-      if (lastRow.characters[i]?.timestamp === timestamp && lastRow.characters[i]?.char === ' ') {
-        wordEndIndex = i
-        break
+      if (lastRow.characters[i]?.timestamp === timestamp) {
+        const char = lastRow.characters[i]?.char
+        if (char === ' ') {
+          wordEndIndex = i
+          break
+        }
       }
     }
 
-    if (wordEndIndex === -1) return
+    // If no space found in current row, check if newline was added (word in previous row)
+    if (wordEndIndex === -1 && newCode.includes('\n') && displayedCodeRows.value.length > 1) {
+      targetRow = displayedCodeRows.value[displayedCodeRows.value.length - 2]
+      // Find the last non-whitespace character in previous row
+      for (let i = targetRow.characters.length - 1; i >= 0; i--) {
+        if (targetRow.characters[i] && !/\s/.test(targetRow.characters[i].char)) {
+          wordEndIndex = i + 1
+          break
+        }
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- targetRow could be undefined in edge cases
+    if (wordEndIndex === -1 || !targetRow) return
 
     // Work backwards to find word start (previous space or line start)
     let wordStartIndex = 0
     for (let i = wordEndIndex - 1; i >= 0; i--) {
-      if (lastRow.characters[i]?.char === ' ' || lastRow.characters[i]?.char === '\n') {
+      if (targetRow.characters[i]?.char === ' ' || targetRow.characters[i]?.char === '\n') {
         wordStartIndex = i + 1
         break
       }
     }
 
     // Skip leading whitespace/tabs at word start
-    while (wordStartIndex < wordEndIndex && /\s/.test(lastRow.characters[wordStartIndex]?.char ?? '')) {
+    while (wordStartIndex < wordEndIndex && /\s/.test(targetRow.characters[wordStartIndex]?.char ?? '')) {
       wordStartIndex++
     }
 
@@ -130,15 +148,15 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
 
     // Mark all characters in the word with the determined quality
     for (let i = wordStartIndex; i < wordEndIndex; i++) {
-      lastRow.characters[i].quality = quality
+      targetRow.characters[i].quality = quality
     }
 
     // Calculate points for this word
-    const wordCharacters = lastRow.characters.slice(wordStartIndex, wordEndIndex)
+    const wordCharacters = targetRow.characters.slice(wordStartIndex, wordEndIndex)
     const wordPoints = codeToPoints(wordCharacters)
 
     // Add floating point above the word
-    const lineIndex = displayedCodeRows.value.length - 1
+    const lineIndex = displayedCodeRows.value.indexOf(targetRow)
     const charIndex = Math.floor((wordStartIndex + wordEndIndex) / 2)
     const id = floatingPointId++
 
@@ -149,12 +167,6 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
       lineIndex,
       charIndex,
     })
-
-    // Remove after animation completes
-    setTimeout(() => {
-      const index = floatingPoints.value.findIndex((fp) => fp.id === id)
-      if (index !== -1) floatingPoints.value.splice(index, 1)
-    }, 1000)
   }
 
   function codeToPoints(characters: CodeCharacter[]): number {
@@ -284,6 +296,11 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     })
   }
 
+  function removeFloatingPoint(id: number): void {
+    const index = floatingPoints.value.findIndex((fp) => fp.id === id)
+    if (index !== -1) floatingPoints.value.splice(index, 1)
+  }
+
   return {
     codePoints,
     amountCoded,
@@ -291,5 +308,6 @@ export function useCodeInput(params: UseCodeInputParams): UseCodeInputReturn {
     floatingPoints,
     input,
     setupKeyboardHandling,
+    removeFloatingPoint,
   }
 }

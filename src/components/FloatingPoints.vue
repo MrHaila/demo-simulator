@@ -20,12 +20,17 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const emit = defineEmits<{
+  complete: []
+}>()
+
 const show = ref(false)
 
 onMounted(() => {
   show.value = true
   setTimeout(() => {
     show.value = false
+    emit('complete')
   }, 1000)
 })
 
