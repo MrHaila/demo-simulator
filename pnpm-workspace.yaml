@@ -1,5 +1,0 @@
-onlyBuiltDependencies:
-  - '@tsparticles/engine'
-  - esbuild
-  - tsparticles-engine
-  - vue-demi
