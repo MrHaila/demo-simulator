@@ -32,7 +32,20 @@ export type EliteOsApp = (typeof EliteOsApps)[keyof typeof EliteOsApps]
 export type Title = (typeof Titles)[keyof typeof Titles]
 export type Unlock = 'perfectCode'
 
-export const currentSaveVersion = 6
+export interface MwxEntry {
+  id: string
+  type: string
+  quantity: string
+  name: string
+  country: string
+}
+
+export interface MonkeyWorkState {
+  displayedRows: MwxEntry[]
+  nextOrder: MwxEntry
+}
+
+export const currentSaveVersion = 7
 
 const defaultProfile: {
   saveVersion: number
@@ -45,6 +58,7 @@ const defaultProfile: {
   juiceBoxes: number
   latestWorkId: number
   title: Title
+  monkeyWorkState?: MonkeyWorkState
 } = {
   saveVersion: currentSaveVersion,
   name: '',
@@ -56,6 +70,7 @@ const defaultProfile: {
   juiceBoxes: 0,
   latestWorkId: 0,
   title: Titles.Chimp as Title,
+  monkeyWorkState: undefined,
 }
 
 const defaultProgression: {

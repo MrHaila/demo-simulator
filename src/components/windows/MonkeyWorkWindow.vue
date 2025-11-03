@@ -57,12 +57,12 @@ os-window(
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { onKeyStroke, useWindowFocus } from '@vueuse/core'
 import OsButton from '@/components/OsButton.vue'
 import { PlotCharacters } from '@/content/narrative'
 import { countries, names } from '@/source_code/work'
-import { EliteOsApps, useGameStateStore } from '@/stores/gameStateStore'
+import { EliteOsApps, useGameStateStore, type MwxEntry } from '@/stores/gameStateStore'
 import OsWindow from './OsWindow.vue'
 
 const gameStateStore = useGameStateStore()
@@ -70,14 +70,6 @@ const gameStateStore = useGameStateStore()
 const mwxWindow = ref<InstanceType<typeof OsWindow> | null>(null)
 const tableContainer = ref<HTMLDivElement | null>(null)
 
-interface MwxEntry {
-  id: string // always increment by one
-  type: string // 'bananas'
-  quantity: string // between 1 and 1000
-  name: string
-  country: string
-}
-const displayedRows = ref<MwxEntry[]>([])
 function addEmptyOrder(): void {
   displayedRows.value.push({
     id: '',
@@ -87,7 +79,6 @@ function addEmptyOrder(): void {
     country: '',
   })
 }
-addEmptyOrder()
 
 function getRandomOrder(): MwxEntry {
   const id = gameStateStore.profile.latestWorkId
@@ -107,7 +98,29 @@ function getRandomOrder(): MwxEntry {
     country,
   }
 }
+
+// Load saved state or initialize fresh
+const savedState = gameStateStore.profile.monkeyWorkState
+const displayedRows = ref<MwxEntry[]>([])
 let nextOrder = getRandomOrder()
+
+if (savedState) {
+  // Cap loaded state to 50 rows
+  const maxRows = 50
+  displayedRows.value =
+    savedState.displayedRows.length > maxRows ? savedState.displayedRows.slice(-maxRows) : savedState.displayedRows
+  nextOrder = savedState.nextOrder
+} else {
+  addEmptyOrder()
+}
+
+// Scroll to bottom on mount
+onMounted(async () => {
+  await nextTick()
+  if (tableContainer.value) {
+    tableContainer.value.scrollTop = tableContainer.value.scrollHeight
+  }
+})
 
 // eslint-disable-next-line complexity -- I accept
 async function input(remainingAmountLeftToType?: number): Promise<void> {
@@ -177,8 +190,8 @@ async function input(remainingAmountLeftToType?: number): Promise<void> {
   // If there are still characters left to type, then continue typing
   if (amountLeftToType > 0) void input(amountLeftToType)
 
-  // If there are more than 10 rows, then remove the first row
-  if (displayedRows.value.length > 100) displayedRows.value.shift()
+  // Cap buffer size to prevent memory issues
+  if (displayedRows.value.length > 50) displayedRows.value.shift()
 
   // Keep new code visible - scroll to bottom
   await nextTick() // Wait for a DOM update.
@@ -196,6 +209,18 @@ onKeyStroke((e) => {
     void input()
   }
 })
+
+// Save monkey work state to profile when it changes
+watch(
+  displayedRows,
+  () => {
+    gameStateStore.profile.monkeyWorkState = {
+      displayedRows: displayedRows.value,
+      nextOrder,
+    }
+  },
+  { deep: true },
+)
 
 function getNextIncompleteRowField(row: MwxEntry): string | null {
   // Fix first field not being highlighted
